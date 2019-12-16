@@ -2,7 +2,7 @@
 This is Library I will shade into my plugins from now on.
 ```
 <repository>
-    <id>everything</id>
+    <id>bs-repo</id>
     <url>http://ci.pluginwiki.us/plugin/repository/everything/</url>
 </repository>
 <dependency>
