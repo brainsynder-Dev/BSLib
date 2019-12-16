@@ -1,0 +1,10 @@
+target
+*/target
+dependency-reduced-pom.xml
+*/dependency-reduced-pom.xml
+.idea/
+*/.idea
+*/*.iml
+libs/craftbukkit-*
+
+*.iml
