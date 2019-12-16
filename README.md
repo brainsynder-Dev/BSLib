@@ -6,9 +6,9 @@ This is Library I will shade into my plugins from now on.
     <url>http://ci.pluginwiki.us/plugin/repository/everything/</url>
 </repository>
 <dependency>
-    <groupId>simple.brainsynder</groupId>
+    <groupId>lib.brainsynder</groupId>
     <artifactId>API</artifactId>
-    <version>4.0.3-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
 </dependency>
 
 
