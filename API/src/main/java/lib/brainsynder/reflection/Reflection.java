@@ -1,21 +1,12 @@
-/*
- * Copyright (c) created class file on: 2016.
- * All rights reserved.
- * Copyright owner: brainsynder/Magnus498
- * To contact the developer go to:
- * - spigotmc.org and look up brainsynder
- * - email at: briansnyder498@gmail.com
- * - or Skype at live:starwars4393
- */
 package lib.brainsynder.reflection;
 
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 
 import java.lang.reflect.*;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Reflection {
     private static HashMap<Class<? extends Entity>, Method> handles = new HashMap<>();
@@ -49,7 +40,6 @@ public class Reflection {
     }
 
     public static <T> T invokeNMSMethod(String className, String method, Object invoker, Class<?>[] parameterClasses, Object... params) {
-        Validate.isTrue(parameterClasses.length == params.length, "Parameter array's length must be equal to the params array's length");
 
         try {
             Class e = getNmsClass(className);
@@ -63,12 +53,12 @@ public class Reflection {
     }
 
     public static <T> T invokeNMSMethod(String method, Object invoker, Class<?>[] parameterClasses, Object... params) {
-        Validate.isTrue(invoker != null, "Invoker cannot be null");
+        Objects.requireNonNull(invoker, "Invoker cannot be null");
         return invokeNMSMethod(invoker.getClass().getSimpleName(), method, invoker, parameterClasses, params);
     }
 
     public static <T> T invokeNMSMethod(String method, Object invoker) {
-        Validate.isTrue(invoker != null, "Invoker cannot be null");
+        Objects.requireNonNull(invoker, "Invoker cannot be null");
         return invokeNMSMethod(method, invoker, new Class[0], new Object[0]);
     }
 
@@ -113,7 +103,6 @@ public class Reflection {
     }
 
     public static <T> T invokeBukkitMethod(String className, String method, Object invoker, Class<?>[] parameterClasses, Object... params) {
-        Validate.isTrue(parameterClasses.length == params.length, "Parameter array\'s length must be equal to the params array's length");
 
         try {
             Class e = getCBCClass(className);
