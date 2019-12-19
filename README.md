@@ -1,5 +1,8 @@
 # BSLib
-This is Library I will shade into my plugins from now on.
+This is not a new plugin (Like SimpleAPI). Instead this aims to make the plugins that have SimpleAPI shaded into them smaller.
+
+- [Jenkins](http://ci.pluginwiki.us/job/BSLib/)
+- [Maven](http://ci.pluginwiki.us/plugin/repository/everything/lib/brainsynder/API/)
 ```
 <repository>
     <id>bs-repo</id>
@@ -8,7 +11,7 @@ This is Library I will shade into my plugins from now on.
 <dependency>
     <groupId>lib.brainsynder</groupId>
     <artifactId>API</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1-B(JENKINS BUILD)</version>
 </dependency>
 
 
@@ -18,6 +21,7 @@ This is Library I will shade into my plugins from now on.
     <artifactId>maven-shade-plugin</artifactId>
     <version>3.2.1</version>
     <configuration>
+        <minimizeJar>true</minimizeJar>
         <createDependencyReducedPom>false</createDependencyReducedPom>
         <relocations>
             <relocation>
