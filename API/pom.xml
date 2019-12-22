@@ -9,6 +9,7 @@
         <artifactId>BSLib</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
+    <description>Contains the BSLib code (Without NMS)</description>
     <artifactId>API</artifactId>
     <version>0.1-B${jenkins.buildNumber}</version>
 
