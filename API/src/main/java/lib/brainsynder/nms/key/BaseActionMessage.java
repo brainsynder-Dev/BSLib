@@ -2,7 +2,6 @@ package lib.brainsynder.nms.key;
 
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.nms.IActionMessage;
-import lib.brainsynder.particle.ParticleReflection;
 import lib.brainsynder.reflection.Reflection;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -42,7 +41,7 @@ public class BaseActionMessage extends IActionMessage {
 
     @Override
     public void sendMessage(Player player, String message) {
-        ParticleReflection.sendPacket(player, Reflection.initiateClass(packet, buildMessage(ChatColor.translateAlternateColorCodes('&', message)), value));
+        Reflection.sendPacket(player, Reflection.initiateClass(packet, buildMessage(ChatColor.translateAlternateColorCodes('&', message)), value));
     }
 
     private Object buildMessage (String text) {

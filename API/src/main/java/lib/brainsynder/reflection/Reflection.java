@@ -3,6 +3,7 @@ package lib.brainsynder.reflection;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 
 import java.lang.reflect.*;
 import java.util.HashMap;
@@ -10,6 +11,26 @@ import java.util.Objects;
 
 public class Reflection {
     private static HashMap<Class<? extends Entity>, Method> handles = new HashMap<>();
+
+
+
+    public static void sendPacket(Player player, Object packet)
+            throws IllegalArgumentException {
+        Object handle = getHandle(player);
+        Field connection = getField(handle.getClass(), "playerConnection");
+        Method sendPacket = getMethod(connection.getClass(), "sendPacket");
+        try {
+            for (Method method : connection.getClass().getMethods()) {
+                if (method.getName().equalsIgnoreCase("sendMethod")) {
+                    sendPacket = method;
+                    break;
+                }
+            }
+            if (sendPacket != null) sendPacket.invoke(connection.get(handle), packet);
+        } catch (IllegalAccessException | InvocationTargetException ex) {
+            ex.printStackTrace();
+        }
+    }
 
     public static <T> T invokeNMSStaticMethod(String className, String method, Class<?>[] parameterClasses, Object... params) {
         return invokeNMSMethod(className, method, null, parameterClasses, params);

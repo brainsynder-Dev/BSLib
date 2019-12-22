@@ -2,6 +2,7 @@ package lib.brainsynder.particle;
 
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.nms.IParticlePacket;
+import lib.brainsynder.reflection.Reflection;
 import lib.brainsynder.storage.TriLoc;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -181,11 +182,11 @@ public class ParticleMaker {
             Object packet = createPacket(location);
             if (colored) {
                 for (int i = 0; i < repeatAmount; i++) {
-                    ParticleReflection.sendPacket(player, packet);
+                    Reflection.sendPacket(player, packet);
                 }
                 return;
             }
-            ParticleReflection.sendPacket(player, packet);
+            Reflection.sendPacket(player, packet);
         } catch (Exception e) {
             e.printStackTrace();
         }
