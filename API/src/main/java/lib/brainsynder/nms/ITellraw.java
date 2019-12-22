@@ -33,9 +33,9 @@ public abstract class ITellraw {
     }
 
 
-    public static ITellraw getInstance() {
-        if (tellraw != null) return tellraw;
+    public static ITellraw getInstance(String text) {
+        if (tellraw != null) return tellraw.then(text);
         tellraw = new BaseTellrawMessage();
-        return tellraw;
+        return tellraw.then(text);
     }
 }
