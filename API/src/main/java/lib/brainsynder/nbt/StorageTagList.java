@@ -82,6 +82,10 @@ public class StorageTagList extends StorageBase {
         return stringbuilder.append(']').toString();
     }
 
+    public List<StorageBase> getTagList() {
+        return tagList;
+    }
+
     /**
      * Adds the provided tag to the end of the list. There is no check to verify this tag is of the same type as any
      * previous tag.

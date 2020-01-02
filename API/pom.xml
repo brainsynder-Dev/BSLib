@@ -11,7 +11,7 @@
     </parent>
     <description>Contains the BSLib code (Without NMS)</description>
     <artifactId>API</artifactId>
-    <version>0.1-B${jenkins.buildNumber}</version>
+    <version>${module.version}</version>
 
     <build>
         <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
@@ -22,8 +22,6 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <module.info>-IGNORE</module.info>
-        <!--suppress UnresolvedMavenProperty -->
-        <jenkins.buildNumber>${env.BUILD_NUMBER}</jenkins.buildNumber>
     </properties>
 
     <repositories>
