@@ -1,19 +1,30 @@
 package lib.brainsynder.nbt;
 
 public class NBTException extends Exception {
-    public NBTException(String s, String s1, int i) {
-        super(s + " at: " + prepareMessage(s1, i));
+    public static final int CONTEXT_AMOUNT = 10;
+    private String input, message;
+    private int cursor;
+
+    public NBTException(String message, String input, int cursor) {
+        super(message, null, true, true);
+        this.cursor = cursor;
+        this.message = message;
+        this.input = input;
     }
 
-    private static String prepareMessage(String text, int length) {
+    @Override
+    public String getMessage() {
+        String message = this.message;
+        String context = getContext();
+        if (context != null) message += " at position " + cursor + ": " + context;
+        return message;
+    }
+
+    private String getContext() {
         StringBuilder stringbuilder = new StringBuilder();
-        int i = Math.min(text.length(), length);
-
-        if (i > 35) {
-            stringbuilder.append("...");
-        }
-
-        stringbuilder.append(text, Math.max(0, i - 35), i);
+        int cursor = Math.min(this.input.length(), this.cursor);
+        if (cursor > CONTEXT_AMOUNT) stringbuilder.append("...");
+        stringbuilder.append(this.input, Math.max(0, cursor - CONTEXT_AMOUNT), cursor);
         stringbuilder.append("<--[HERE]");
         return stringbuilder.toString();
     }

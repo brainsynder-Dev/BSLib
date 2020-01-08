@@ -25,7 +25,7 @@ public class JsonToNBT {
     }
 
     private StorageTagCompound toCompound() throws NBTException {
-        StorageTagCompound nbttagcompound = this.excapeFormat();
+        StorageTagCompound nbttagcompound = this.parseCompoundTag();
         this.movePlace();
 
         if (this.notValid()) {
@@ -50,7 +50,7 @@ public class JsonToNBT {
         return new NBTException(s, this.text, this.place);
     }
 
-    protected StorageBase c() throws NBTException {
+    protected StorageBase parseTagPrimitive() throws NBTException {
         this.movePlace();
 
         if (this.getFirstChar() == '"') {
@@ -61,12 +61,12 @@ public class JsonToNBT {
             if (s.isEmpty()) {
                 throw this.throwError("Expected value");
             } else {
-                return this.c(s);
+                return this.parsePrimitive(s);
             }
         }
     }
 
-    private StorageBase c(String value) {
+    private StorageBase parsePrimitive(String value) {
         try {
             if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
                 return new StorageTagByte((byte)(Boolean.getBoolean(value) ? 1 : 0));
@@ -160,9 +160,9 @@ public class JsonToNBT {
             char c0 = this.getFirstChar();
 
             if (c0 == '{') {
-                return this.excapeFormat();
+                return this.parseCompoundTag();
             } else {
-                return c0 == '[' ? this.fetchList() : this.c();
+                return c0 == '[' ? this.fetchList() : this.parseTagPrimitive();
             }
         }
     }
@@ -171,7 +171,7 @@ public class JsonToNBT {
         return this.checkLength(2) && this.getChar(1) != '"' && this.getChar(2) == ';' ? this.arrays() : this.list();
     }
 
-    private StorageTagCompound excapeFormat() throws NBTException {
+    private StorageTagCompound parseCompoundTag() throws NBTException {
         this.validateChar('{');
         StorageTagCompound nbttagcompound = new StorageTagCompound();
         this.movePlace();
