@@ -1,5 +1,7 @@
 package lib.brainsynder.nbt;
 
+import org.bukkit.Color;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -18,6 +20,11 @@ public class StorageTagString extends StorageBase {
     public StorageTagString(String data) {
         Objects.requireNonNull(data, "Null string not allowed");
         this.data = data;
+    }
+
+    public StorageTagString(Color color) {
+        Objects.requireNonNull(color, "Null color not allowed");
+        this.data = color.getRed() + "," + color.getGreen() + "," + color.getBlue();
     }
 
     static String configure(String data) {
@@ -81,6 +88,26 @@ public class StorageTagString extends StorageBase {
             StorageTagString nbttagstring = (StorageTagString) o;
             return this.data == null && nbttagstring.data == null || Objects.equals(this.data, nbttagstring.data);
         }
+    }
+
+    public Color getAsColor() {
+        if (!data.contains(",")) return null;
+        String[] args = data.replace(" ", "").split(",");
+        if (args.length != 3) return null;
+        int r = Integer.parseInt(args[0]);
+        if (r > 255) r = 255;
+        if (r < 0) r = 0;
+
+        int g = Integer.parseInt(args[1]);
+        if (g > 255) r = 255;
+        if (g < 0) r = 0;
+
+        int b = Integer.parseInt(args[2]);
+        if (b > 255) r = 255;
+        if (b < 0) r = 0;
+
+        return Color.fromRGB(r, g, b);
+
     }
 
     public int hashCode() {
