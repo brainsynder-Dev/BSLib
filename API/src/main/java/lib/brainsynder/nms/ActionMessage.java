@@ -1,7 +1,6 @@
-package lib.brainsynder.nms.key;
+package lib.brainsynder.nms;
 
 import lib.brainsynder.ServerVersion;
-import lib.brainsynder.nms.IActionMessage;
 import lib.brainsynder.reflection.Reflection;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -10,12 +9,13 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-public class BaseActionMessage extends IActionMessage {
+public class ActionMessage {
     private Constructor packet;
     private Object value;
     private Method serializerMethod;
+    private static ActionMessage actionMessage = null;
 
-    public BaseActionMessage() {
+    public ActionMessage() {
         Class packetPlayOutChatClass = Reflection.getNmsClass("PacketPlayOutChat");
         try {
             if (ServerVersion.isEqualOld(ServerVersion.v1_11_R1)) {
@@ -33,18 +33,24 @@ public class BaseActionMessage extends IActionMessage {
         serializerMethod = Reflection.getMethod(chatSerializer, "a", String.class);
     }
 
-    @Override
     public void sendMessage(Collection<? extends Player> players, String message) {
         for (Player player : players)
             sendMessage(player, message);
     }
 
-    @Override
     public void sendMessage(Player player, String message) {
         Reflection.sendPacket(player, Reflection.initiateClass(packet, buildMessage(ChatColor.translateAlternateColorCodes('&', message)), value));
     }
 
     private Object buildMessage (String text) {
         return Reflection.invoke(serializerMethod, null, "{\"text\": \"" + text + "\"}");
+    }
+
+
+
+    public static ActionMessage getInstance() {
+        if (actionMessage != null) return actionMessage;
+        actionMessage = new ActionMessage();
+        return actionMessage;
     }
 }
