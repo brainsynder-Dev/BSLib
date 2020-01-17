@@ -1,5 +1,6 @@
-package lib.brainsynder.utils;
+package lib.brainsynder.web;
 
+import lib.brainsynder.utils.ReturnValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 

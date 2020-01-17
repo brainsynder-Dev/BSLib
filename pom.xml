@@ -10,6 +10,8 @@
     <version>0.0.1-SNAPSHOT</version>
     <modules>
         <module>API</module>
+        <module>v1_15_R1</module>
+        <module>API-NMS</module>
     </modules>
 
     <properties>
