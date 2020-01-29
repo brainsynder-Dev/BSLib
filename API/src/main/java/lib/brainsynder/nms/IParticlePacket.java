@@ -11,18 +11,12 @@ public abstract class IParticlePacket {
 
     public static IParticlePacket getInstance() {
         if (particlePacket != null) return particlePacket;
-
-        try {
-            Class<?> clazz = Class.forName("simple.brainsynder.nms." + ServerVersion.getVersion().name() + ".ParticlePacket");
-            if (IParticlePacket.class.isAssignableFrom(clazz)) {
-                particlePacket = (IParticlePacket) clazz.getConstructor().newInstance();
-            }
-        } catch (Exception e) {
-            try {
-                particlePacket = (IParticlePacket) Class.forName("lib.brainsynder.nms.key.BaseParticlePacket").newInstance();
-            } catch (InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
-                ex.printStackTrace();
-            }
+        if (ServerVersion.isOlder(ServerVersion.v1_8_R3)) {
+            particlePacket = new lib.brainsynder.nms.key.v8_lower.BaseParticlePacket();
+        } else if (ServerVersion.isEqualNew(ServerVersion.v1_8_R3) && ServerVersion.isOlder(ServerVersion.v1_13_R1)) {
+            particlePacket = new lib.brainsynder.nms.key.v8_to_v12.BaseParticlePacket();
+        } else {
+            particlePacket = new lib.brainsynder.nms.key.v13_newer.BaseParticlePacket();
         }
         return particlePacket;
     }
