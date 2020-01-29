@@ -16,7 +16,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.InputMismatchException;
 import java.util.List;
 
 public class ItemBuilder {
@@ -206,14 +205,13 @@ public class ItemBuilder {
     }
 
     public <T extends MetaBuilder> ItemBuilder handleMeta (Class<T> clazz, ReturnValue<T> value) {
+        MetaBuilder builder = getMeta(meta);
+        if (builder == null) return this;
+
         metaBuilder = Reflection.initiateClass(clazz);
         FieldAccessor<ItemMeta> field = FieldAccessor.getField(MetaBuilder.class, "meta", ItemMeta.class);
         field.set(metaBuilder, meta);
-
-        MetaBuilder builder = getMeta(meta);
-        if (builder != null) {
-            if (!clazz.isAssignableFrom(builder.getClass())) throw new InputMismatchException("An Incorrect MetaBuilder was selected for material("+item.getType().name()+"), must be: "+builder.getName()+".class");
-        }
+        if (!clazz.isAssignableFrom(builder.getClass())) return this;
         metaBuilder.fromItemMeta(meta);
         value.run((T) metaBuilder);
         meta = field.get(metaBuilder); // Should update the ItemMeta field
@@ -266,6 +264,9 @@ public class ItemBuilder {
     }
 
     private static MetaBuilder getMeta (ItemMeta meta) {
+        if (meta == null) return null;
+        if (meta.getClass().getInterfaces() == null) return null;
+        if (meta.getClass().getInterfaces()[0] == null) return null;
         Class<?> clazz;
 
         try {
