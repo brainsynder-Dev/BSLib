@@ -303,7 +303,7 @@ public class StorageTagCompound extends StorageBase {
     public Location getLocation (String key, Location fallback) {
         return (hasKey(key) ? getLocation(key) : fallback);
     }
-    
+
     public void setColor (String key, Color color) {
         StorageTagCompound compound = new StorageTagCompound();
         compound.setInteger("r", color.getRed());
@@ -329,6 +329,17 @@ public class StorageTagCompound extends StorageBase {
     }
     public Color getColor (String key, Color fallback) {
         return (hasKey(key) ? getColor(key) : fallback);
+    }
+
+    public void setEnum (String key, Enum anEnum) {
+        setString(key, anEnum.name());
+    }
+    public <E extends Enum>E getEnum (String key, Class<E> type) {
+        return getEnum(key, type, null);
+    }
+    public <E extends Enum>E getEnum (String key, Class<E> type, E fallback) {
+        if (!hasKey(key)) return fallback;
+        return (E) E.valueOf(type, getString(key));
     }
 
     /**
@@ -526,6 +537,17 @@ public class StorageTagCompound extends StorageBase {
     }
     public boolean getBoolean(String key, boolean fallback) {
         return (hasKey(key) ? getBoolean(key) : fallback);
+    }
+
+    public void setItemStack (String key, ItemStack item) {
+        setTag(key, StorageTagTools.toStorage(item));
+    }
+    public ItemStack getItemStack (String key) {
+        return getItemStack(key, new ItemStack(Material.AIR));
+    }
+    public ItemStack getItemStack (String key, ItemStack fallback) {
+        if (!hasKey(key)) return fallback;
+        return StorageTagTools.toItemStack(getCompoundTag(key));
     }
 
     /**
