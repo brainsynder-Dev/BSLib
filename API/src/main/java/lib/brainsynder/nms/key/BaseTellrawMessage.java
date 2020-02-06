@@ -1,7 +1,7 @@
 package lib.brainsynder.nms.key;
 
 import com.google.gson.stream.JsonWriter;
-import lib.brainsynder.nms.ITellraw;
+import lib.brainsynder.nms.Tellraw;
 import lib.brainsynder.reflection.Reflection;
 import lib.brainsynder.utils.MessagePart;
 import org.bukkit.Bukkit;
@@ -16,7 +16,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseTellrawMessage extends ITellraw {
+public class BaseTellrawMessage extends Tellraw {
     private final List<MessagePart> messageParts = new ArrayList<>();
     private String jsonString = null;
     private boolean dirty = false;

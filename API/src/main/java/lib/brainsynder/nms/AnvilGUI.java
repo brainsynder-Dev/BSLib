@@ -10,14 +10,14 @@ import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Constructor;
 
-public class IAnvilGUI {
+public class AnvilGUI {
     private Player player;
     private Plugin plugin;
     private IAnvilClickEvent handler;
 	private static Constructor constructor = null;
 
 
-	public IAnvilGUI (Plugin plugin, Player player, IAnvilClickEvent handler) {
+	public AnvilGUI(Plugin plugin, Player player, IAnvilClickEvent handler) {
         this.player = player;
         this.plugin = plugin;
         this.handler = handler;
@@ -38,7 +38,7 @@ public class IAnvilGUI {
     public void setSlot(AnvilSlot slot, ItemStack item){}
 	public void open(){}
 
-	public static IAnvilGUI getInstance (Plugin plugin, Player player, IAnvilClickEvent handler) {
+	public static AnvilGUI getInstance (Plugin plugin, Player player, IAnvilClickEvent handler) {
 	    if (constructor == null) {
             try {
                 Class clazz = Class.forName("lib.brainsynder.nms.versions."+ ServerVersion.getVersion().name() +".AnvilHandler");

@@ -1,7 +1,7 @@
 package lib.brainsynder.commands;
 
 import lib.brainsynder.commands.annotations.ICommand;
-import lib.brainsynder.nms.ITellraw;
+import lib.brainsynder.nms.Tellraw;
 import lib.brainsynder.utils.ReturnValue;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -66,7 +66,7 @@ public class SubCommand implements CommandExecutor, TabCompleter {
         String description = ChatColor.translateAlternateColorCodes('&', command.description());
 
         if (sender instanceof Player) {
-            ITellraw.getInstance(usage).tooltip(ChatColor.GRAY + description).send((Player) sender);
+            Tellraw.getInstance(usage).tooltip(ChatColor.GRAY + description).send((Player) sender);
         } else {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', command.usage()));
         }

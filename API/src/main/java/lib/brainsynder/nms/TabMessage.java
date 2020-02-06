@@ -8,14 +8,14 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-public class ITabMessage {
+public class TabMessage {
     private String header = "";
     private String footer = "";
-    private static ITabMessage tabMessage = null;
+    private static TabMessage tabMessage = null;
     private FieldAccessor headerField, footerField;
     private Method serializerMethod;
 
-    private ITabMessage() {
+    private TabMessage() {
         Class chatSerializer = Reflection.getNmsClass("IChatBaseComponent$ChatSerializer");
         serializerMethod = Reflection.getMethod(chatSerializer, "a", String.class);
 
@@ -31,15 +31,15 @@ public class ITabMessage {
         return footer;
     }
 
-    public ITabMessage setHeader(String header) {
+    public TabMessage setHeader(String header) {
         this.header = header;
         return this;
     }
-    public ITabMessage setFooter(String footer) {
+    public TabMessage setFooter(String footer) {
         this.footer = footer;
         return this;
     }
-    public ITabMessage setHeaderFooter(String header, String footer) {
+    public TabMessage setHeaderFooter(String header, String footer) {
         this.header = header;
         this.footer = footer;
         return this;
@@ -63,9 +63,9 @@ public class ITabMessage {
     }
 
 
-    public static ITabMessage getInstance() {
+    public static TabMessage getInstance() {
         if (tabMessage != null) return tabMessage;
-        tabMessage = new ITabMessage();
+        tabMessage = new TabMessage();
         return tabMessage;
     }
 

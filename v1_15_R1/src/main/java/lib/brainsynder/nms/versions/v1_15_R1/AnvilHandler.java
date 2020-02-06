@@ -3,7 +3,7 @@ package lib.brainsynder.nms.versions.v1_15_R1;
 import lib.brainsynder.anvil.AnvilClickEvent;
 import lib.brainsynder.anvil.AnvilSlot;
 import lib.brainsynder.anvil.IAnvilClickEvent;
-import lib.brainsynder.nms.IAnvilGUI;
+import lib.brainsynder.nms.AnvilGUI;
 import lib.brainsynder.reflection.FieldAccessor;
 import net.minecraft.server.v1_15_R1.*;
 import org.bukkit.GameMode;
@@ -24,7 +24,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AnvilHandler extends IAnvilGUI {
+public class AnvilHandler extends AnvilGUI {
     private Map<AnvilSlot, ItemStack> items = new HashMap<>();
     private int levels = 0;
     private float exp = 0.0F;
