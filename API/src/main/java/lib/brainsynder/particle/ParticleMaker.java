@@ -1,7 +1,7 @@
 package lib.brainsynder.particle;
 
 import lib.brainsynder.ServerVersion;
-import lib.brainsynder.nms.IParticlePacket;
+import lib.brainsynder.nms.ParticlePacket;
 import lib.brainsynder.reflection.Reflection;
 import lib.brainsynder.storage.TriLoc;
 import org.bukkit.Color;
@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 public class ParticleMaker {
-    private static IParticlePacket particlePacket = null;
+    private static ParticlePacket particlePacket = null;
     private Particle type;
     private double speed = 0.0;
     private int count = 1;
@@ -97,7 +97,7 @@ public class ParticleMaker {
         this.offsetX = offsetX;
         this.offsetY = offsetY;
         this.offsetZ = offsetZ;
-        particlePacket = IParticlePacket.getInstance();
+        particlePacket = ParticlePacket.getInstance();
     }
 
     public ParticleMaker setSpeed(double speed) {

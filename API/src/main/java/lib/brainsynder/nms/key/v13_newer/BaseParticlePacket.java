@@ -1,6 +1,6 @@
 package lib.brainsynder.nms.key.v13_newer;
 
-import lib.brainsynder.nms.IParticlePacket;
+import lib.brainsynder.nms.ParticlePacket;
 import lib.brainsynder.particle.DustOptions;
 import lib.brainsynder.particle.Particle;
 import lib.brainsynder.reflection.Reflection;
@@ -14,7 +14,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class BaseParticlePacket extends IParticlePacket {
+public class BaseParticlePacket extends ParticlePacket {
     private Constructor<?> packetConstructor = null, dustOption;
     private Method createBlockData, toNMS;
 

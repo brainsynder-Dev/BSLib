@@ -1,6 +1,6 @@
 package lib.brainsynder.nms.key.v8_to_v12;
 
-import lib.brainsynder.nms.IParticlePacket;
+import lib.brainsynder.nms.ParticlePacket;
 import lib.brainsynder.particle.DustOptions;
 import lib.brainsynder.particle.Particle;
 import lib.brainsynder.reflection.Reflection;
@@ -10,9 +10,8 @@ import org.bukkit.inventory.ItemStack;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-public class BaseParticlePacket extends IParticlePacket {
+public class BaseParticlePacket extends ParticlePacket {
     private Constructor<?> packetConstructor = null;
-    private boolean newParticlePacketConstructor = false;
     private Class<?> enumParticle = null;
 
     public BaseParticlePacket() {
