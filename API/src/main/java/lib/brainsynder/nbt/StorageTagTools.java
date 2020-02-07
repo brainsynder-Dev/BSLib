@@ -10,11 +10,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 public class StorageTagTools {
-    private static Method parseString;
     private static Object registry = null;
     private static Class<?> nbtTag, craftStack, stackClass;
     private static Constructor newStack, newKey;
-    private static Method save, load, toString, asCopy, asBukkitCopy, getItem;
+    private static Method save, newItem, toString, asCopy, asBukkitCopy, getItem, parseString;
 
     static {
         Class parser = Reflection.getNmsClass("MojangsonParser");
@@ -25,8 +24,8 @@ public class StorageTagTools {
 
         newKey = Reflection.getConstructor(keyClass, String.class);
         nbtTag = Reflection.getNmsClass("NBTTagCompound");
-        stackClass = Reflection.getNmsClass("ItemStack");
-        newStack = Reflection.getConstructor(stackClass, Reflection.getNmsClass("Item"));
+        stackClass = Reflection.getNmsClass("ItemStack"); /** {@link net.minecraft.server.v1_13_R1.ItemStack} */
+        newStack = Reflection.getConstructor(stackClass, nbtTag);
 
         if (ServerVersion.isEqualNew(ServerVersion.v1_14_R1)) { // TODO: Find the correct version this changed in
             FieldAccessor accessor = FieldAccessor.getField(Reflection.getNmsClass("IRegistry"), "ITEM", Object.class);
@@ -35,8 +34,8 @@ public class StorageTagTools {
         }else{
             getItem = Reflection.getMethod(Reflection.getNmsClass("Items"), "get", String.class);
         }
-
-        load = Reflection.getMethod(stackClass, "load", nbtTag);
+        if (ServerVersion.isEqualNew(ServerVersion.v1_13_R1))
+            newItem = Reflection.getMethod(stackClass, "a", nbtTag);
         asBukkitCopy = Reflection.getMethod(craftStack, "asBukkitCopy", stackClass);
 
         save = Reflection.getMethod(stackClass, "save", nbtTag);
@@ -47,17 +46,13 @@ public class StorageTagTools {
     public static ItemStack toItemStack (StorageTagCompound compound) {
         if (!compound.hasKey("id")) return new ItemStack(Material.AIR); // Checks if it is an ItemStacks NBT/STC
 
-        String material = compound.getString("id");
-        Object item;
-        if (registry != null) {
-            item = Reflection.invoke(getItem, registry, newMCKey(material)); // Finds the material, Returns { Item }
+        Object nbt = Reflection.invoke(parseString, null, compound.toString());
+        Object nmsStack;
+        if (ServerVersion.isEqualOld(ServerVersion.v1_12_R1)) {
+            nmsStack = Reflection.initiateClass(newStack, nbt); // Will make it an NMS ItemStack
         }else{
-            item = Reflection.invoke(getItem, null, material); // Finds the material, Returns { Item }
+            nmsStack = Reflection.invoke(newItem, null, nbt); // Will make it an NMS ItemStack
         }
-
-        Object nmsStack = Reflection.initiateClass(newStack, item); // Will make it an NMS ItemStack
-
-        Reflection.invoke(load, nmsStack, toNBTTag(compound));
 
         return (ItemStack) Reflection.invoke(asBukkitCopy, null, nmsStack);
     }
@@ -67,7 +62,7 @@ public class StorageTagTools {
         String json = (String) Reflection.invoke(toString, nbt);
 
         // Removes the extra formatting that Spigot adds
-        if (json.contains("{\"text\":\"")) json = json.replace("'{\"text\":\"", "\"").replace("\"}'", "\"");
+        //if (json.contains("{\"text\":\"")) json = json.replace("'{\"text\":\"", "\"").replace("\"}'", "\"");
         StorageTagCompound compound = new StorageTagCompound ();
 
         try {

@@ -2,31 +2,21 @@ package lib.brainsynder.nbt;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import lib.brainsynder.reflection.Reflection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.regex.Pattern;
 
 public class StorageTagCompound extends StorageBase {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Pattern PATTERN = Pattern.compile("[A-Za-z0-9._+-]+");
-    private final Map<String, StorageBase> tagMap = Maps.newHashMap();
-    private Method parseString;
-
-    public StorageTagCompound() {
-        Class parser = Reflection.getNmsClass("MojangsonParser");
-        parseString = Reflection.getMethod(parser, "parse", String.class);
-    }
+    private Map<String, StorageBase> tagMap = Maps.newHashMap();
 
     private static void writeEntry(String name, StorageBase data, DataOutput output) throws IOException {
         output.writeByte(data.getId());
@@ -555,10 +545,6 @@ public class StorageTagCompound extends StorageBase {
      */
     public void removeTag(String key) {
         this.tagMap.remove(key);
-    }
-
-    public <T> T toNBTTag () {
-        return (T) Reflection.invoke(parseString, null, toString());
     }
 
     public String toString() {
