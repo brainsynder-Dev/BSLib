@@ -220,7 +220,7 @@ public class ItemBuilder {
 
     public StorageTagCompound toCompound () {
         StorageTagCompound compound = new StorageTagCompound ();
-        compound.setString("material", item.getType().name());
+        compound.setEnum("material", item.getType());
         if (item.getAmount() > 1) compound.setInteger("amount", item.getAmount());
         if (meta.hasDisplayName()) compound.setString("name", meta.getDisplayName());
         if (meta.isUnbreakable()) compound.setBoolean("unbreakable", meta.isUnbreakable());
