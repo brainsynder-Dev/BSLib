@@ -23,6 +23,10 @@
                 <configuration>
                     <relocations>
                         <relocation>
+                            <pattern>com.eclipsesource.json</pattern>
+                            <shadedPattern>lib.brainsynder.json</shadedPattern>
+                        </relocation>
+                        <relocation>
                             <pattern>org.bstats</pattern>
                             <shadedPattern>lib.brainsynder.metric</shadedPattern>
                         </relocation>
@@ -60,15 +64,14 @@
 
     <dependencies>
         <dependency>
-            <groupId>net.sf.flexjson</groupId>
-            <artifactId>flexjson</artifactId>
-            <version>3.3</version>
+            <groupId>com.eclipsesource.minimal-json</groupId>
+            <artifactId>minimal-json</artifactId>
+            <version>0.9.5</version>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
             <version>1.5</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
