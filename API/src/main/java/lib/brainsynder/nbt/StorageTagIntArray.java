@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class StorageTagIntArray extends StorageBase {
+public class StorageTagIntArray extends StorageBase implements IStorageList<int[]> {
     /**
      * The array of saved integers
      */
@@ -20,6 +20,11 @@ public class StorageTagIntArray extends StorageBase {
 
     public StorageTagIntArray(List<Integer> integerList) {
         this(toArray(integerList));
+    }
+
+    @Override
+    public int[] getList() {
+        return intArray;
     }
 
     private static int[] toArray(List<Integer> integerList) {

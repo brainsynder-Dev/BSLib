@@ -17,6 +17,7 @@ public class StorageTagCompound extends StorageBase {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Pattern PATTERN = Pattern.compile("[A-Za-z0-9._+-]+");
     private Map<String, StorageBase> tagMap = Maps.newHashMap();
+    private List<String> booleans = new ArrayList<>();
 
     private static void writeEntry(String name, StorageBase data, DataOutput output) throws IOException {
         output.writeByte(data.getId());
@@ -229,6 +230,10 @@ public class StorageTagCompound extends StorageBase {
      */
     public void setBoolean(String key, boolean value) {
         tagMap.put(key, new StorageTagByte((byte) ((value) ? 1 : 0)));
+        booleans.add(key);
+    }
+    public boolean isBoolean (String key) {
+        return booleans.contains(key);
     }
 
     /**
@@ -457,7 +462,7 @@ public class StorageTagCompound extends StorageBase {
     public byte[] getByteArray(String key) {
         try {
             if (this.hasKey(key, 7)) {
-                return ((StorageTagByteArray) this.tagMap.get(key)).getByteArray();
+                return ((IStorageList<byte[]>) this.tagMap.get(key)).getList();
             }
         } catch (ClassCastException ignored) {
         }
@@ -471,7 +476,7 @@ public class StorageTagCompound extends StorageBase {
     public int[] getIntArray(String key) {
         try {
             if (this.hasKey(key, 11)) {
-                return ((StorageTagIntArray) this.tagMap.get(key)).getIntArray();
+                return ((IStorageList<int[]>) this.tagMap.get(key)).getList();
             }
         } catch (ClassCastException ignored) {
         }
@@ -594,6 +599,11 @@ public class StorageTagCompound extends StorageBase {
 
     public int hashCode() {
         return super.hashCode() ^ this.tagMap.hashCode();
+    }
+
+    public void remove (String key) {
+        if (hasKey(key)) tagMap.remove(key);
+        booleans.remove(key);
     }
 
     /**

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class StorageTagByteArray extends StorageBase {
+public class StorageTagByteArray extends StorageBase implements IStorageList<byte[]> {
     /**
      * The byte array stored in the tag.
      */
@@ -20,6 +20,11 @@ public class StorageTagByteArray extends StorageBase {
 
     public StorageTagByteArray(List<Byte> byteList) {
         this(toArray(byteList));
+    }
+
+    @Override
+    public byte[] getList() {
+        return data;
     }
 
     private static byte[] toArray(List<Byte> byteList) {

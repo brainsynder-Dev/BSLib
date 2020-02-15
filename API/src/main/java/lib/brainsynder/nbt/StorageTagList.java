@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-public class StorageTagList extends StorageBase {
+public class StorageTagList extends StorageBase implements IStorageList<List<StorageBase>> {
     private static final Logger LOGGER = LogManager.getLogger();
     private List<StorageBase> tagList = Lists.newArrayList();
 
@@ -18,6 +18,11 @@ public class StorageTagList extends StorageBase {
      * The type byte for the tags in the list - they must all be of the same type.
      */
     private byte tagType = 0;
+
+    @Override
+    public List<StorageBase> getList() {
+        return tagList;
+    }
 
     /**
      * Write the actual data contents of the tag, implemented in NBT extension classes

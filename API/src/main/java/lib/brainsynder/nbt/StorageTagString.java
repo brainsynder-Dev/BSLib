@@ -117,4 +117,60 @@ public class StorageTagString extends StorageBase {
     public String getString() {
         return this.data;
     }
+
+
+    public long getLong() {
+        try {
+            return Long.parseLong(data);
+        }catch (NumberFormatException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public int getInt() {
+        try {
+            return Integer.parseInt(data);
+        }catch (NumberFormatException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public short getShort() {
+        try {
+            return Short.parseShort(data);
+        }catch (NumberFormatException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public byte getByte() {
+        try {
+            return Byte.parseByte(data);
+        }catch (NumberFormatException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public double getDouble() {
+        try {
+            return Double.parseDouble(data);
+        }catch (NumberFormatException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+
+    public float getFloat() {
+        try {
+            return Float.parseFloat(data);
+        }catch (NumberFormatException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 }

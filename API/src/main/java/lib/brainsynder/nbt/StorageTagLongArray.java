@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class StorageTagLongArray extends StorageBase {
+public class StorageTagLongArray extends StorageBase implements IStorageList<long[]> {
     private long[] longArray;
 
     StorageTagLongArray() {}
@@ -17,6 +17,11 @@ public class StorageTagLongArray extends StorageBase {
 
     public StorageTagLongArray(List<Long> longList) {
         this(toArray(longList));
+    }
+
+    @Override
+    public long[] getList() {
+        return longArray;
     }
 
     private static long[] toArray(List<Long> longList) {
