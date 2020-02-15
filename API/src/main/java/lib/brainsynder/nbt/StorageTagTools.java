@@ -1,5 +1,8 @@
 package lib.brainsynder.nbt;
 
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.reflection.FieldAccessor;
 import lib.brainsynder.reflection.Reflection;
@@ -8,6 +11,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StorageTagTools {
     private static Object registry = null;
@@ -70,6 +75,91 @@ public class StorageTagTools {
         } catch (NBTException e) {
             e.printStackTrace();
         }
+
+        return compound;
+    }
+
+    public static JsonObject toJsonObject (StorageTagCompound compound) {
+        JsonObject json = new JsonObject ();
+        compound.getKeySet().forEach(key -> {
+            StorageBase base = compound.getTag(key);
+
+            if (compound.isBoolean(key)) {
+                json.add (key, compound.getBoolean(key));
+            }else if (base instanceof StoragePrimitive) {
+                json.add(key, ((StoragePrimitive)base).getInt());
+            }else if (base instanceof IStorageList) {
+                JsonArray array = new JsonArray();
+                Object list = ((IStorageList)base).getList();
+                if (list instanceof byte[]) {
+                    for (byte v : (byte[]) list) array.add(v+"-B");
+                }else if (list instanceof int[]) {
+                    for (int v : (int[]) list) array.add(v+"-I");
+                }else if (list instanceof long[]) {
+                    for (long v : (long[]) list) array.add(v+"-L");
+                }else if (list instanceof List) {
+                    ((List)list).forEach(string -> array.add(String.valueOf(string)));
+                }
+                json.add(key, array);
+            }else if (base instanceof StorageTagCompound) {
+                json.add(key, toJsonObject((StorageTagCompound)base));
+            }else if (base instanceof StorageTagString) {
+                json.add(key, base.getString());
+            }
+        });
+        return json;
+    }
+
+    public static StorageTagCompound fromJsonObject (JsonObject json) {
+        StorageTagCompound compound = new StorageTagCompound ();
+        json.names().forEach(key -> {
+            JsonValue value = json.get(key);
+            if (value.isNumber()) {
+                compound.setInteger(key, value.asInt());
+            }else if (value.isBoolean()) {
+                compound.setBoolean(key, value.asBoolean());
+            }else if (value.isString()) {
+                compound.setString(key, value.asString());
+            }else if (value.isArray()) {
+                JsonArray array = value.asArray();
+                List<Byte> bytes = new ArrayList<>();
+                List<Integer> ints = new ArrayList<>();
+                List<Long> longs = new ArrayList<>();
+                StorageTagList list = new StorageTagList();
+
+                array.values().forEach(jsonValue -> {
+                    if (jsonValue.isString()) {
+                        String string = jsonValue.asString();
+                        if (string.endsWith("-L")) {
+                            longs.add(jsonValue.asLong());
+                        }else if (string.endsWith("-B")) {
+                            bytes.add((byte) jsonValue.asInt());
+                        }else if (string.endsWith("-I")) {
+                            ints.add(jsonValue.asInt());
+                        }else {
+                            list.appendTag(new StorageTagString(string));
+                        }
+                    }
+
+                    if (jsonValue.isNumber()) {
+                        ints.add(jsonValue.asInt());
+                    }
+                });
+
+                if (!bytes.isEmpty()) {
+                    compound.setTag(key, new StorageTagByteArray(bytes));
+                }else if (!ints.isEmpty()) {
+                    compound.setTag(key, new StorageTagIntArray(ints));
+                }else if (!longs.isEmpty()) {
+                    compound.setTag(key, new StorageTagLongArray(longs));
+                }else{
+                    compound.setTag(key, list);
+                }
+
+            }else if (value.isObject()) {
+                compound.setTag(key, fromJsonObject(value.asObject()));
+            }
+        });
 
         return compound;
     }
