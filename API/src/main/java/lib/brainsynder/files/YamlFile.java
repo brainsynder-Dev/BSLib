@@ -17,7 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class YamlFile implements ConfigurationSection {
+public class YamlFile implements ConfigurationSection, Movable{
     private File file;
     private FileConfiguration configuration;
 
@@ -406,6 +406,14 @@ public class YamlFile implements ConfigurationSection {
             }
 
             return map;
+        }
+    }
+
+    @Override
+    public void move(String oldKey, String newKey) {
+        if (contains(oldKey)) {
+            set(newKey, get(oldKey));
+            set(oldKey, null);
         }
     }
 }

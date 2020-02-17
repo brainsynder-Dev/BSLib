@@ -8,7 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class StorageFile extends StorageTagCompound {
+public class StorageFile extends StorageTagCompound implements Movable{
     private File file;
 
     public StorageFile(File file) {
@@ -45,5 +45,14 @@ public class StorageFile extends StorageTagCompound {
             CompressedStreamTools.writeCompressed(this, stream);
             stream.close();
         }catch (Exception ignored){}
+    }
+
+    @Override
+    public void move(String oldKey, String newKey) {
+        if (hasKey(oldKey)) {
+            setTag(newKey, getTag(oldKey));
+            remove(oldKey);
+            save();
+        }
     }
 }

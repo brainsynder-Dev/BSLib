@@ -545,13 +545,6 @@ public class StorageTagCompound extends StorageBase {
         return StorageTagTools.toItemStack(getCompoundTag(key));
     }
 
-    /**
-     * Remove the specified tag.
-     */
-    public void removeTag(String key) {
-        this.tagMap.remove(key);
-    }
-
     public String toString() {
         StringBuilder stringbuilder = new StringBuilder("{");
         Collection<String> collection = this.tagMap.keySet();
@@ -601,6 +594,9 @@ public class StorageTagCompound extends StorageBase {
         return super.hashCode() ^ this.tagMap.hashCode();
     }
 
+    /**
+     * Remove the specified tag.
+     */
     public void remove (String key) {
         if (hasKey(key)) tagMap.remove(key);
         booleans.remove(key);

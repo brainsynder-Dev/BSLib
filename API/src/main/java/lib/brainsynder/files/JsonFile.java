@@ -9,7 +9,7 @@ import com.google.common.base.Charsets;
 import java.io.*;
 import java.nio.charset.Charset;
 
-public class JsonFile {
+public class JsonFile implements Movable {
     private final Charset ENCODE = Charsets.UTF_8;
     private JsonObject json;
     protected JsonObject defaults = new JsonObject();
@@ -187,5 +187,14 @@ public class JsonFile {
     }
     public void setDefault(String key, JsonValue value) {
         defaults.add(key, value);
+    }
+
+    @Override
+    public void move(String oldKey, String newKey) {
+        if (hasKey(oldKey)) {
+            json.set(newKey, getValue(oldKey));
+            json.remove(oldKey);
+            save();
+        }
     }
 }
