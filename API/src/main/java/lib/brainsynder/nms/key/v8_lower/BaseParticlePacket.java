@@ -17,9 +17,9 @@ public class BaseParticlePacket extends ParticlePacket {
             Class<?> packetClass = Reflection.getNmsClass("PacketPlayOutWorldParticles");
             packetConstructor = packetClass.getConstructor(
                     String.class,
-                    Float.TYPE,
-                    Float.TYPE,
-                    Float.TYPE,
+                    Double.TYPE,
+                    Double.TYPE,
+                    Double.TYPE,
                     Float.TYPE,
                     Float.TYPE,
                     Float.TYPE,

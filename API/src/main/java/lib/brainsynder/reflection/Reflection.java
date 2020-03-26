@@ -18,15 +18,10 @@ public class Reflection {
             throws IllegalArgumentException {
         Object handle = getHandle(player);
         Field connection = getField(handle.getClass(), "playerConnection");
-        Method sendPacket = getMethod(connection.getClass(), "sendPacket");
+        Method sendPacket = getMethod(getNmsClass("PlayerConnection"), "sendPacket", getNmsClass("Packet"));
+
         try {
-            for (Method method : connection.getClass().getMethods()) {
-                if (method.getName().equalsIgnoreCase("sendMethod")) {
-                    sendPacket = method;
-                    break;
-                }
-            }
-            if (sendPacket != null) sendPacket.invoke(connection.get(handle), packet);
+            sendPacket.invoke(connection.get(handle), packet);
         } catch (IllegalAccessException | InvocationTargetException ex) {
             ex.printStackTrace();
         }

@@ -21,9 +21,9 @@ public class BaseParticlePacket extends ParticlePacket {
                 packetConstructor = packetClass.getDeclaredConstructor(
                         enumParticle,
                         Boolean.TYPE,
-                        Float.TYPE,
-                        Float.TYPE,
-                        Float.TYPE,
+                        Double.TYPE,
+                        Double.TYPE,
+                        Double.TYPE,
                         Float.TYPE,
                         Float.TYPE,
                         Float.TYPE,
