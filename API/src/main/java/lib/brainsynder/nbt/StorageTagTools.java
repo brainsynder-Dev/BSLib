@@ -98,7 +98,7 @@ public class StorageTagTools {
                 }else if (list instanceof long[]) {
                     for (long v : (long[]) list) array.add(v+"-L");
                 }else if (list instanceof List) {
-                    ((List)list).forEach(string -> array.add(String.valueOf(string)));
+                    ((List)list).forEach(string -> array.add(String.valueOf(string).replace("\"", "")));
                 }
                 json.add(key, array);
             }else if (base instanceof StorageTagCompound) {

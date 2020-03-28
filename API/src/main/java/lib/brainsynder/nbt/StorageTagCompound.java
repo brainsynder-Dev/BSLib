@@ -145,41 +145,47 @@ public class StorageTagCompound extends StorageBase {
     /**
      * Stores the given tag into the map with the given string key. This is mostly used to store tag lists.
      */
-    public void setTag(String key, StorageBase value) {
+    public StorageTagCompound setTag(String key, StorageBase value) {
         this.tagMap.put(key, value);
+        return this;
     }
 
     /**
      * Stores a new NBTTagByte with the given byte value into the map with the given string key.
      */
-    public void setByte(String key, byte value) {
+    public StorageTagCompound setByte(String key, byte value) {
         this.tagMap.put(key, new StorageTagByte(value));
+        return this;
     }
 
     /**
      * Stores a new NBTTagShort with the given short value into the map with the given string key.
      */
-    public void setShort(String key, short value) {
+    public StorageTagCompound setShort(String key, short value) {
         this.tagMap.put(key, new StorageTagShort(value));
+        return this;
     }
 
     /**
      * Stores a new NBTTagInt with the given integer value into the map with the given string key.
      */
-    public void setInteger(String key, int value) {
+    public StorageTagCompound setInteger(String key, int value) {
         this.tagMap.put(key, new StorageTagInt(value));
+        return this;
     }
 
     /**
      * Stores a new NBTTagLong with the given long value into the map with the given string key.
      */
-    public void setLong(String key, long value) {
+    public StorageTagCompound setLong(String key, long value) {
         this.tagMap.put(key, new StorageTagLong(value));
+        return this;
     }
 
-    public void setUniqueId(String key, UUID value) {
+    public StorageTagCompound setUniqueId(String key, UUID value) {
         this.setLong(key + "Most", value.getMostSignificantBits());
         this.setLong(key + "Least", value.getLeastSignificantBits());
+        return this;
     }
 
     public UUID getUniqueId(String key) {
@@ -193,44 +199,50 @@ public class StorageTagCompound extends StorageBase {
     /**
      * Stores a new NBTTagFloat with the given float value into the map with the given string key.
      */
-    public void setFloat(String key, float value) {
+    public StorageTagCompound setFloat(String key, float value) {
         this.tagMap.put(key, new StorageTagFloat(value));
+        return this;
     }
 
     /**
      * Stores a new NBTTagDouble with the given double value into the map with the given string key.
      */
-    public void setDouble(String key, double value) {
+    public StorageTagCompound setDouble(String key, double value) {
         this.tagMap.put(key, new StorageTagDouble(value));
+        return this;
     }
 
     /**
      * Stores a new NBTTagString with the given string value into the map with the given string key.
      */
-    public void setString(String key, String value) {
+    public StorageTagCompound setString(String key, String value) {
         this.tagMap.put(key, new StorageTagString(value));
+        return this;
     }
 
     /**
      * Stores a new NBTTagByteArray with the given array as data into the map with the given string key.
      */
-    public void setByteArray(String key, byte[] value) {
+    public StorageTagCompound setByteArray(String key, byte[] value) {
         this.tagMap.put(key, new StorageTagByteArray(value));
+        return this;
     }
 
     /**
      * Stores a new NBTTagIntArray with the given array as data into the map with the given string key.
      */
-    public void setIntArray(String key, int[] value) {
+    public StorageTagCompound setIntArray(String key, int[] value) {
         this.tagMap.put(key, new StorageTagIntArray(value));
+        return this;
     }
 
     /**
      * Stores the given boolean value as a NBTTagByte, storing 1 for true and 0 for false, using the given string key.
      */
-    public void setBoolean(String key, boolean value) {
+    public StorageTagCompound setBoolean(String key, boolean value) {
         tagMap.put(key, new StorageTagByte((byte) ((value) ? 1 : 0)));
         booleans.add(key);
+        return this;
     }
     public boolean isBoolean (String key) {
         return booleans.contains(key);
@@ -275,7 +287,7 @@ public class StorageTagCompound extends StorageBase {
         }
     }
     
-    public void setLocation (String key, Location location) {
+    public StorageTagCompound setLocation (String key, Location location) {
         StorageTagCompound compound = new StorageTagCompound();
         compound.setString("world", location.getWorld().getName());
         compound.setDouble("x", location.getX());
@@ -284,6 +296,7 @@ public class StorageTagCompound extends StorageBase {
         compound.setFloat("yaw", location.getYaw());
         compound.setFloat("pitch", location.getPitch());
         setTag(key, compound);
+        return this;
     }
     public Location getLocation (String key) {
         StorageTagCompound compound = getCompoundTag(key);
@@ -299,12 +312,13 @@ public class StorageTagCompound extends StorageBase {
         return (hasKey(key) ? getLocation(key) : fallback);
     }
 
-    public void setColor (String key, Color color) {
+    public StorageTagCompound setColor (String key, Color color) {
         StorageTagCompound compound = new StorageTagCompound();
         compound.setInteger("r", color.getRed());
         compound.setInteger("g", color.getGreen());
         compound.setInteger("b", color.getBlue());
         setTag(key, compound);
+        return this;
     }
     public Color getColor (String key) {
         StorageTagCompound compound = getCompoundTag(key);
@@ -326,8 +340,9 @@ public class StorageTagCompound extends StorageBase {
         return (hasKey(key) ? getColor(key) : fallback);
     }
 
-    public void setEnum (String key, Enum anEnum) {
+    public StorageTagCompound setEnum (String key, Enum anEnum) {
         setString(key, anEnum.name());
+        return this;
     }
     public <E extends Enum>E getEnum (String key, Class<E> type) {
         return getEnum(key, type, null);
@@ -534,8 +549,9 @@ public class StorageTagCompound extends StorageBase {
         return (hasKey(key) ? getBoolean(key) : fallback);
     }
 
-    public void setItemStack (String key, ItemStack item) {
+    public StorageTagCompound setItemStack (String key, ItemStack item) {
         setTag(key, StorageTagTools.toStorage(item));
+        return this;
     }
     public ItemStack getItemStack (String key) {
         return getItemStack(key, new ItemStack(Material.AIR));
@@ -597,16 +613,17 @@ public class StorageTagCompound extends StorageBase {
     /**
      * Remove the specified tag.
      */
-    public void remove (String key) {
+    public StorageTagCompound remove (String key) {
         if (hasKey(key)) tagMap.remove(key);
         booleans.remove(key);
+        return this;
     }
 
     /**
      * Merges this NBTTagCompound with the given compound. Any sub-compounds are merged using the same methods, other
      * types of tags are overwritten from the given compound.
      */
-    public void merge(StorageTagCompound other) {
+    public StorageTagCompound merge(StorageTagCompound other) {
         for (String s : other.tagMap.keySet()) {
             StorageBase nbtbase = other.tagMap.get(s);
 
@@ -621,5 +638,6 @@ public class StorageTagCompound extends StorageBase {
                 this.setTag(s, nbtbase.copy());
             }
         }
+        return this;
     }
 }
