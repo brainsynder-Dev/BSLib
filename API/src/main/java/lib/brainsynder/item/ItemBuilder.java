@@ -3,9 +3,7 @@ package lib.brainsynder.item;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nbt.StorageTagList;
 import lib.brainsynder.nbt.StorageTagString;
-import lib.brainsynder.reflection.FieldAccessor;
-import lib.brainsynder.reflection.Reflection;
-import lib.brainsynder.utils.ReturnValue;
+import lib.brainsynder.utils.Base64Wrapper;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,6 +11,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,17 +20,17 @@ import java.util.List;
 public class ItemBuilder {
     private ItemStack item;
     private ItemMeta meta;
-    private MetaBuilder metaBuilder;
 
-    public ItemBuilder (Material material) {
+    public ItemBuilder(Material material) {
         this(material, 1);
     }
-    public ItemBuilder (Material material, int amount) {
+
+    public ItemBuilder(Material material, int amount) {
         item = new ItemStack(material, amount);
         meta = item.getItemMeta();
     }
 
-    public static ItemBuilder fromCompound (StorageTagCompound compound) {
+    public static ItemBuilder fromCompound(StorageTagCompound compound) {
         Material material = Material.getMaterial(compound.getString("material"));
         ItemBuilder builder = new ItemBuilder(material, compound.getInteger("amount", 1));
         if (compound.hasKey("enchants")) {
@@ -50,20 +49,20 @@ public class ItemBuilder {
             StorageTagList list = (StorageTagList) compound.getTag("lore");
             List<String> lore = new ArrayList<>();
             list.getTagList().forEach(storageBase -> {
-                lore.add(((StorageTagString)storageBase).getString());
+                lore.add(((StorageTagString) storageBase).getString());
             });
             builder.withLore(lore);
         }
         if (compound.hasKey("flags")) {
             StorageTagList list = (StorageTagList) compound.getTag("flags");
             list.getTagList().forEach(storageBase -> {
-                ItemFlag flag = ItemFlag.valueOf(((StorageTagString)storageBase).getString());
+                ItemFlag flag = ItemFlag.valueOf(((StorageTagString) storageBase).getString());
                 builder.withFlag(flag);
             });
         }
 
         if (compound.hasKey("meta")) {
-            builder.metaBuilder.loadCompound(compound.getCompoundTag("meta"));
+            ItemTools.fromCompound(builder.meta, compound.getCompoundTag("meta"));
         }
 
         return builder;
@@ -78,12 +77,7 @@ public class ItemBuilder {
             if (meta.hasDisplayName()) builder.withName(meta.getDisplayName());
             if (meta.hasLore()) builder.withLore(meta.getLore());
             if (!meta.getItemFlags().isEmpty()) meta.getItemFlags().forEach(builder::withFlag);
-
-            MetaBuilder metaBuilder = getMeta(meta);
-            if (metaBuilder != null) {
-                metaBuilder.fromItemMeta(meta);
-                builder.metaBuilder = metaBuilder;
-            }
+            builder.meta = meta;
         }
 
         return builder;
@@ -91,26 +85,29 @@ public class ItemBuilder {
 
     /*  LORE METHODS  */
     public ItemBuilder withLore(List<String> lore) {
-        meta.setLore(translate(lore));
+        meta.setLore(translate(lore, false));
         return this;
     }
+
     public ItemBuilder addLore(String... lore) {
         List<String> itemLore = new ArrayList<>();
         if (meta.hasLore()) itemLore = meta.getLore();
 
         List<String> finalItemLore = itemLore;
-        Arrays.asList(lore).forEach(s -> finalItemLore.add(translate(s)));
+        Arrays.asList(lore).forEach(s -> finalItemLore.add(translate(s, false)));
         meta.setLore(finalItemLore);
         return this;
     }
+
     public ItemBuilder clearLore() {
         meta.getLore().clear();
         return this;
     }
+
     public ItemBuilder removeLore(String lore) {
         List<String> itemLore = new ArrayList<>();
         if (meta.hasLore()) itemLore = meta.getLore();
-        itemLore.remove(translate(lore));
+        itemLore.remove(translate(lore, false));
         meta.setLore(itemLore);
         return this;
     }
@@ -120,6 +117,7 @@ public class ItemBuilder {
         item.addUnsafeEnchantment(enchant, level);
         return this;
     }
+
     public ItemBuilder removeEnchant(Enchantment enchant) {
         item.removeEnchantment(enchant);
         return this;
@@ -130,6 +128,7 @@ public class ItemBuilder {
         meta.addItemFlags(flag);
         return this;
     }
+
     public ItemBuilder removeFlag(ItemFlag flag) {
         meta.removeItemFlags(flag);
         return this;
@@ -140,17 +139,19 @@ public class ItemBuilder {
         meta.setUnbreakable(unbreakable);
         return this;
     }
-    public boolean isUnbreakable () {
+
+    public boolean isUnbreakable() {
         return meta.isUnbreakable();
     }
 
 
     /**
      * Will set the Items display name
+     *
      * @param name - Custom name for the item
      */
     public ItemBuilder withName(String name) {
-        meta.setDisplayName(translate(name));
+        meta.setDisplayName(translate(name, false));
         return this;
     }
 
@@ -162,7 +163,7 @@ public class ItemBuilder {
         return this;
     }
 
-    public String getName () {
+    public String getName() {
         if (meta.hasDisplayName()) return meta.getDisplayName();
         return WordUtils.capitalizeFully(item.getType().name().toLowerCase().replace("_", " "));
     }
@@ -172,8 +173,7 @@ public class ItemBuilder {
         return item;
     }
 
-    public boolean isSimilar (ItemStack item) {
-        List<Boolean> values = new ArrayList<>();
+    public boolean isSimilar(ItemStack item) {
         if (item == null) return false;
         ItemStack main = build();
         if (main.getType() == item.getType()) {
@@ -181,22 +181,20 @@ public class ItemBuilder {
                 ItemMeta mainMeta = main.getItemMeta();
                 ItemMeta checkMeta = item.getItemMeta();
                 if (mainMeta.hasDisplayName() && checkMeta.hasDisplayName()) {
-                    values.add(mainMeta.getDisplayName().equals(checkMeta.getDisplayName()));
+                    if (!mainMeta.getDisplayName().equals(checkMeta.getDisplayName())) return false;
                 }
 
                 if (mainMeta.hasLore() && checkMeta.hasLore()) {
-                    values.add(mainMeta.getLore().equals(checkMeta.getLore()));
+                    if (!mainMeta.getLore().equals(checkMeta.getLore())) return false;
                 }
+
+                if (! mainMeta.getItemFlags().equals(checkMeta.getItemFlags())) return false;
 
                 if (mainMeta.hasEnchants() && checkMeta.hasEnchants()) {
-                    values.add(mainMeta.getEnchants().equals(checkMeta.getEnchants()));
+                    if (!mainMeta.getEnchants().equals(checkMeta.getEnchants())) return false;
                 }
 
-                if ((getMeta(checkMeta) != null) && (metaBuilder != null)) {
-                    values.add(getMeta(checkMeta).toCompound().toString().equals(metaBuilder.toCompound().toString()));
-                }
-
-                if (!values.isEmpty()) return !values.contains(false);
+                return ItemTools.toCompound(mainMeta).equals(ItemTools.toCompound(checkMeta));
             }
         }
 
@@ -204,31 +202,56 @@ public class ItemBuilder {
 
     }
 
-    public <T extends MetaBuilder> ItemBuilder handleMeta (Class<T> clazz, ReturnValue<T> value) {
-        MetaBuilder builder = getMeta(meta);
-        if (builder == null) return this;
+    public boolean isSimilar(ItemBuilder builder) {
+        if (builder == null) return false;
+        return isSimilar(builder.build());
+    }
 
-        metaBuilder = Reflection.initiateClass(clazz);
-        FieldAccessor<ItemMeta> field = FieldAccessor.getField(MetaBuilder.class, "meta", ItemMeta.class);
-        field.set(metaBuilder, meta);
-        if (!clazz.isAssignableFrom(builder.getClass())) return this;
-        metaBuilder.fromItemMeta(meta);
-        value.run((T) metaBuilder);
-        meta = field.get(metaBuilder); // Should update the ItemMeta field
+    public ItemBuilder clone () {
+        return fromCompound(toCompound());
+    }
+
+
+    /* SKULL METHODS */
+    /**
+     * If the Item is a player_skull it will set the texture of the skull
+     * This is here due to {@link SkullMeta} not having a method to do this
+     */
+    public ItemBuilder setTexture (String texture) {
+        if (texture == null) return this;
+        if (texture.isEmpty()) return this;
+        if (texture.startsWith("http")) texture = Base64Wrapper.encodeString("{\"textures\":{\"SKIN\":{\"url\":\"" + texture + "\"}}}");
+        String finalTexture = texture;
+        handleMeta(SkullMeta.class, value -> {
+            if (finalTexture.length() > 17) {
+                return ItemTools.applyTextureToMeta(value, ItemTools.createProfile(finalTexture));
+            }else{
+                value.setOwner(finalTexture);
+            }
+            return value;
+        });
         return this;
     }
 
-    public StorageTagCompound toCompound () {
-        StorageTagCompound compound = new StorageTagCompound ();
+    /**
+     * If the Item is a player_skull it will return the Base64 Encoded texture url
+     * This is here due to {@link SkullMeta} not having a method to do this
+     */
+    public String getTexture() {
+        return getMetaValue(SkullMeta.class, value -> ItemTools.getTexture(ItemTools.getGameProfile(value)));
+    }
+
+    public StorageTagCompound toCompound() {
+        StorageTagCompound compound = new StorageTagCompound();
         compound.setEnum("material", item.getType());
         if (item.getAmount() > 1) compound.setInteger("amount", item.getAmount());
-        if (meta.hasDisplayName()) compound.setString("name", meta.getDisplayName());
+        if (meta.hasDisplayName()) compound.setString("name", translate(meta.getDisplayName(), true));
         if (meta.isUnbreakable()) compound.setBoolean("unbreakable", meta.isUnbreakable());
         if (item.getDurability() > 0) compound.setInteger("durability", item.getDurability());
 
         if (meta.hasLore()) {
             StorageTagList lore = new StorageTagList();
-            meta.getLore().forEach(line -> lore.appendTag(new StorageTagString(line)));
+            translate(meta.getLore(), true).forEach(line -> lore.appendTag(new StorageTagString(line.replace("\"", ""))));
             compound.setTag("lore", lore);
         }
 
@@ -248,38 +271,50 @@ public class ItemBuilder {
             meta.getItemFlags().forEach(itemFlag -> flags.appendTag(new StorageTagString(itemFlag.name())));
             compound.setTag("flags", flags);
         }
-        if (metaBuilder != null) compound.setTag("meta", metaBuilder.toCompound());
+        compound.setTag("meta", ItemTools.toCompound(meta));
         return compound;
     }
 
 
     /* PRIVATE METHODS */
-    private String translate(String message) {
-        return ChatColor.translateAlternateColorCodes('&', message);
-    }
-    private List<String> translate(List<String> message) {
+    private List<String> translate(List<String> message, boolean strip) {
         ArrayList<String> newLore = new ArrayList<>();
-        message.forEach(msg -> newLore.add(translate(msg)));
+        message.forEach(msg -> {
+            if (strip) {
+                msg = msg.replace(ChatColor.COLOR_CHAR, '&');
+            } else {
+                msg = ChatColor.translateAlternateColorCodes('&', msg);
+            }
+            newLore.add(msg);
+        });
         return newLore;
     }
-
-    private static MetaBuilder getMeta (ItemMeta meta) {
-        if (meta == null) return null;
-        if (meta.getClass().getInterfaces() == null) return null;
-        if (meta.getClass().getInterfaces()[0] == null) return null;
-        Class<?> clazz;
-
-        try {
-            Class metaClass = meta.getClass().getInterfaces()[0];
-            clazz = Class.forName("lib.brainsynder.item.meta."+metaClass.getSimpleName().replace("Meta", "").replace("Craft", "")+"MetaBuilder");
-        }catch (ClassNotFoundException e) {
-            clazz = MetaBuilder.class;
+    private String translate(String message, boolean strip) {
+        if (strip) {
+            message = message.replace(ChatColor.COLOR_CHAR, '&');
+        } else {
+            message = ChatColor.translateAlternateColorCodes('&', message);
         }
-        MetaBuilder metaBuilder = Reflection.initiateClass(clazz);
-        if (metaBuilder == null) return null;
-        FieldAccessor<ItemMeta> field = FieldAccessor.getField(clazz, "meta", ItemMeta.class);
-        field.set(metaBuilder, meta);
-        metaBuilder.fromItemMeta(meta);
-        return metaBuilder;
+        return message;
+    }
+
+    public  <T extends ItemMeta> ItemBuilder handleMeta(Class<T> clazz, InnerReturn<T> meta) {
+        if (!clazz.isAssignableFrom(this.meta.getClass())) return this;
+        this.meta = meta.run((T)this.meta);
+        item.setItemMeta(this.meta);
+        return this;
+    }
+
+    public  <R, T> R getMetaValue(Class<T> clazz, InnerReturnValue<T, R> meta) {
+        if (!clazz.isAssignableFrom(this.meta.getClass())) return null;
+        return meta.run((T)this.meta);
+    }
+
+    public interface InnerReturn<T> {
+        T run(T value);
+    }
+
+    public interface InnerReturnValue<T, R> {
+        R run(T value);
     }
 }
