@@ -160,13 +160,12 @@ public class YamlFile implements ConfigurationSection, Movable{
     
     @Override
     public int getInt(String tag) {
-        this.configuration = YamlConfiguration.loadConfiguration(file);
-        return this.configuration.get(tag) != null ? this.configuration.getInt(tag) : 0;
+        return getInt(tag, 0);
     }
     @Override
     public int getInt(String tag, int fallback) {
         if (!contains(tag)) return fallback;
-        return getInt(tag, fallback);
+        return configuration.getInt(tag, fallback);
     }
     @Override
     public boolean isInt(String tag) {
