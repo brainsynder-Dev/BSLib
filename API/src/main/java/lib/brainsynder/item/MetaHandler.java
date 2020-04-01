@@ -1,5 +1,6 @@
 package lib.brainsynder.item;
 
+import lib.brainsynder.VersionRestricted;
 import lib.brainsynder.nbt.StorageTagCompound;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -7,7 +8,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MetaHandler<T extends ItemMeta> extends ItemTools {
+public class MetaHandler<T extends ItemMeta> extends ItemTools implements VersionRestricted {
     private T meta = null;
     private StorageTagCompound compound = null;
 

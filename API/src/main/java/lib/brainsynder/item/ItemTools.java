@@ -9,7 +9,6 @@ import lib.brainsynder.reflection.FieldAccessor;
 import lib.brainsynder.reflection.Reflection;
 import org.bukkit.inventory.meta.*;
 
-import java.lang.reflect.Constructor;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -80,23 +79,19 @@ class ItemTools {
         if (meta instanceof MapMeta) handler = new MapMetaHandler((MapMeta) meta);
         if (meta instanceof PotionMeta) handler = new PotionMetaHandler((PotionMeta) meta);
         if (meta instanceof SkullMeta) handler = new SkullMetaHandler((SkullMeta) meta);
+        if (isInstance(meta, "TropicalFishBucketMeta")) handler = new TropicalFishBucketMetaHandler(meta);
+        if (isInstance(meta, "CrossbowMeta")) handler = new CrossbowMetaHandler(meta);
 
-        if (handler == null) {
-            if (meta.getClass().getInterfaces() == null) return null;
-            if (meta.getClass().getInterfaces()[0] == null) return null;
-            Class<?> clazz = null;
-
-            try {
-                Class metaClass = meta.getClass().getInterfaces()[0];
-                clazz = Class.forName("lib.brainsynder.item.meta." + metaClass.getSimpleName().replace("Meta", "").replace("Craft", "") + "MetaHandler");
-            } catch (ClassNotFoundException ignored) {}
-            if (clazz == null) return null;
-            Constructor constructor = Reflection.getConstructor(clazz, ItemMeta.class);
-            MetaHandler metaHandler = Reflection.initiateClass(constructor, meta);
-            if (metaHandler == null) return null;
-            handler = metaHandler;
-        }
+        if ((handler != null) && (!handler.isSupported())) return null;
         return handler;
+    }
+
+    private static boolean isInstance (ItemMeta meta, String name) {
+        if (meta.getClass().getInterfaces() == null) return false;
+        if (meta.getClass().getInterfaces()[0] == null) return false;
+        Class metaClass = meta.getClass().getInterfaces()[0];
+        String className = metaClass.getSimpleName().replace("Meta", "").replace("Craft", "")+"Meta";
+        return (name.equals(className));
     }
 
     static StorageTagCompound toCompound (ItemMeta meta) {

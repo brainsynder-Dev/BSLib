@@ -328,6 +328,16 @@ public class Reflection {
         return null;
     }
 
+    // This is mostly useful in Reflection of multiple version
+    public static Class getBukkitClass(String className) {
+        try {
+            return Class.forName("org.bukkit." + className);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static Method getMethod(Class<?> clazz, String methodName, Class<?>... params) {
         try {
             return clazz.getDeclaredMethod(methodName, params);
