@@ -1,12 +1,12 @@
-package lib.brainsynder.nms.versions.v1_15_R1;
+package lib.brainsynder.nms.versions.v1_13_R2;
 
 import lib.brainsynder.anvil.AnvilClickEvent;
 import lib.brainsynder.anvil.AnvilSlot;
 import lib.brainsynder.anvil.IAnvilClickEvent;
 import lib.brainsynder.nms.AnvilGUI;
 import lib.brainsynder.reflection.FieldAccessor;
-import net.minecraft.server.v1_15_R1.*;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import net.minecraft.server.v1_13_R2.*;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -40,12 +40,12 @@ public class AnvilHandler extends AnvilGUI {
     public void open() {
         EntityPlayer p = ((CraftPlayer) getPlayer()).getHandle();
         int c = p.nextContainerCounter();
-        AnvilContainer container = new AnvilContainer(c, p);
+        AnvilContainer container = new AnvilContainer(p);
         this.inv = container.getBukkitView().getTopInventory();
         for (AnvilSlot slot : this.items.keySet()) {
             this.inv.setItem(slot.getSlot(), items.get(slot));
         }
-        p.playerConnection.sendPacket(new PacketPlayOutOpenWindow(c, Containers.ANVIL, new ChatMessage("Anvil")));
+        p.playerConnection.sendPacket(new PacketPlayOutOpenWindow(c, "minecraft:anvil", new ChatMessage("Anvil"), 0));
         p.activeContainer = container;
         FieldAccessor<Integer> field = FieldAccessor.getField(Container.class, "windowId", Integer.TYPE);
         field.set(p.activeContainer, c);
@@ -61,8 +61,8 @@ public class AnvilHandler extends AnvilGUI {
     }
 
     private static class AnvilContainer extends ContainerAnvil {
-        AnvilContainer(int id, EntityHuman entity) {
-            super(id, entity.inventory, ContainerAccess.at(entity.world, new BlockPosition(0, 0, 0)));
+        AnvilContainer(EntityHuman entity) {
+            super(entity.inventory, entity.world, new BlockPosition(0, 0, 0), entity);
             checkReachable = false;
         }
 
@@ -74,9 +74,9 @@ public class AnvilHandler extends AnvilGUI {
         }
 
         @Override
-        public void e() {
-            super.e();
-            this.levelCost.set(0);
+        public void d() {
+            super.d();
+            this.levelCost = 0;
         }
     }
 

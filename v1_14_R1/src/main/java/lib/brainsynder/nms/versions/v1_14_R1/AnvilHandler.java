@@ -1,12 +1,11 @@
-package lib.brainsynder.nms.versions.v1_15_R1;
+package lib.brainsynder.nms.versions.v1_14_R1;
 
 import lib.brainsynder.anvil.AnvilClickEvent;
 import lib.brainsynder.anvil.AnvilSlot;
 import lib.brainsynder.anvil.IAnvilClickEvent;
 import lib.brainsynder.nms.AnvilGUI;
-import lib.brainsynder.reflection.FieldAccessor;
-import net.minecraft.server.v1_15_R1.*;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import net.minecraft.server.v1_14_R1.*;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -45,10 +44,8 @@ public class AnvilHandler extends AnvilGUI {
         for (AnvilSlot slot : this.items.keySet()) {
             this.inv.setItem(slot.getSlot(), items.get(slot));
         }
-        p.playerConnection.sendPacket(new PacketPlayOutOpenWindow(c, Containers.ANVIL, new ChatMessage("Anvil")));
+        p.playerConnection.sendPacket(new PacketPlayOutOpenWindow (c, Containers.ANVIL, new ChatMessage("Anvil")));
         p.activeContainer = container;
-        FieldAccessor<Integer> field = FieldAccessor.getField(Container.class, "windowId", Integer.TYPE);
-        field.set(p.activeContainer, c);
         p.activeContainer.addSlotListener(p);
     }
 
