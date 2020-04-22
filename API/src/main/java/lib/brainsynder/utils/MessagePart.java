@@ -11,6 +11,7 @@ public final class MessagePart {
     public String hoverActionName = null;
     public String hoverActionData = null;
     public final String text;
+    public String font;
 
     public MessagePart(String text) {
         this.text = text;
@@ -21,6 +22,9 @@ public final class MessagePart {
             json.beginObject().name("text").value(this.text);
             if (this.color != null) {
                 json.name("color").value(this.color.name().toLowerCase());
+            }
+            if (this.font != null) {
+                json.name("font").value(font.toLowerCase());
             }
             if (this.styles != null) {
                 for (ChatColor style : this.styles) {

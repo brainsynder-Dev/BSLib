@@ -41,6 +41,21 @@ public class BaseTellrawMessage extends Tellraw {
         this.dirty = true;
         return this;
     }
+
+    /**
+     * This feature was added to ChatComponents in 1.16
+     *
+     * @param font - Resource Pack path to the font
+     *             Example: minecraft:default - Will result in the default minecraft texture
+     */
+    public BaseTellrawMessage font(String font) {
+        if ((font == null) || (font.isEmpty())) {
+            throw new NullPointerException("font can not be null");
+        }
+        latest().font = font;
+        this.dirty = true;
+        return this;
+    }
     public BaseTellrawMessage style(ChatColor[] styles) {
         for (ChatColor style : styles) {
             if (!style.isFormat()) {
