@@ -6,6 +6,7 @@ import lib.brainsynder.reflection.Reflection;
 import lib.brainsynder.utils.MessagePart;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -38,6 +39,19 @@ public class BaseTellrawMessage extends Tellraw {
             throw new IllegalArgumentException(color.name() + " is not a color");
         }
         latest().color = color;
+        latest().customColor = null;
+        this.dirty = true;
+        return this;
+    }
+
+    /**
+     * This feature was added to ChatComponents in 1.16
+     *
+     * @param color - RGB/HEX color
+     */
+    public BaseTellrawMessage color(Color color) {
+        latest().customColor = color;
+        latest().color = null;
         this.dirty = true;
         return this;
     }
