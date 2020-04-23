@@ -1,6 +1,8 @@
 package lib.brainsynder.particle;
 
 import lib.brainsynder.ServerVersion;
+import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nms.ParticlePacket;
 import lib.brainsynder.reflection.Reflection;
 import lib.brainsynder.storage.TriLoc;
@@ -14,7 +16,7 @@ import java.util.List;
 
 public class ParticleMaker {
     private static ParticlePacket particlePacket = null;
-    private Particle type;
+    private final Particle type;
     private double speed = 0.0;
     private int count = 1;
     private double offsetX = 0.0;
@@ -98,6 +100,21 @@ public class ParticleMaker {
         this.offsetY = offsetY;
         this.offsetZ = offsetZ;
         particlePacket = ParticlePacket.getInstance();
+    }
+
+    public ParticleMaker (StorageTagCompound compound) {
+        type = compound.getEnum("particle", Particle.class, Particle.CRIT);
+        speed = compound.getDouble("speed", 0.0);
+        count = compound.getInteger("count", 1);
+        if (compound.hasKey("offset")) {
+            StorageTagCompound offset = compound.getCompoundTag("offset");
+            if (offset.getSize() == 1) throw new MissingParticleException("Offset has to have 3 values (x,y,z)");
+            offsetX = offset.getDouble("x", 0);
+            offsetY = offset.getDouble("y", 0);
+            offsetZ = offset.getDouble("z", 0);
+        }
+        if (compound.hasKey("dust")) dustOptions = new DustOptions (compound.getCompoundTag("dust"));
+        if (compound.hasKey("item")) data = ItemBuilder.fromCompound(compound.getCompoundTag("item")).build();
     }
 
     public ParticleMaker setSpeed(double speed) {
@@ -196,6 +213,17 @@ public class ParticleMaker {
         for (Player player : players) {
             sendToPlayer(player, location);
         }
+    }
+
+    public StorageTagCompound toCompound () {
+        StorageTagCompound compound = new StorageTagCompound ();
+        compound.setEnum("particle", type);
+        compound.setDouble("speed", speed);
+        compound.setInteger("count", count);
+        compound.setTag("offset", new StorageTagCompound().setDouble("x", offsetX).setDouble("y", offsetY).setDouble("z", offsetZ));
+        if (dustOptions != null) compound.setTag("dust", dustOptions.toCompound());
+        if (data != null) compound.setTag("item", ItemBuilder.fromItem(data).toCompound());
+        return compound;
     }
 
     private Object createPacket(Location location) {
