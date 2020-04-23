@@ -53,11 +53,11 @@ public class DataConverter {
         return builder;
     }
 
-    private static Material getMaterial (String name) {
+    public static Material getMaterial (String name) {
         return getMaterial(name, null);
     }
 
-    private static Material getMaterial (String name, String fallback) {
+    public static Material getMaterial (String name, String fallback) {
         name = name.toUpperCase();
         if (EnumUtils.isValidEnum(Material.class, name)) return Material.valueOf(name);
         if ((fallback != null) && (!fallback.isEmpty())) return getMaterial(fallback);
