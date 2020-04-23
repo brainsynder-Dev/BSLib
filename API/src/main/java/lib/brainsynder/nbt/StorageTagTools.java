@@ -16,9 +16,18 @@ import java.util.List;
 
 public class StorageTagTools {
     private static Object registry = null;
-    private static Class<?> nbtTag, craftStack, stackClass;
-    private static Constructor newStack, newKey;
-    private static Method save, newItem, toString, asCopy, asBukkitCopy, getItem, parseString;
+    private static final Class<?> nbtTag;
+    private static final Class<?> craftStack;
+    private static final Class<?> stackClass;
+    private static final Constructor newStack;
+    private static final Constructor newKey;
+    private static final Method save;
+    private static Method newItem;
+    private static final Method toString;
+    private static final Method asCopy;
+    private static final Method asBukkitCopy;
+    private static final Method getItem;
+    private static final Method parseString;
 
     static {
         Class parser = Reflection.getNmsClass("MojangsonParser");
@@ -92,11 +101,11 @@ public class StorageTagTools {
                 JsonArray array = new JsonArray();
                 Object list = ((IStorageList)base).getList();
                 if (list instanceof byte[]) {
-                    for (byte v : (byte[]) list) array.add(v+"-B");
+                    for (byte v : (byte[]) list) array.add(v+"b");
                 }else if (list instanceof int[]) {
-                    for (int v : (int[]) list) array.add(v+"-I");
+                    for (int v : (int[]) list) array.add(v);
                 }else if (list instanceof long[]) {
-                    for (long v : (long[]) list) array.add(v+"-L");
+                    for (long v : (long[]) list) array.add(v+"l");
                 }else if (list instanceof List) {
                     ((List)list).forEach(string -> array.add(String.valueOf(string).replace("\"", "")));
                 }
@@ -130,14 +139,16 @@ public class StorageTagTools {
                 array.values().forEach(jsonValue -> {
                     if (jsonValue.isString()) {
                         String string = jsonValue.asString();
-                        if (string.endsWith("-L")) {
-                            longs.add(jsonValue.asLong());
-                        }else if (string.endsWith("-B")) {
-                            bytes.add((byte) jsonValue.asInt());
-                        }else if (string.endsWith("-I")) {
-                            ints.add(jsonValue.asInt());
+                        if (string.endsWith("l")) {
+                            longs.add(Long.parseLong(string.replace("l", "")));
+                        }else if (string.endsWith("b")) {
+                            bytes.add(Byte.parseByte(string.replace("b", "")));
                         }else {
-                            list.appendTag(new StorageTagString(string));
+                            try {
+                                ints.add(Integer.parseInt(string));
+                            }catch (NumberFormatException e) {
+                                list.appendTag(new StorageTagString(string));
+                            }
                         }
                     }
 
