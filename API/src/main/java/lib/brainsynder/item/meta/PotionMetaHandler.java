@@ -34,7 +34,7 @@ public class PotionMetaHandler extends MetaHandler<PotionMeta> {
                 effect.setBoolean("particles", potionEffect.hasParticles());
                 effect.setInteger("amplifier", potionEffect.getAmplifier());
                 effect.setInteger("duration", potionEffect.getDuration());
-                if (potionEffect.getColor() != null) effect.setColor("color", potionEffect.getColor());
+                effect.setBoolean("icon", potionEffect.hasIcon());
                 list.appendTag(effect);
             });
             compound.setTag("effects", list);
@@ -69,7 +69,7 @@ public class PotionMetaHandler extends MetaHandler<PotionMeta> {
                             effect.getInteger("amplifier", 1),
                             effect.getBoolean("ambient", true),
                             effect.getBoolean("particles", true),
-                            effect.getColor("color", null));
+                            effect.getBoolean("icon", true));
                     value.addCustomEffect(potionEffect, false);
                 });
             }

@@ -9,6 +9,7 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
@@ -312,8 +313,27 @@ public class YamlFile implements ConfigurationSection, Movable{
         return configuration.getMapList(tag);
     }
 
-    
-    
+    @Override
+    public <T> T getObject(String s, Class<T> aClass) {
+        return configuration.getObject(s, aClass);
+    }
+
+    @Override
+    public <T> T getObject(String s, Class<T> aClass, T t) {
+        return configuration.getObject(s, aClass, t);
+    }
+
+    @Override
+    public <T extends ConfigurationSerializable> T getSerializable(String s, Class<T> aClass) {
+        return configuration.getSerializable(s, aClass);
+    }
+
+    @Override
+    public <T extends ConfigurationSerializable> T getSerializable(String s, Class<T> aClass, T t) {
+        return configuration.getSerializable(s, aClass, t);
+    }
+
+
     @Override
     public Vector getVector(String tag) {
         return configuration.getVector(tag);
