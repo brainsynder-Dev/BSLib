@@ -19,12 +19,26 @@ public class JsonToNBT {
         this.reader = reader;
     }
 
-    public static StorageTagCompound getTagFromJson(String string) throws NBTException {
-        return (new JsonToNBT(new StringReader(string))).toCompound();
+    public static JsonToNBT parse (String string) {
+        return new JsonToNBT(new StringReader(string));
     }
 
-    private StorageTagCompound toCompound() throws NBTException {
+    public static StorageTagCompound getTagFromJson(String string) throws NBTException {
+        return parse(string).toCompound();
+    }
+
+    public StorageTagCompound toCompound() throws NBTException {
         StorageTagCompound compoundTag = this.parseCompoundTag();
+        this.reader.skipWhitespace();
+        if (this.reader.canRead()) {
+            throw this.reader.throwError("Trailing data found");
+        } else {
+            return compoundTag;
+        }
+    }
+
+    public StorageTagList toList() throws NBTException {
+        StorageTagList compoundTag = (StorageTagList) this.list();
         this.reader.skipWhitespace();
         if (this.reader.canRead()) {
             throw this.reader.throwError("Trailing data found");

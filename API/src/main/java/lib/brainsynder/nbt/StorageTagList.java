@@ -95,19 +95,20 @@ public class StorageTagList extends StorageBase implements IStorageList<List<Sto
      * Adds the provided tag to the end of the list. There is no check to verify this tag is of the same type as any
      * previous tag.
      */
-    public void appendTag(StorageBase nbt) {
+    public StorageTagList appendTag(StorageBase nbt) {
         if (nbt.getId() == 0) {
             LOGGER.warn("Invalid TagEnd added to ListTag");
         } else {
             if (this.tagType == 0) {
                 this.tagType = nbt.getId();
             } else if (this.tagType != nbt.getId()) {
-                LOGGER.warn("Adding mismatching tag types to tag list");
-                return;
+                LOGGER.warn("Mismatching tag types to tag list ("+nbt.getClass().getSimpleName()+" != "+StorageBase.createNewByType(tagType).getClass().getSimpleName()+")");
+                return this;
             }
 
             this.tagList.add(nbt);
         }
+        return this;
     }
 
     /**
@@ -120,7 +121,7 @@ public class StorageTagList extends StorageBase implements IStorageList<List<Sto
             if (this.tagType == 0) {
                 this.tagType = nbt.getId();
             } else if (this.tagType != nbt.getId()) {
-                LOGGER.warn("Adding mismatching tag types to tag list");
+                LOGGER.warn("Mismatching tag types to tag list ("+nbt.getClass().getSimpleName()+" != "+StorageBase.createNewByType(tagType).getClass().getSimpleName()+")");
                 return;
             }
 

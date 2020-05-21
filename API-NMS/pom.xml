@@ -11,7 +11,7 @@
     </parent>
     <description>Contains the BSLib code (With NMS)</description>
     <artifactId>API-NMS</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <version>${module.version}</version>
 
     <build>
