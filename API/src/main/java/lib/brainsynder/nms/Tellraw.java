@@ -9,8 +9,6 @@ import java.util.Collection;
 import java.util.List;
 
 public abstract class Tellraw {
-    private static Tellraw tellraw = null;
-
     public abstract Tellraw color(ChatColor color);
     public abstract Tellraw style(ChatColor[] styles);
     public abstract Tellraw file(String path);
@@ -34,8 +32,6 @@ public abstract class Tellraw {
 
 
     public static Tellraw getInstance(String text) {
-        if (tellraw != null) return tellraw.then(text);
-        tellraw = new BaseTellrawMessage();
-        return tellraw.then(text);
+        return new BaseTellrawMessage().then(text);
     }
 }
