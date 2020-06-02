@@ -26,7 +26,10 @@ public class BaseTellrawMessage extends Tellraw {
 
     public BaseTellrawMessage() {
         try {
-            packet = Reflection.getNmsClass("PacketPlayOutChat").getConstructor(Reflection.getNmsClass("IChatBaseComponent"), byte.class);
+            /**
+             * {@link net.minecraft.server.v1_15_R1.PacketPlayOutChat}
+             */
+            packet = Reflection.getNmsClass("PacketPlayOutChat").getConstructor(Reflection.getNmsClass("IChatBaseComponent"));
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
