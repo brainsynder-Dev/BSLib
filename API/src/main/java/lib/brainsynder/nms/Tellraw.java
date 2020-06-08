@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 public abstract class Tellraw {
-    protected static Tellraw tellraw = null;
+    private static Tellraw tellraw = null;
 
     public abstract Tellraw color(ChatColor color);
     public abstract Tellraw style(ChatColor[] styles);
