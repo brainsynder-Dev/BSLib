@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class StorageTagList extends StorageBase implements IStorageList<List<StorageBase>> {
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger(StorageTagList.class);
     private List<StorageBase> tagList = Lists.newArrayList();
 
     /**

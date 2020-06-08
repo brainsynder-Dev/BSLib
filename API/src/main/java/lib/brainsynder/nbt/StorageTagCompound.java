@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class StorageTagCompound extends StorageBase {
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger(StorageTagCompound.class);
     private static final Pattern PATTERN = Pattern.compile("[A-Za-z0-9._+-]+");
     private Map<String, StorageBase> tagMap = Maps.newHashMap();
     private List<String> booleans = new ArrayList<>();
