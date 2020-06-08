@@ -100,7 +100,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder clearLore() {
-        meta.getLore().clear();
+        if (meta.hasLore()) meta.getLore().clear();
         return this;
     }
 
