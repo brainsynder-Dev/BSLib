@@ -163,11 +163,13 @@ public class BaseTellrawMessage extends Tellraw {
     public void send(Player player) {
         if ((packet == null) || (serializerMethod == null)){
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + player.getName () + " " + toJSONString());
+            messageParts.clear();
             return;
         }
 
         Object serializer = Reflection.invoke(serializerMethod, null, toJSONString());
         Reflection.sendPacket(player, Reflection.initiateClass(packet, serializer));
+        messageParts.clear();
     }
 
 
