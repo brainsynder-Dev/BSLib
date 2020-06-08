@@ -156,6 +156,7 @@ public class BaseTellrawMessage extends Tellraw {
             builder.append(part.text);
         });
         sender.sendMessage(builder.toString());
+        tellraw = null;
     }
 
     @Override
