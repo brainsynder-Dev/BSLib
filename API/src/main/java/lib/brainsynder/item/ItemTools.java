@@ -88,8 +88,8 @@ class ItemTools {
 
     private static boolean isInstance (ItemMeta meta, String name) {
         if (meta.getClass().getInterfaces() == null) return false;
-        if (meta.getClass().getInterfaces()[0] == null) return false;
-        Class metaClass = meta.getClass().getInterfaces()[0];
+        if (meta.getClass().getInterfaces().length == 0) return false;
+        Class<?> metaClass = meta.getClass().getInterfaces()[0];
         String className = metaClass.getSimpleName().replace("Meta", "").replace("Craft", "")+"Meta";
         return (name.equals(className));
     }
