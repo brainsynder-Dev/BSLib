@@ -13,7 +13,7 @@ public class JsonFile implements Movable {
     private final Charset ENCODE = Charsets.UTF_8;
     private JsonObject json;
     protected JsonObject defaults = new JsonObject();
-    private File file;
+    private final File file;
     private boolean update = false;
 
     public JsonFile(File file) {
@@ -87,36 +87,43 @@ public class JsonFile implements Movable {
     public double getDouble (String key) {
         JsonValue value = getValue(key);
         if (value == null) return 0;
+        if (value.isString()) return Double.parseDouble(value.asString());
         return value.asDouble();
     }
     public byte getByte (String key) {
         JsonValue value = getValue(key);
         if (value == null) return 0;
+        if (value.isString()) return Byte.parseByte(value.asString());
         return (byte) value.asInt();
     }
     public boolean getBoolean (String key) {
         JsonValue value = getValue(key);
         if (value == null) return false;
+        if (value.isString()) return Boolean.getBoolean(value.asString());
         return value.asBoolean();
     }
     public short getShort (String key) {
         JsonValue value = getValue(key);
         if (value == null) return 0;
+        if (value.isString()) return Short.parseShort(value.asString());
         return (short) value.asLong();
     }
     public float getFloat (String key) {
         JsonValue value = getValue(key);
         if (value == null) return 0;
+        if (value.isString()) return Float.parseFloat(value.asString());
         return value.asFloat();
     }
     public long getLong (String key) {
         JsonValue value = getValue(key);
         if (value == null) return 0;
+        if (value.isString()) return Long.parseLong(value.asString());
         return value.asLong();
     }
     public int getInteger (String key) {
         JsonValue value = getValue(key);
         if (value == null) return 0;
+        if (value.isString()) return Integer.parseInt(value.asString());
         return value.asInt();
     }
 
