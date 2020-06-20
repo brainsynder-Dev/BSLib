@@ -7,6 +7,7 @@ import java.lang.annotation.Annotation;
 
 public enum Particle {
     UNKNOWN,
+    // ---- START ---- //
     @EnumVersion(version = ServerVersion.v1_8_R3) BARRIER("barrier", 35),
     @EnumVersion(version = ServerVersion.v1_8_R3) BLOCK_CRACK(true, "tilecrack_", 37),
     @EnumVersion(version = ServerVersion.v1_8_R3) BLOCK_DUST(true, "blockdust_", 38),
@@ -21,10 +22,10 @@ public enum Particle {
     @EnumVersion(version = ServerVersion.v1_8_R3) EXPLOSION_NORMAL("explode", 0),
     @EnumVersion(version = ServerVersion.v1_8_R3) FIREWORKS_SPARK("fireworksSpark", 3),
     @EnumVersion(version = ServerVersion.v1_8_R3) FLAME("flame", 26),
-    @EnumVersion(version = ServerVersion.v1_8_R3, maxVersion = ServerVersion.v1_12_R1) @Deprecated FOOTSTEP("footstep", 28),  /*  Was removed in 1.13 */
+    @EnumVersion(version = ServerVersion.v1_8_R3) FOOTSTEP("footstep", 28),
     @EnumVersion(version = ServerVersion.v1_8_R3) HEART("heart", 34),
     @EnumVersion(version = ServerVersion.v1_8_R3) ITEM_CRACK(true, "iconcrack_", 36),
-    @EnumVersion(version = ServerVersion.v1_8_R3, maxVersion = ServerVersion.v1_12_R1) @Deprecated ITEM_TAKE("take", 40),  /*  Was removed in 1.13 */
+    @EnumVersion(version = ServerVersion.v1_8_R3) ITEM_TAKE("take", 40),
     @EnumVersion(version = ServerVersion.v1_8_R3) LAVA("lava", 27),
     @EnumVersion(version = ServerVersion.v1_8_R3) MOB_APPEARANCE("mobappearance", 41),
     @EnumVersion(version = ServerVersion.v1_8_R3) NOTE("note", 23),
@@ -51,32 +52,32 @@ public enum Particle {
     @EnumVersion(version = ServerVersion.v1_8_R3) WATER_WAKE("wake", 6),
 
 
-    /* Added in 1.9 */
-    @EnumVersion(version = ServerVersion.v1_9_R1) DAMAGE_INDICATOR("damageIndicator", -1),
-    @EnumVersion(version = ServerVersion.v1_9_R1) DRAGON_BREATH("dragonbreath", -1),
-    @EnumVersion(version = ServerVersion.v1_9_R1) END_ROD("endRod", -1),
-    @EnumVersion(version = ServerVersion.v1_9_R1) SWEEP_ATTACK("sweepAttack", -1),
+    // ---- Particles added in v1_9_R1 ---- //
+    @EnumVersion(version = ServerVersion.v1_9_R1) DAMAGE_INDICATOR,
+    @EnumVersion(version = ServerVersion.v1_9_R1) DRAGON_BREATH,
+    @EnumVersion(version = ServerVersion.v1_9_R1) END_ROD,
+    @EnumVersion(version = ServerVersion.v1_9_R1) SWEEP_ATTACK,
 
 
-    /* Added in 1.11 */
+    // ---- Particles added in v1_11_R1 ---- //
     @EnumVersion(version = ServerVersion.v1_11_R1) FALLING_DUST(true, "fallingdust"),
     @EnumVersion(version = ServerVersion.v1_11_R1) SPIT("spit"),
     @EnumVersion(version = ServerVersion.v1_11_R1) TOTEM("totem"),
 
 
-    /* Added in 1.13 */
+    // ---- Particles added in v1_13_R1 ---- //
     @EnumVersion(version = ServerVersion.v1_13_R1) BUBBLE_COLUMN_UP,
     @EnumVersion(version = ServerVersion.v1_13_R1) BUBBLE_POP,
     @EnumVersion(version = ServerVersion.v1_13_R1) CURRENT_DOWN,
     @EnumVersion(version = ServerVersion.v1_13_R1) DOLPHIN,
-    @EnumVersion(version = ServerVersion.v1_13_R1) @Deprecated LEGACY_BLOCK_CRACK(true, "legacy_block_crack", -1),
-    @EnumVersion(version = ServerVersion.v1_13_R1) @Deprecated LEGACY_BLOCK_DUST(true, "legacy_block_dust", -1),
-    @EnumVersion(version = ServerVersion.v1_13_R1) @Deprecated LEGACY_FALLING_DUST(true, "legacy_falling_dust", -1),
+    @EnumVersion(version = ServerVersion.v1_13_R1) LEGACY_BLOCK_CRACK(true, "legacy_block_crack", -1),
+    @EnumVersion(version = ServerVersion.v1_13_R1) LEGACY_BLOCK_DUST(true, "legacy_block_dust", -1),
+    @EnumVersion(version = ServerVersion.v1_13_R1) LEGACY_FALLING_DUST(true, "legacy_falling_dust", -1),
     @EnumVersion(version = ServerVersion.v1_13_R1) NAUTILUS,
     @EnumVersion(version = ServerVersion.v1_13_R1) SQUID_INK,
 
 
-    /* Added in 1.14 */
+    // ---- Particles added in v1_14_R1 ---- //
     @EnumVersion(version = ServerVersion.v1_14_R1) CAMPFIRE_COSY_SMOKE,
     @EnumVersion(version = ServerVersion.v1_14_R1) CAMPFIRE_SIGNAL_SMOKE,
     @EnumVersion(version = ServerVersion.v1_14_R1) COMPOSTER,
@@ -87,11 +88,12 @@ public enum Particle {
     @EnumVersion(version = ServerVersion.v1_14_R1) SNEEZE,
 
 
-    /* Added in 1.15 */
+    // ---- Particles added in v1_15_R1 ---- //
     @EnumVersion(version = ServerVersion.v1_15_R1) DRIPPING_HONEY,
     @EnumVersion(version = ServerVersion.v1_15_R1) FALLING_HONEY,
-    @EnumVersion(version = ServerVersion.v1_15_R1) LANDING_HONEY,
-    @EnumVersion(version = ServerVersion.v1_15_R1) FALLING_NECTAR;
+    @EnumVersion(version = ServerVersion.v1_15_R1) FALLING_NECTAR,
+    @EnumVersion(version = ServerVersion.v1_15_R1) LANDING_HONEY
+    ; // ---- END ---- //
 
     private final String name;
     private int id = -1;
@@ -99,6 +101,10 @@ public enum Particle {
 
     Particle() {
         this.name = name().toLowerCase();
+    }
+    Particle(boolean requiresData) {
+        this.name = name().toLowerCase();
+        this.requiresData = requiresData;
     }
     Particle(String name) {
         this.name = ((ServerVersion.getVersion() == ServerVersion.v1_13_R1) ? name().toLowerCase() : name);
@@ -195,3 +201,5 @@ public enum Particle {
         return false;
     }
 }
+
+

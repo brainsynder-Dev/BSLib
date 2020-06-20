@@ -3,6 +3,7 @@ package lib.brainsynder;
 import org.bukkit.Bukkit;
 
 public enum ServerVersion {
+    // ---- START ---- //
     UNKNOWN,
     v1_8_R3,
     v1_9_R1,
@@ -14,7 +15,8 @@ public enum ServerVersion {
     v1_13_R2,
     v1_14_R1,
     v1_15_R1,
-    v1_16_R1;
+    v1_16_R1
+    ; // ---- END ---- //
 
     /**
      * This will fetch the servers version as an {@link Integer}
