@@ -10,16 +10,20 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class Reflection {
-    private static HashMap<Class<? extends Entity>, Method> handles = new HashMap<>();
+    private static final HashMap<Class<? extends Entity>, Method> handles = new HashMap<>();
 
 
 
     public static void sendPacket(Player player, Object packet)
             throws IllegalArgumentException {
+        if (packet == null) return;
         Object handle = getHandle(player);
+        if (handle == null) return;
         Field connection = getField(handle.getClass(), "playerConnection");
         Method sendPacket = getMethod(getNmsClass("PlayerConnection"), "sendPacket", getNmsClass("Packet"));
 
+        if (connection == null) return;
+        if (sendPacket == null) return;
         try {
             sendPacket.invoke(connection.get(handle), packet);
         } catch (IllegalAccessException | InvocationTargetException ex) {
