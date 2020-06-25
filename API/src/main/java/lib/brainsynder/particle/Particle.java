@@ -92,7 +92,19 @@ public enum Particle {
     @EnumVersion(version = ServerVersion.v1_15_R1) DRIPPING_HONEY,
     @EnumVersion(version = ServerVersion.v1_15_R1) FALLING_HONEY,
     @EnumVersion(version = ServerVersion.v1_15_R1) FALLING_NECTAR,
-    @EnumVersion(version = ServerVersion.v1_15_R1) LANDING_HONEY
+    @EnumVersion(version = ServerVersion.v1_15_R1) LANDING_HONEY,
+
+
+    // ---- Particles added in v1_16_R1 ---- //
+    @EnumVersion(version = ServerVersion.v1_16_R1) ASH,
+    @EnumVersion(version = ServerVersion.v1_16_R1) CRIMSON_SPORE,
+    @EnumVersion(version = ServerVersion.v1_16_R1) DRIPPING_OBSIDIAN_TEAR,
+    @EnumVersion(version = ServerVersion.v1_16_R1) FALLING_OBSIDIAN_TEAR,
+    @EnumVersion(version = ServerVersion.v1_16_R1) LANDING_OBSIDIAN_TEAR,
+    @EnumVersion(version = ServerVersion.v1_16_R1) REVERSE_PORTAL,
+    @EnumVersion(version = ServerVersion.v1_16_R1) SOUL,
+    @EnumVersion(version = ServerVersion.v1_16_R1) SOUL_FIRE_FLAME,
+    @EnumVersion(version = ServerVersion.v1_16_R1) WARPED_SPORE
     ; // ---- END ---- //
 
     private final String name;
