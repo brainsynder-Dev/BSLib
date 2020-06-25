@@ -80,6 +80,12 @@
             <version>${module.version}</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>v1_16_R1</artifactId>
+            <version>${module.version}</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     
