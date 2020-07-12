@@ -31,6 +31,7 @@ public class JsonFile implements Movable {
         try {
             if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
             if (!file.exists()) {
+                loadDefaults();
                 OutputStreamWriter pw = new OutputStreamWriter(new FileOutputStream(file), ENCODE);
                 pw.write(defaults.toString(WriterConfig.PRETTY_PRINT).replace("\u0026", "&"));
                 pw.flush();
@@ -38,15 +39,13 @@ public class JsonFile implements Movable {
             }
 
             json = (JsonObject) Json.parse(new InputStreamReader(new FileInputStream(file), ENCODE));
-            loadDefaults();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public boolean save() {
-        String text = defaults.toString(WriterConfig.PRETTY_PRINT).replace("\u0026", "&");
-        if (update) text = json.toString(WriterConfig.PRETTY_PRINT).replace("\u0026", "&");
+        String text = json.toString(WriterConfig.PRETTY_PRINT).replace("\u0026", "&");
 
         try {
             OutputStreamWriter fw = new OutputStreamWriter(new FileOutputStream(file), ENCODE);
