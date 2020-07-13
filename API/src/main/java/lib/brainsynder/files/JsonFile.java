@@ -30,15 +30,19 @@ public class JsonFile implements Movable {
     public void reload() {
         try {
             if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
+            boolean defaultsLoaded = false;
             if (!file.exists()) {
                 loadDefaults();
+                defaultsLoaded = true;
                 OutputStreamWriter pw = new OutputStreamWriter(new FileOutputStream(file), ENCODE);
                 pw.write(defaults.toString(WriterConfig.PRETTY_PRINT).replace("\u0026", "&"));
                 pw.flush();
                 pw.close();
             }
-
             json = (JsonObject) Json.parse(new InputStreamReader(new FileInputStream(file), ENCODE));
+            if (!defaultsLoaded) {
+                loadDefaults();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -98,7 +102,11 @@ public class JsonFile implements Movable {
     public boolean getBoolean (String key) {
         JsonValue value = getValue(key);
         if (value == null) return false;
-        if (value.isString()) return Boolean.getBoolean(value.asString());
+        try {
+            if (value.isString()) return Boolean.parseBoolean(value.asString());
+        } catch (IllegalArgumentException | NullPointerException ex) {
+            return false;
+        }
         return value.asBoolean();
     }
     public short getShort (String key) {
