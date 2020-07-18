@@ -1,6 +1,8 @@
 package lib.brainsynder.nms.key;
 
 import com.google.gson.stream.JsonWriter;
+import lib.brainsynder.ServerVersion;
+import lib.brainsynder.apache.EnumUtils;
 import lib.brainsynder.nms.Tellraw;
 import lib.brainsynder.reflection.Reflection;
 import lib.brainsynder.utils.MessagePart;
@@ -16,6 +18,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class BaseTellrawMessage extends Tellraw {
     private final List<MessagePart> messageParts = new ArrayList<>();
@@ -23,13 +26,24 @@ public class BaseTellrawMessage extends Tellraw {
     private boolean dirty = false;
     private Constructor packet = null;
     private Method serializerMethod = null;
+    private Object messagetype, uuid;
 
     public BaseTellrawMessage() {
         try {
             /**
              * {@link net.minecraft.server.v1_15_R1.PacketPlayOutChat}
              */
-            packet = Reflection.getNmsClass("PacketPlayOutChat").getConstructor(Reflection.getNmsClass("IChatBaseComponent"));
+            Class clazz = Reflection.getNmsClass("PacketPlayOutChat");
+            Class component = Reflection.getNmsClass("IChatBaseComponent");
+            if (ServerVersion.isEqualNew(ServerVersion.v1_16_R1)) {
+                Class typeClass = Reflection.getNmsClass("ChatMessageType");
+                packet = Reflection.getConstructor(clazz, component, typeClass, UUID.class);
+
+                messagetype = EnumUtils.getEnum(typeClass, "SYSTEM");
+                uuid = Reflection.getFieldValue(Reflection.getField(Reflection.getNmsClass("SystemUtils"), "b"), null);
+            }else{
+                packet = clazz.getConstructor(component);
+            }
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -169,7 +183,11 @@ public class BaseTellrawMessage extends Tellraw {
         }
 
         Object serializer = Reflection.invoke(serializerMethod, null, toJSONString());
-        Reflection.sendPacket(player, Reflection.initiateClass(packet, serializer));
+        if (ServerVersion.isEqualNew(ServerVersion.v1_16_R1)) {
+            Reflection.sendPacket(player, Reflection.initiateClass(packet, serializer, messagetype, uuid));
+        }else{
+            Reflection.sendPacket(player, Reflection.initiateClass(packet, serializer));
+        }
     }
 
 
