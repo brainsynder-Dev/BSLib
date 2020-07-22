@@ -1,17 +1,51 @@
 package lib.brainsynder.utils;
 
-public class Base64Wrapper {
-    private static char[] map1 = new char[64];
-    private static byte[] map2;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-    public static String encodeString(String s) {
-        byte[] bytes = s.getBytes();
+public class Base64Wrapper {
+    private static final char[] map1 = new char[64];
+    private static final byte[] map2;
+
+    /**
+     * This method will encode the {@link String} into Base64
+     *
+     * @param string - {@link String} to be encoded
+     * @return - Base64 Encoded {@link String}
+     */
+    public static String encodeString(String string) {
+        if ((string == null) || string.isEmpty()) return null;
+        if (isEncoded(string)) return string; // String is already encoded, returning input value
+        byte[] bytes = string.getBytes();
         return new String(encode(bytes, 0, bytes.length));
     }
 
-    public static String decodeString(String s) {
-        char[] chars = s.toCharArray();
+    /**
+     * This method will decode the {@link String} from Base64
+     *
+     * @param string - {@link String} to be decoded
+     * @return - Decoded {@link String}
+     */
+    public static String decodeString(String string) {
+        if ((string == null) || string.isEmpty()) return null;
+        if (!isEncoded(string)) return string; // String is not encoded, returning input value
+        char[] chars = string.toCharArray();
         return new String(decode(chars, 0, chars.length));
+    }
+
+    /**
+     * This method will check if the {@link String} is Base64 Encoded
+     *
+     * @param string - {@link String} to check
+     * @return
+     *      true - Is Base64 Encoded
+     *      false - Isn't Base64 Encoded
+     */
+    public static boolean isEncoded(String string) {
+        String pattern = "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$";
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(string);
+        return m.find();
     }
     
     private static char[] encode(byte[] in, int iOff, int iLen) {
@@ -92,14 +126,15 @@ public class Base64Wrapper {
         int i = 0;
 
         char c;
-        for(c = 65; c <= 90; map1[i++] = c++) {
-        }
+        c = 65;
+        while (c <= 90) map1[i++] = c++;
 
-        for(c = 97; c <= 122; map1[i++] = c++) {
-        }
+        c = 97;
+        while (c <= 122) map1[i++] = c++;
 
-        for(c = 48; c <= 57; map1[i++] = c++) {
-        }
+        c = 48;
+        while (c <= 57) map1[i++] = c++;
+
 
         map1[i++] = 43;
         map1[i++] = 47;
