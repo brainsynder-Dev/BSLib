@@ -204,11 +204,13 @@ public class JsonFile implements Movable {
     }
 
     @Override
-    public void move(String oldKey, String newKey) {
+    public boolean move(String oldKey, String newKey) {
         if (hasKey(oldKey)) {
             json.set(newKey, getValue(oldKey));
             json.remove(oldKey);
             save();
+            return true;
         }
+        return false;
     }
 }

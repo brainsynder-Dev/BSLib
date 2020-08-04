@@ -9,7 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class StorageFile extends StorageTagCompound implements Movable{
-    private File file;
+    private final File file;
 
     public StorageFile(File file) {
         if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
@@ -48,11 +48,13 @@ public class StorageFile extends StorageTagCompound implements Movable{
     }
 
     @Override
-    public void move(String oldKey, String newKey) {
+    public boolean move(String oldKey, String newKey) {
         if (hasKey(oldKey)) {
             setTag(newKey, getTag(oldKey));
             remove(oldKey);
             save();
+            return true;
         }
+        return false;
     }
 }

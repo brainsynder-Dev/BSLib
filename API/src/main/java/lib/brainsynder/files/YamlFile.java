@@ -429,10 +429,12 @@ public class YamlFile implements ConfigurationSection, Movable{
     }
 
     @Override
-    public void move(String oldKey, String newKey) {
+    public boolean move(String oldKey, String newKey) {
         if (contains(oldKey)) {
             set(newKey, get(oldKey));
             set(oldKey, null);
+            return true;
         }
+        return false;
     }
 }
