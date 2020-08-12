@@ -1166,7 +1166,17 @@ public enum SoundMaker {
     @EnumVersion(version = ServerVersion.v1_16_R1) UI_LOOM_SELECT_PATTERN,
     @EnumVersion(version = ServerVersion.v1_16_R1) UI_LOOM_TAKE_RESULT,
     @EnumVersion(version = ServerVersion.v1_16_R1) UI_STONECUTTER_SELECT_RECIPE,
-    @EnumVersion(version = ServerVersion.v1_16_R1) UI_STONECUTTER_TAKE_RESULT
+    @EnumVersion(version = ServerVersion.v1_16_R1) UI_STONECUTTER_TAKE_RESULT,
+
+
+    // ---- Sounds added in v1_16_R2 ---- //
+    @EnumVersion(version = ServerVersion.v1_16_R2) ENTITY_PARROT_IMITATE_PIGLIN_BRUTE,
+    @EnumVersion(version = ServerVersion.v1_16_R2) ENTITY_PIGLIN_BRUTE_AMBIENT,
+    @EnumVersion(version = ServerVersion.v1_16_R2) ENTITY_PIGLIN_BRUTE_ANGRY,
+    @EnumVersion(version = ServerVersion.v1_16_R2) ENTITY_PIGLIN_BRUTE_CONVERTED_TO_ZOMBIFIED,
+    @EnumVersion(version = ServerVersion.v1_16_R2) ENTITY_PIGLIN_BRUTE_DEATH,
+    @EnumVersion(version = ServerVersion.v1_16_R2) ENTITY_PIGLIN_BRUTE_HURT,
+    @EnumVersion(version = ServerVersion.v1_16_R2) ENTITY_PIGLIN_BRUTE_STEP
     ; // ---- END ---- //
 
     private String soundname = name();
