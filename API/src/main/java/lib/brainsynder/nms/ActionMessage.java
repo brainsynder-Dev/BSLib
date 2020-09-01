@@ -8,12 +8,14 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.UUID;
 
 public class ActionMessage {
     private Constructor packet;
     private Object value;
-    private Method serializerMethod;
+    private final Method serializerMethod;
     private static ActionMessage actionMessage = null;
+    private Object uuid;
 
     public ActionMessage() {
         Class packetPlayOutChatClass = Reflection.getNmsClass("PacketPlayOutChat");
@@ -22,7 +24,12 @@ public class ActionMessage {
                 packet = packetPlayOutChatClass.getConstructor(Reflection.getNmsClass("IChatBaseComponent"), byte.class);
                 value = (byte)2;
             }else{
-                packet = packetPlayOutChatClass.getConstructor(Reflection.getNmsClass("IChatBaseComponent"), Reflection.getNmsClass("ChatMessageType"));
+                if (ServerVersion.isEqualNew(ServerVersion.v1_16_R1)) {
+                    uuid = Reflection.getFieldValue(Reflection.getField(Reflection.getNmsClass("SystemUtils"), "b"), null);
+                    packet = packetPlayOutChatClass.getConstructor(Reflection.getNmsClass("IChatBaseComponent"), Reflection.getNmsClass("ChatMessageType"), UUID.class);
+                }else{
+                    packet = packetPlayOutChatClass.getConstructor(Reflection.getNmsClass("IChatBaseComponent"), Reflection.getNmsClass("ChatMessageType"));
+                }
                 value = Reflection.invoke(Reflection.getMethod(Reflection.getNmsClass("ChatMessageType"), "a", byte.class), null, (byte)2);
             }
         } catch (NoSuchMethodException e) {
@@ -39,7 +46,11 @@ public class ActionMessage {
     }
 
     public void sendMessage(Player player, String message) {
-        Reflection.sendPacket(player, Reflection.initiateClass(packet, buildMessage(ChatColor.translateAlternateColorCodes('&', message)), value));
+        if (ServerVersion.isEqualNew(ServerVersion.v1_16_R1)) {
+            Reflection.sendPacket(player, Reflection.initiateClass(packet, buildMessage(ChatColor.translateAlternateColorCodes('&', message)), value, uuid));
+        }else{
+            Reflection.sendPacket(player, Reflection.initiateClass(packet, buildMessage(ChatColor.translateAlternateColorCodes('&', message))));
+        }
     }
 
     private Object buildMessage (String text) {
