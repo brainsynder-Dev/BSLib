@@ -33,7 +33,7 @@ public class CrossbowMetaHandler extends MetaHandler {
         List<ItemStack> projectiles = (List<ItemStack>) Reflection.invoke(getProjectiles, meta);
         if (projectiles.isEmpty()) return;
         StorageTagList list = new StorageTagList();
-        projectiles.forEach(stack -> list.appendTag(StorageTagTools.toStorage(stack)));
+        projectiles.forEach(stack -> list.appendTag(StorageTagTools.fromItemStack(stack)));
         compound.setTag("projectiles", list);
         updateCompound(compound);
     }

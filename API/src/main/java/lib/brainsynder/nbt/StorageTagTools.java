@@ -73,7 +73,7 @@ public class StorageTagTools {
         return (ItemStack) Reflection.invoke(asBukkitCopy, null, nmsStack);
     }
 
-    public static StorageTagCompound toStorage (ItemStack item) {
+    public static StorageTagCompound fromItemStack(ItemStack item) {
         Object nbt = Reflection.invoke(save, asNMSCopy(item), newNBTTag(nbtTag));
         String json = (String) Reflection.invoke(toString, nbt);
 
