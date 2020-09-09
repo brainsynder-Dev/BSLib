@@ -8,6 +8,8 @@ import lib.brainsynder.reflection.FieldAccessor;
 import lib.brainsynder.reflection.Reflection;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -85,6 +87,21 @@ public class StorageTagTools {
             e.printStackTrace();
         }
 
+        return compound;
+    }
+
+    public PotionEffect toPotionEffect (StorageTagCompound compound) {
+        return new PotionEffect(PotionEffectType.getByName(compound.getString("type", "SPEED")), compound.getInteger("duration"), compound.getInteger("amplifier"), compound.getBoolean("isAmbient"), compound.getBoolean("hasParticles"), compound.getBoolean("hasIcon"));
+    }
+
+    public static StorageTagCompound fromPotionEffect (PotionEffect effect) {
+        StorageTagCompound compound = new StorageTagCompound ();
+        compound.setString("type", effect.getType().getName());
+        compound.setInteger("amplifier", effect.getAmplifier());
+        compound.setInteger("duration", effect.getDuration());
+        compound.setBoolean("isAmbient", effect.isAmbient());
+        compound.setBoolean("hasParticles", effect.hasParticles());
+        compound.setBoolean("hasIcon", effect.hasIcon());
         return compound;
     }
 
