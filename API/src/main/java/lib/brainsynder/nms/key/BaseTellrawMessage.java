@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,26 +52,50 @@ public class BaseTellrawMessage extends Tellraw {
         serializerMethod = Reflection.getMethod(chatSerializer, "a", String.class);
     }
 
-    public BaseTellrawMessage color(ChatColor color) {
-        if (!color.isColor()) {
-            throw new IllegalArgumentException(color.name() + " is not a color");
-        }
-        latest().color = color;
+    public BaseTellrawMessage color(Object obj) {
+        latest().color = null;
         latest().customColor = null;
+        if (obj instanceof java.awt.Color) {
+            java.awt.Color color = (java.awt.Color) obj;
+            latest().customColor = hex2Rgb(MessagePart.toHex(color.getRed(), color.getGreen(), color.getBlue()));
+
+        }else if (obj instanceof Color) {
+            latest().customColor = (Color) obj;
+
+        }else if (obj instanceof net.md_5.bungee.api.ChatColor) {
+            net.md_5.bungee.api.ChatColor color = (net.md_5.bungee.api.ChatColor) obj;
+            try {
+                Method method = obj.getClass().getMethod("getColor");
+                return color (method.invoke(color));
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                return color(ChatColor.valueOf(color.name()));
+            }
+
+        }else if (obj instanceof ChatColor) {
+            ChatColor color = (ChatColor) obj;
+            if (!color.isColor()) throw new IllegalArgumentException(color.name() + " is not a color");
+
+            latest().color = color;
+
+        }else if (obj instanceof String) {
+            latest().customColor = hex2Rgb((String) obj);
+        }else{
+            throw new IllegalArgumentException(obj.getClass().getSimpleName()+" is not a valid input.");
+        }
         this.dirty = true;
         return this;
     }
-
-    /**
-     * This feature was added to ChatComponents in 1.16
-     *
-     * @param color - RGB/HEX color
-     */
-    public BaseTellrawMessage color(Color color) {
-        latest().customColor = color;
-        latest().color = null;
-        this.dirty = true;
-        return this;
+    private Color hex2Rgb(String hex) {
+        if (hex.startsWith("#") && hex.length() == 7) {
+            int rgb;
+            try {
+                rgb = Integer.parseInt(hex.substring(1), 16);
+            } catch (NumberFormatException var7) {
+                throw new IllegalArgumentException("Illegal hex string " + hex);
+            }
+            return Color.fromRGB(rgb);
+        }
+        return Color.RED;
     }
 
     /**
@@ -203,7 +228,7 @@ public class BaseTellrawMessage extends Tellraw {
             StringBuilder builder = new StringBuilder();
 
             for(int i = startIndex; i < endIndex; ++i) {
-                builder.append(ChatColor.translateAlternateColorCodes('&', stringArray[i]));
+                builder.append(net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', stringArray[i]));
                 builder.append(separator);
             }
 

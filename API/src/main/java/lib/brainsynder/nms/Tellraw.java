@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 public abstract class Tellraw {
-    public abstract Tellraw color(ChatColor color);
+    public abstract Tellraw color(Object color);
     public abstract Tellraw style(ChatColor[] styles);
     public abstract Tellraw file(String path);
     public abstract Tellraw link(String url);
