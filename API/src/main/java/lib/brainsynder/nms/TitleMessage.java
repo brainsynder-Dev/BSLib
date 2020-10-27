@@ -2,15 +2,20 @@ package lib.brainsynder.nms;
 
 import lib.brainsynder.apache.EnumUtils;
 import lib.brainsynder.reflection.Reflection;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+@Deprecated
+/**
+ * This is @Deprecated because of Player#sendTitle method (and that fact that subtitles cant be sent with the code...)
+ */
 public class TitleMessage {
     private int fadeIn = 5, stay = 5, fadeOut = 5;
-    private String header="", subHeader="";
+    private String header=null, subHeader=null;
 
     private final Constructor packet;
     private final Object TITLE, SUBTITLE;
@@ -50,13 +55,14 @@ public class TitleMessage {
     }
 
     public void sendMessage(Player player) {
-        //PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction, IChatBaseComponent, fadeIn, stay, fadeOut)
-        try {
-            if ((header != null) && (!header.isEmpty())) Reflection.sendPacket(player, Reflection.initiateClass(packet, TITLE, buildMessage(header), fadeIn, stay, fadeOut));
-            if ((subHeader != null) && (!subHeader.isEmpty())) Reflection.sendPacket(player, Reflection.initiateClass(packet, SUBTITLE, buildMessage(subHeader), fadeIn, stay, fadeOut));
-        }catch (Exception e) {
-            player.sendMessage (header + " " + subHeader);
-        }
+        player.sendTitle(ChatColor.translateAlternateColorCodes('&', header), ChatColor.translateAlternateColorCodes('&', subHeader), fadeIn, stay, fadeOut);
+//        //PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction, IChatBaseComponent, fadeIn, stay, fadeOut)
+//        try {
+//            if ((header != null) && (!header.isEmpty())) Reflection.sendPacket(player, Reflection.initiateClass(packet, TITLE, buildMessage(header), fadeIn, stay, fadeOut));
+//            if ((subHeader != null) && (!subHeader.isEmpty())) Reflection.sendPacket(player, Reflection.initiateClass(packet, SUBTITLE, buildMessage(subHeader), fadeIn, stay, fadeOut));
+//        }catch (Exception e) {
+//            player.sendMessage (header + " " + subHeader);
+//        }
     }
 
     public void sendMessage(Collection<? extends Player> players) {
