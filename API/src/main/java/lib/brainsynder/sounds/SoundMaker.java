@@ -1245,12 +1245,26 @@ public enum SoundMaker {
         } catch (Exception ignored) {}
     }
 
+    private void playSound(Player player, Location loc, float v, float v1) {
+        if (!isSupported()) return;
+        String name = getSound();
+        if (name == null) return;
+        try {
+            Sound sound = Sound.valueOf(name);
+            player.playSound(loc, sound, v, v1);
+        } catch (Exception ignored) {}
+    }
+
     public void playSound(Player player) {
-        playSound(player.getLocation());
+        playSound(player, player.getLocation(), 1, 1);
+    }
+
+    public void playSound(Player player, float v, float v1) {
+        playSound(player, player.getLocation(), v, v1);
     }
 
     public void playSound(Player player, Location loc) {
-        playSound(player.getWorld(), loc, 1.0F, 1.0F);
+        playSound(player, loc, 1.0F, 1.0F);
     }
 
     public void playSound(Entity entity) {
