@@ -16,8 +16,8 @@ import java.util.regex.Pattern;
 public class StorageTagCompound extends StorageBase {
     private static final Logger LOGGER = LogManager.getLogger(StorageTagCompound.class);
     private static final Pattern PATTERN = Pattern.compile("[A-Za-z0-9._+-]+");
-    private Map<String, StorageBase> tagMap = Maps.newHashMap();
-    private List<String> booleans = new ArrayList<>();
+    private final Map<String, StorageBase> tagMap = Maps.newHashMap();
+    private final List<String> booleans = new ArrayList<>();
 
     private static void writeEntry(String name, StorageBase data, DataOutput output) throws IOException {
         output.writeByte(data.getId());
@@ -550,7 +550,7 @@ public class StorageTagCompound extends StorageBase {
     }
 
     public StorageTagCompound setItemStack (String key, ItemStack item) {
-        setTag(key, StorageTagTools.toStorage(item));
+        setTag(key, StorageTagTools.fromItemStack(item));
         return this;
     }
     public ItemStack getItemStack (String key) {
