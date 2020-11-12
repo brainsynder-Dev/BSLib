@@ -172,6 +172,19 @@ public class JsonFile implements Movable {
         json.add(key, value);
     }
 
+    public void remove (String key) {
+        boolean update = false;
+        if (defaults.names().contains(key)) {
+            update = true;
+            defaults.remove(key);
+        }
+        if (json.names().contains(key)) {
+            update = true;
+            json.remove(key);
+        }
+        if (update) save();
+    }
+
 
 
 

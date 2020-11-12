@@ -55,7 +55,9 @@ public class TitleMessage {
     }
 
     public void sendMessage(Player player) {
-        player.sendTitle(ChatColor.translateAlternateColorCodes('&', header), ChatColor.translateAlternateColorCodes('&', subHeader), fadeIn, stay, fadeOut);
+        player.sendTitle((header != null) ? ChatColor.translateAlternateColorCodes('&', header) : "",
+                (subHeader != null) ? ChatColor.translateAlternateColorCodes('&', subHeader) : "",
+                fadeIn, stay, fadeOut);
 //        //PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction, IChatBaseComponent, fadeIn, stay, fadeOut)
 //        try {
 //            if ((header != null) && (!header.isEmpty())) Reflection.sendPacket(player, Reflection.initiateClass(packet, TITLE, buildMessage(header), fadeIn, stay, fadeOut));

@@ -13,12 +13,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class ItemBuilder {
-    private ItemStack item;
+    private Map<String, String> replaceLore = new HashMap<>();
+    private Map<String, String> replaceName = new HashMap<>();
+    private final ItemStack item;
     private ItemMeta meta;
 
     public ItemBuilder(Material material) {
@@ -81,6 +81,16 @@ public class ItemBuilder {
         }
 
         return builder;
+    }
+
+    public ItemBuilder replaceInName(String key, Object replacement) {
+        replaceName.put(key, String.valueOf(replacement));
+        return this;
+    }
+
+    public ItemBuilder replaceInLore(String key, Object replacement) {
+        replaceLore.put(key, String.valueOf(replacement));
+        return this;
     }
 
     /*  LORE METHODS  */
@@ -169,6 +179,27 @@ public class ItemBuilder {
     }
 
     public ItemStack build() {
+        List<String> newLore = new ArrayList<>();
+        if (meta.hasLore()) {
+            for (String line : meta.getLore()) {
+                for (Map.Entry<String, String> entry : replaceLore.entrySet()) {
+                    String key = entry.getKey();
+                    String replacement = entry.getValue();
+                    line = line.replace(key, replacement);
+                }
+                newLore.add(line);
+            }
+            meta.setLore(newLore);
+        }
+        if (meta.hasDisplayName()) {
+            String name = meta.getDisplayName();
+            for (Map.Entry<String, String> entry : replaceName.entrySet()) {
+                String key = entry.getKey();
+                String replacement = entry.getValue();
+                name = name.replace(key, replacement);
+            }
+            meta.setDisplayName(name);
+        }
         item.setItemMeta(meta);
         return item;
     }
@@ -208,7 +239,10 @@ public class ItemBuilder {
     }
 
     public ItemBuilder clone () {
-        return fromCompound(toCompound());
+        ItemBuilder builder = fromCompound(toCompound());
+        builder.replaceName = replaceName;
+        builder.replaceLore = replaceLore;
+        return builder;
     }
 
 
@@ -296,6 +330,14 @@ public class ItemBuilder {
             message = ChatColor.translateAlternateColorCodes('&', message);
         }
         return message;
+    }
+
+    public static boolean isAir(Material mat) {
+        return mat.name().endsWith("AIR") && !mat.name().endsWith("AIRS");
+    }
+
+    public static boolean isAir(ItemStack item) {
+        return item == null || isAir(item.getType());
     }
 
     public  <T extends ItemMeta> ItemBuilder handleMeta(Class<T> clazz, InnerReturn<T> meta) {

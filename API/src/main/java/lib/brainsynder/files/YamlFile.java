@@ -71,6 +71,12 @@ public class YamlFile implements ConfigurationSection, Movable{
         this.configuration = YamlConfiguration.loadConfiguration(file);
     }
 
+    public void remove (String key) {
+        if (configuration.contains(key)) {
+            set(key, null);
+        }
+    }
+
     public void setDefault (String key, Object value) {
         if (!contains(key)) set(key, value);
     }

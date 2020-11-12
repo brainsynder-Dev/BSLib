@@ -12,10 +12,10 @@ import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 public class ExpireHashMap<K, V> {
-    private Map<K, ExpireEntry> keyLookup;
-    private PriorityQueue<ExpireEntry> expireQueue;
-    private Map<K, V> valueView;
-    private Ticker ticker;
+    private final Map<K, ExpireEntry> keyLookup;
+    private final PriorityQueue<ExpireEntry> expireQueue;
+    private final Map<K, V> valueView;
+    private final Ticker ticker;
 
     public ExpireHashMap() {
         this(Ticker.systemTicker());
