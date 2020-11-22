@@ -28,6 +28,9 @@ public class UpdateUtils {
         properties = prop;
     }
 
+    public static Properties getProperties() {
+        return properties;
+    }
 
     public static void startUpdateTask (UpdateResult result, long ticks, TimeUnit unit) {
         if (updateTask == null) updateTask = new BukkitRunnable() {
