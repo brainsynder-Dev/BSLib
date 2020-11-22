@@ -1,23 +1,61 @@
 package lib.brainsynder.commands;
 
 import lib.brainsynder.commands.annotations.ICommand;
+import lib.brainsynder.nms.Tellraw;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import java.util.*;
 
 public class ParentCommand<T extends SubCommand> extends SubCommand {
     protected boolean overrideTab = false;
-    private List<T> subCommands = new ArrayList<>();
+    private final List<T> subCommands = new ArrayList<>();
 
     public void sendHelp (CommandSender sender, boolean parent) {
-        if (!subCommands.isEmpty())
-            subCommands.forEach(subCommand -> subCommand.sendUsage(sender));
         if (parent) sendUsage(sender);
+        if (!subCommands.isEmpty())
+            subCommands.forEach(subCommand -> {
+                ICommand command = subCommand.getCommand(subCommand.getClass());
+                String usage = ChatColor.translateAlternateColorCodes('&', command.usage());
+                String description = "";
+                Tellraw raw = Tellraw.getInstance("/"+getCommand(getClass()).name()+" "+command.name()+ " " +usage);
+
+                if (!command.description().isEmpty()) {
+                    description = ChatColor.translateAlternateColorCodes('&', command.description());
+                    raw.tooltip(ChatColor.GRAY+description);
+                }
+
+                if (!(sender instanceof Player)) {
+                    if (!description.isEmpty()) raw.then(" "+description);
+                }
+                raw.send(sender);
+            });
+    }
+
+    @Override
+    public void sendUsage(CommandSender sender) {
+        ICommand command = getCommand(getClass());
+        if (command == null) return;
+        String usage = ChatColor.translateAlternateColorCodes('&', command.usage());
+        String description = "";
+        Tellraw raw = Tellraw.getInstance("/"+command.name()+ " " +usage);
+
+        if (!command.description().isEmpty()) {
+            description = ChatColor.translateAlternateColorCodes('&', command.description());
+            raw.tooltip(ChatColor.GRAY+description);
+        }
+
+        if (!(sender instanceof Player)) {
+            if (!description.isEmpty()) raw.then(" "+description);
+        }
+        raw.send(sender);
+
     }
 
     @Override
