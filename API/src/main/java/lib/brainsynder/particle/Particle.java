@@ -196,7 +196,7 @@ public enum Particle {
         return this.id;
     }
 
-    public boolean isCompatable () {
+    public boolean isCompatible() {
         try {
             Annotation[] annotations = getClass().getField(name()).getAnnotations();
             for (Annotation annotation : annotations) {

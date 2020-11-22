@@ -87,7 +87,7 @@ public class ParticleMaker {
             }
         }
         this.type = type;
-        if (!type.isCompatable()) {
+        if (!type.isCompatible()) {
             try {
                 throw new MissingParticleException("The particle '" + type.getName() + "' is not supported in this version.");
             } catch (MissingParticleException e) {

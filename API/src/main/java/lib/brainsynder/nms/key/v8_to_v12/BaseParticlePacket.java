@@ -35,7 +35,7 @@ public class BaseParticlePacket extends ParticlePacket {
 
     @Override
     public Object getPacket(Particle type, TriLoc<Float> loc, TriLoc<Float> offset, float speed, int count, Object data) {
-        if (!type.isCompatable()) return null;
+        if (!type.isCompatible()) return null;
         int[] inner = new int[0];
         float offsetX = offset.getX(),
                 offsetY = offset.getY(),
@@ -66,13 +66,13 @@ public class BaseParticlePacket extends ParticlePacket {
             return packetConstructor.newInstance(
                     particleType,
                     true,
-                    (float) loc.getX(),
-                    (float) loc.getY(),
-                    (float) loc.getZ(),
-                    (float) offsetX,
-                    (float) offsetY,
-                    (float) offsetZ,
-                    (float) speed,
+                    loc.getX(),
+                    loc.getY(),
+                    loc.getZ(),
+                    offsetX,
+                    offsetY,
+                    offsetZ,
+                    speed,
                     count,
                     inner);
         } catch (IllegalAccessException | InstantiationException | InvocationTargetException ignored) {}
