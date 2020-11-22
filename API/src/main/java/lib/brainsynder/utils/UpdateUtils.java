@@ -63,6 +63,7 @@ public class UpdateUtils {
             JsonObject main = (JsonObject) Json.parse(string);
             if (!main.isEmpty()) {
                 if (main.names().contains("error")) {
+                    result.getOnError().run();
                     return;
                 }
 
@@ -70,9 +71,9 @@ public class UpdateUtils {
 
                 // New build found
                 if (latestBuild > build) {
-
+                    result.getNewBuild().run(main);
                 } else {
-
+                    result.getNoNewBuilds().run();
                 }
             }
         });
