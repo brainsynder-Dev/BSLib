@@ -1,7 +1,8 @@
-package lib.brainsynder.utils;
+package lib.brainsynder.update;
 
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
+import lib.brainsynder.utils.Utilities;
 import lib.brainsynder.web.WebConnector;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -11,12 +12,13 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 public class UpdateUtils {
-    private static Properties properties;
-    private static Plugin plugin;
-    private static BukkitRunnable updateTask;
+    private final Properties properties;
+    private final Plugin plugin;
+    private BukkitRunnable updateTask;
+    private final UpdateResult result;
 
-    public static void initiate (Plugin plugin) {
-        UpdateUtils.plugin = plugin;
+    public UpdateUtils (Plugin plugin, UpdateResult result) {
+        this.plugin = plugin;
 
 
         Properties prop = null;
@@ -26,17 +28,20 @@ public class UpdateUtils {
         } catch (IOException ignored) {} // If it fails, it means there is no 'jenkins.properties' file
 
         properties = prop;
+        result.setCurrentBuild(Integer.parseInt(properties.getProperty("buildnumber")));
+        result.setRepo(properties.getProperty("repo"));
+        this.result = result;
     }
 
-    public static Properties getProperties() {
+    public Properties getProperties() {
         return properties;
     }
 
-    public static void startUpdateTask (UpdateResult result, long ticks, TimeUnit unit) {
+    public void startUpdateTask (long ticks, TimeUnit unit) {
         if (updateTask == null) updateTask = new BukkitRunnable() {
             @Override
             public void run() {
-                checkUpdate(result);
+                checkUpdate();
             }
         };
 
@@ -46,21 +51,44 @@ public class UpdateUtils {
     /**
      * Will cancel the update task and remove the instance
      */
-    public static void stopTask () {
+    public void stopTask () {
         if (updateTask == null) return;
         updateTask.cancel();
         updateTask = null;
     }
 
+    public UpdateResult getResult() {
+        return result;
+    }
 
     /**
      * Will check for an update once without re-checking
      */
-    public static void checkUpdate(UpdateResult result) {
+    public void checkUpdate() {
         if (properties == null) return;
         int build = Integer.parseInt(properties.getProperty("buildnumber"));
-        WebConnector.getInputStreamString("http://pluginwiki.us/version/?repo=" + properties.getProperty("repo"), plugin, string -> {
-            JsonObject main = (JsonObject) Json.parse(string);
+        String url = "http://pluginwiki.us/version/?repo=" + properties.getProperty("repo");
+        result.getPreStart().run();
+
+        WebConnector.getInputStreamString(url, plugin, string -> {
+            JsonObject main = null;
+            try {
+                main = (JsonObject) Json.parse(string);
+            }catch (Exception e){
+                JsonObject json = new JsonObject();
+                json.add("url", url);
+                json.add("result", string);
+                json.add("exception", e.getClass().getSimpleName());
+                json.add("exception-message", e.getMessage());
+                result.getFailParse().run(json);
+                return;
+            }
+
+            if (main == null) {
+                result.getOnError().run();
+                return;
+            }
+
             if (!main.isEmpty()) {
                 if (main.names().contains("error")) {
                     result.getOnError().run();
@@ -68,7 +96,7 @@ public class UpdateUtils {
                 }
 
                 int latestBuild = main.getInt("build", -1);
-
+                this.result.setLatestBuild(latestBuild);
                 // New build found
                 if (latestBuild > build) {
                     result.getNewBuild().run(main);
