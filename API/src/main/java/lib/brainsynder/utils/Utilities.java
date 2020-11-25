@@ -297,6 +297,47 @@ public class Utilities {
         return ticks;
     }
 
+
+
+    public static String getPaddedString(String text, char paddingChar, int maxPadding, AlignText alignText) {
+        if (text == null) {
+            throw new NullPointerException("Can not add padding in null String!");
+        }
+
+        int length = text.length();
+        int padding = (maxPadding - length) / 2;//decide left and right padding
+        if (padding <= 0) {
+            return text;// return actual String if padding is less than or equal to 0
+        }
+
+        String empty = "", hash = "#";//hash is used as a place holder
+
+        // extra character in case of String with even length
+        int extra = (length % 2 == 0) ? 1 : 0;
+
+        String leftPadding = "%" + padding + "s";
+        String rightPadding = "%" + (padding - extra) + "s";
+
+        // Will align the text to the selected side
+        switch (alignText) {
+            case LEFT:
+                leftPadding = "%s";
+                rightPadding = "%" + (padding+(padding - extra)) + "s";
+                break;
+            case RIGHT:
+                rightPadding = "%s";
+                leftPadding = "%" + (padding+(padding - extra)) + "s";
+                break;
+        }
+
+        String strFormat = leftPadding + "%s" + rightPadding;
+        String formattedString = String.format(strFormat, empty, hash, empty);
+
+        //Replace space with * and hash with provided String
+        String paddedString = formattedString.replace(' ', paddingChar).replace(hash, text);
+        return paddedString;
+    }
+
     static {
         /**
          * {@link net.minecraft.server.v1_16_R2.EntityTypes}
@@ -318,5 +359,9 @@ public class Utilities {
 
         // new PacketPlayOutEntityDestroy (int: Entity.getId())
         removeEntity = Reflection.getConstructor(Reflection.getNmsClass("PacketPlayOutEntityDestroy"), Integer.TYPE);
+    }
+
+    public enum AlignText {
+        LEFT, RIGHT, CENTER
     }
 }
