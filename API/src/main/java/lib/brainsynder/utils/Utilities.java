@@ -278,8 +278,23 @@ public class Utilities {
         return false;
     }
 
-    public static long toUnit(long ticks, TimeUnit unit) {
-        return unit.convert(ticks * MILLI_PER_TICK, TimeUnit.MILLISECONDS);
+    public static long toUnit(long time, TimeUnit unit) {
+        long ticks = 20;
+
+        if (unit == TimeUnit.DAYS) {
+            ticks = (ticks * 60);// minute
+            ticks = (ticks * 60);// hour
+            ticks = (ticks * 24)*time;// days
+        }else if (unit == TimeUnit.HOURS) {
+            ticks = (ticks * 60);// minute
+            ticks = (ticks * 60)*time;// hour
+        }else if (unit == TimeUnit.MINUTES) {
+            ticks = (ticks * 60)*time;// minute
+        }else{
+            ticks = (ticks * time);
+        }
+
+        return ticks;
     }
 
     static {
