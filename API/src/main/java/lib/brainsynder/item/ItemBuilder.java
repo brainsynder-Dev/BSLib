@@ -179,6 +179,8 @@ public class ItemBuilder {
     }
 
     public ItemStack build() {
+        if (item == null) return new ItemStack(Material.STONE);
+        if (item.getType() == Material.AIR) return item;
         List<String> newLore = new ArrayList<>();
         if (meta.hasLore()) {
             for (String line : meta.getLore()) {
