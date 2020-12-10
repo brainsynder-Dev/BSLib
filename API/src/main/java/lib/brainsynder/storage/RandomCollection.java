@@ -17,6 +17,16 @@ public class RandomCollection<E> {
         return collection.next();
     }
 
+    public static <E>RandomCollection<E> fromCollection (Collection<E> list) {
+        return fromCollection(list, 50);
+    }
+
+    public static <E>RandomCollection<E> fromCollection (Collection<E> list, int percent) {
+        RandomCollection<E> collection = new RandomCollection<>();
+        list.forEach(e -> collection.add(percent, e));
+        return collection;
+    }
+
     public RandomCollection() {
         this(new Random());
     }
