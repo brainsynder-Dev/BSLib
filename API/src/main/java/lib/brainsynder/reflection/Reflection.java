@@ -312,10 +312,6 @@ public class Reflection {
     public static Field setFieldAccessible(Field f) {
         try {
             f.setAccessible(true);
-            Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            int modifiers = modifiersField.getInt(f);
-            modifiersField.setInt(f, modifiers & -17);
             return f;
         } catch (Throwable var3) {
             return null;
