@@ -1,6 +1,7 @@
 package lib.brainsynder.files;
 
 import com.google.common.base.Preconditions;
+import lib.brainsynder.files.options.YamlOption;
 import lib.brainsynder.utils.Utilities;
 import org.bukkit.*;
 import org.bukkit.configuration.Configuration;
@@ -75,6 +76,9 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
 
     public abstract void loadDefaults();
 
+    public void remove (YamlOption option) {
+        remove(option.getPath());
+    }
     public void remove(String key) {
         if (configuration.contains(key)) {
             set(key, null);
@@ -105,7 +109,19 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
         addComment(key, comment);
     }
 
-    public void writeComments() {
+
+    public void addDefault(YamlOption option) {
+        configuration.addDefault(option.getPath(), option.getDefault());
+        tempConfig.set(option.getPath(), configuration.get(option.getPath()));
+    }
+
+    public void addDefault(YamlOption option, String comment) {
+        configuration.addDefault(option.getPath(), option.getDefault());
+        tempConfig.set(option.getPath(), configuration.get(option.getPath()));
+        addComment(option.getPath(), comment);
+    }
+
+    private void writeComments() {
         // For each comment to be made...
         for (String path : comments.keySet()) {
             // Get all the divisions made in the config
@@ -147,7 +163,7 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
         }
     }
 
-    public void writeSections() {
+    private void writeSections() {
         // For each path the section is to be written above...
         for (String path : sections.keySet()) {
             String[] divisions = path.split("\\.");
@@ -232,7 +248,9 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
         }
     }
 
-
+    public String getString(YamlOption option, boolean color) {
+        return (color ? translate(getString(option)) : getString(option));
+    }
     public String getString(String tag, boolean color) {
         return (color ? translate(getString(tag)) : getString(tag));
     }
@@ -246,6 +264,9 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     public String getString(String tag, String fallback) {
         if (!contains(tag)) return fallback;
         return configuration.getString(tag, fallback);
+    }
+    public String getString(YamlOption option) {
+        return getString(option.getPath(), String.valueOf(option.getDefault()));
     }
 
     @Override
@@ -305,7 +326,10 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
 
     @Override
     public boolean getBoolean(String tag) {
-        return this.configuration.get(tag) != null && this.configuration.getBoolean(tag);
+        return getBoolean(tag, false);
+    }
+    public boolean getBoolean(YamlOption option) {
+        return getBoolean(option.getPath(), (Boolean) option.getDefault());
     }
 
     @Override
@@ -324,6 +348,9 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     public int getInt(String tag) {
         return getInt(tag, 0);
     }
+    public int getInt(YamlOption option) {
+        return getInt(option.getPath(), Integer.parseInt(String.valueOf(option.getDefault())));
+    }
 
     @Override
     public int getInt(String tag, int fallback) {
@@ -341,6 +368,9 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     public double getDouble(String tag) {
         return getDouble(tag, 0);
     }
+    public double getDouble(YamlOption option) {
+        return getDouble(option.getPath(), Double.parseDouble(String.valueOf(option.getDefault())));
+    }
 
     @Override
     public double getDouble(String tag, double fallback) {
@@ -356,7 +386,10 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
 
     @Override
     public long getLong(String tag) {
-        return configuration.getLong(tag);
+        return getLong(tag, 0);
+    }
+    public long getLong(YamlOption option) {
+        return getLong(option.getPath(), Long.parseLong(String.valueOf(option.getDefault())));
     }
 
     @Override
@@ -401,6 +434,9 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     @Override
     public boolean contains(String tag) {
         return configuration.get(tag) != null;
+    }
+    public boolean contains(YamlOption option) {
+        return configuration.get(option.getPath()) != null;
     }
 
     @Override
@@ -554,16 +590,24 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     public Object get(String tag) {
         return this.configuration.get(tag);
     }
+    public Object get(YamlOption option) {
+        return get(option.getPath(), option.getDefault());
+    }
 
     @Override
     public Object get(String tag, Object fallback) {
-        return null;
+        if (!contains(tag)) return fallback;
+        return this.configuration.get(tag);
     }
 
     private String translate(String msg) {
         return ChatColor.translateAlternateColorCodes('&', msg);
     }
 
+
+    public void set(YamlOption option, Object data){
+        set(option.getPath(), data);
+    }
     @Override
     public void set(String tag, Object data) {
         // Resets the `currentLines` to clear the previous generations
