@@ -17,8 +17,8 @@ import org.bukkit.util.StringUtil;
 import java.util.*;
 
 public class SubCommand implements CommandExecutor, TabCompleter {
-    private Map<Integer, List<String>> tabCompletion = new HashMap<>();
-    private Map<Integer, List<Complete>> tabCompletionArg = new HashMap<>();
+    private final Map<Integer, List<String>> tabCompletion = new HashMap<>();
+    private final Map<Integer, List<Complete>> tabCompletionArg = new HashMap<>();
 
     public void run(CommandSender sender) {
         run(sender, new String[0]);
@@ -53,6 +53,12 @@ public class SubCommand implements CommandExecutor, TabCompleter {
         tabCompletionArg.put(length, completes);
     }
 
+    public String getUsageStyle () {
+        ICommand command = getCommand(getClass());
+        if ((command == null) || (command.style().isEmpty())) return "/{name} {usage} - {description}";
+        return command.style();
+    }
+
     /**
      * Send the sender the command usage
      *
@@ -61,14 +67,28 @@ public class SubCommand implements CommandExecutor, TabCompleter {
     public void sendUsage(CommandSender sender) {
         ICommand command = getCommand(getClass());
         if (command == null) return;
-        if (command.usage().isEmpty()) return;
-        String usage = ChatColor.translateAlternateColorCodes('&', command.usage());
-        String description = ChatColor.translateAlternateColorCodes('&', command.description());
+        String usage = command.usage();
+        String description = command.description();
+
+        String style = getUsageStyle();
+
+        if (usage.isEmpty()) {
+            style = style.replace(" {usage} ", "");
+            style = style.replace(" {usage}", "");
+        }
+        if (description.isEmpty()) style = style.replace(" - {description}", "");
+
 
         if (sender instanceof Player) {
-            Tellraw.getInstance(usage).tooltip(ChatColor.GRAY + description).send((Player) sender);
+            style = style.replace(" - {description}", "");
+            Tellraw.getInstance(style).tooltip(ChatColor.GRAY + description).send((Player) sender);
         } else {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', command.usage()));
+
+            // Will format it to send to console
+            style = style.replace("{name}", command.name());
+            style = style.replace("{usage}", usage);
+            style = style.replace("{description}", description);
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', style.replace("/", " - ")));
         }
     }
 

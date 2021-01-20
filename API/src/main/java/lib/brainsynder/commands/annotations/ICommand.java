@@ -12,5 +12,7 @@ public @interface ICommand {
     String usage() default "";
     String description() default "";
 
+    String style() default "/{name} {usage} - {description}";
+
     String[] alias() default {""};
 }
