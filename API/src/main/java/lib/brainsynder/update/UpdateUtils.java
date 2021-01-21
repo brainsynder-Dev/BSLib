@@ -67,7 +67,7 @@ public class UpdateUtils {
     public void checkUpdate() {
         if (properties == null) return;
         int build = Integer.parseInt(properties.getProperty("buildnumber"));
-        String url = "http://pluginwiki.us/version/?repo=" + properties.getProperty("repo");
+        String url = "http://pluginwiki.us/version/builds.json";
         result.getPreStart().run();
 
         WebConnector.getInputStreamString(url, plugin, string -> {
@@ -90,12 +90,13 @@ public class UpdateUtils {
             }
 
             if (!main.isEmpty()) {
-                if (main.names().contains("error")) {
+                // Failed to find repo build number
+                if (!main.names().contains(properties.getProperty("repo"))) {
                     result.getOnError().run();
                     return;
                 }
 
-                int latestBuild = main.getInt("build", -1);
+                int latestBuild = main.getInt(properties.getProperty("repo"), -1);
                 this.result.setLatestBuild(latestBuild);
                 // New build found
                 if (latestBuild > build) {
