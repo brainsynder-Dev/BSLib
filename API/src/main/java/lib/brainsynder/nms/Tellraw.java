@@ -18,6 +18,7 @@ public abstract class Tellraw {
     public abstract Tellraw tooltip(List<String> lines);
     public abstract Tellraw tooltip(String... lines);
     public abstract Tellraw then(Object obj);
+    public abstract Tellraw removeLastPart();
     public abstract String toJSONString();
     public abstract void send(CommandSender sender);
     public abstract void send(Player player);

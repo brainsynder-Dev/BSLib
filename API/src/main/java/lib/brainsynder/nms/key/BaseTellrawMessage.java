@@ -55,7 +55,9 @@ public class BaseTellrawMessage extends Tellraw {
     public BaseTellrawMessage color(Object obj) {
         latest().color = null;
         latest().customColor = null;
-        if (obj instanceof java.awt.Color) {
+        if (obj instanceof String) {
+            latest().customColor = hex2Rgb((String) obj);
+        }else if (obj instanceof java.awt.Color) {
             java.awt.Color color = (java.awt.Color) obj;
             latest().customColor = hex2Rgb(MessagePart.toHex(color.getRed(), color.getGreen(), color.getBlue()));
 
@@ -76,9 +78,6 @@ public class BaseTellrawMessage extends Tellraw {
             if (!color.isColor()) throw new IllegalArgumentException(color.name() + " is not a color");
 
             latest().color = color;
-
-        }else if (obj instanceof String) {
-            latest().customColor = hex2Rgb((String) obj);
         }else{
             throw new IllegalArgumentException(obj.getClass().getSimpleName()+" is not a valid input.");
         }
@@ -154,10 +153,22 @@ public class BaseTellrawMessage extends Tellraw {
         return this;
     }
     public BaseTellrawMessage then(Object obj) {
-        this.messageParts.add(new MessagePart(obj.toString()));
+        if (obj instanceof MessagePart) {
+            this.messageParts.add((MessagePart) obj);
+        } else {
+            this.messageParts.add(new MessagePart(obj.toString()));
+        }
         this.dirty = true;
         return this;
     }
+
+    @Override
+    public BaseTellrawMessage removeLastPart() {
+        if (messageParts.isEmpty()) return this;
+        messageParts.remove( (messageParts.size() - 1) );
+        return this;
+    }
+
     public String toJSONString() {
         if ((!this.dirty) && (this.jsonString != null)) {
             return this.jsonString;
