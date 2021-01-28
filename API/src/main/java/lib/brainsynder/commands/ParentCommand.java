@@ -2,6 +2,7 @@ package lib.brainsynder.commands;
 
 import lib.brainsynder.commands.annotations.ICommand;
 import lib.brainsynder.nms.Tellraw;
+import lib.brainsynder.utils.Colorize;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -22,12 +23,12 @@ public class ParentCommand<T extends SubCommand> extends SubCommand {
         if (!subCommands.isEmpty())
             subCommands.forEach(subCommand -> {
                 ICommand command = subCommand.getCommand(subCommand.getClass());
-                String usage = ChatColor.translateAlternateColorCodes('&', command.usage());
+                String usage = Colorize.translateBungeeHex(command.usage());
                 String description = "";
                 Tellraw raw = Tellraw.getInstance("/"+getCommand(getClass()).name()+" "+command.name()+ " " +usage);
 
                 if (!command.description().isEmpty()) {
-                    description = ChatColor.translateAlternateColorCodes('&', command.description());
+                    description = Colorize.translateBungeeHex(command.description());
                     raw.tooltip(ChatColor.GRAY+description);
                 }
 
@@ -42,12 +43,12 @@ public class ParentCommand<T extends SubCommand> extends SubCommand {
     public void sendUsage(CommandSender sender) {
         ICommand command = getCommand(getClass());
         if (command == null) return;
-        String usage = ChatColor.translateAlternateColorCodes('&', command.usage());
+        String usage = Colorize.translateBungeeHex(command.usage());
         String description = "";
         Tellraw raw = Tellraw.getInstance("/"+command.name()+ " " +usage);
 
         if (!command.description().isEmpty()) {
-            description = ChatColor.translateAlternateColorCodes('&', command.description());
+            description = Colorize.translateBungeeHex(command.description());
             raw.tooltip(ChatColor.GRAY+description);
         }
 

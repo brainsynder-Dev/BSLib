@@ -2,7 +2,7 @@ package lib.brainsynder.nms;
 
 import lib.brainsynder.reflection.FieldAccessor;
 import lib.brainsynder.reflection.Reflection;
-import org.bukkit.ChatColor;
+import lib.brainsynder.utils.Colorize;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Method;
@@ -12,8 +12,9 @@ public class TabMessage {
     private String header = "";
     private String footer = "";
     private static TabMessage tabMessage = null;
-    private FieldAccessor headerField, footerField;
-    private Method serializerMethod;
+    private final FieldAccessor headerField;
+    private final FieldAccessor footerField;
+    private final Method serializerMethod;
 
     private TabMessage() {
         Class chatSerializer = Reflection.getNmsClass("IChatBaseComponent$ChatSerializer");
@@ -70,6 +71,6 @@ public class TabMessage {
     }
 
     private Object buildMessage (String text) {
-        return Reflection.invoke(serializerMethod, null, "{\"text\": \"" + ChatColor.translateAlternateColorCodes('&', text) + "\"}");
+        return Reflection.invoke(serializerMethod, null, "{\"text\": \"" + Colorize.translateBungeeHex(text) + "\"}");
     }
 }

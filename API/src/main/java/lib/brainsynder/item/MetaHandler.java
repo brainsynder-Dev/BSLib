@@ -2,6 +2,7 @@ package lib.brainsynder.item;
 
 import lib.brainsynder.VersionRestricted;
 import lib.brainsynder.nbt.StorageTagCompound;
+import lib.brainsynder.utils.Colorize;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -54,7 +55,7 @@ public class MetaHandler<T extends ItemMeta> extends ItemTools implements Versio
             if (strip) {
                 msg = msg.replace(ChatColor.COLOR_CHAR, '&');
             } else {
-                msg = ChatColor.translateAlternateColorCodes('&', msg);
+                msg = Colorize.translateBungeeHex(msg);
             }
             newLore.add(msg);
         });
@@ -68,7 +69,7 @@ public class MetaHandler<T extends ItemMeta> extends ItemTools implements Versio
         if (strip) {
             message = message.replace(ChatColor.COLOR_CHAR, '&');
         } else {
-            message = ChatColor.translateAlternateColorCodes('&', message);
+            message = Colorize.translateBungeeHex(message);
         }
         return message;
     }

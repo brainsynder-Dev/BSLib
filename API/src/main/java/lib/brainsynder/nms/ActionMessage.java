@@ -2,7 +2,7 @@ package lib.brainsynder.nms;
 
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.reflection.Reflection;
-import org.bukkit.ChatColor;
+import lib.brainsynder.utils.Colorize;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
@@ -47,9 +47,9 @@ public class ActionMessage {
 
     public void sendMessage(Player player, String message) {
         if (ServerVersion.isEqualNew(ServerVersion.v1_16_R1)) {
-            Reflection.sendPacket(player, Reflection.initiateClass(packet, buildMessage(ChatColor.translateAlternateColorCodes('&', message)), value, uuid));
+            Reflection.sendPacket(player, Reflection.initiateClass(packet, buildMessage(Colorize.translateBungeeHex(message)), value, uuid));
         }else{
-            Reflection.sendPacket(player, Reflection.initiateClass(packet, buildMessage(ChatColor.translateAlternateColorCodes('&', message))));
+            Reflection.sendPacket(player, Reflection.initiateClass(packet, buildMessage(Colorize.translateBungeeHex(message))));
         }
     }
 

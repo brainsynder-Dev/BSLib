@@ -2,8 +2,12 @@ package lib.brainsynder.files;
 
 import com.google.common.base.Preconditions;
 import lib.brainsynder.files.options.YamlOption;
+import lib.brainsynder.utils.Colorize;
 import lib.brainsynder.utils.Utilities;
-import org.bukkit.*;
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -601,7 +605,7 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     }
 
     private String translate(String msg) {
-        return ChatColor.translateAlternateColorCodes('&', msg);
+        return Colorize.translateBungeeHex(msg);
     }
 
 

@@ -2,6 +2,7 @@ package lib.brainsynder.commands;
 
 import lib.brainsynder.commands.annotations.ICommand;
 import lib.brainsynder.nms.Tellraw;
+import lib.brainsynder.utils.Colorize;
 import lib.brainsynder.utils.ReturnValue;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -88,7 +89,7 @@ public class SubCommand implements CommandExecutor, TabCompleter {
             style = style.replace("{name}", command.name());
             style = style.replace("{usage}", usage);
             style = style.replace("{description}", description);
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', style.replace("/", " - ")));
+            sender.sendMessage(Colorize.translateBungeeHex(style.replace("/", " - ")));
         }
     }
 

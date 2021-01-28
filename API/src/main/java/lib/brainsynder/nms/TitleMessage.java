@@ -2,7 +2,7 @@ package lib.brainsynder.nms;
 
 import lib.brainsynder.apache.EnumUtils;
 import lib.brainsynder.reflection.Reflection;
-import net.md_5.bungee.api.ChatColor;
+import lib.brainsynder.utils.Colorize;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
@@ -55,8 +55,8 @@ public class TitleMessage {
     }
 
     public void sendMessage(Player player) {
-        player.sendTitle((header != null) ? ChatColor.translateAlternateColorCodes('&', header) : "",
-                (subHeader != null) ? ChatColor.translateAlternateColorCodes('&', subHeader) : "",
+        player.sendTitle((header != null) ? Colorize.translateBungeeHex(header) : "",
+                (subHeader != null) ? Colorize.translateBungeeHex(subHeader) : "",
                 fadeIn, stay, fadeOut);
 //        //PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction, IChatBaseComponent, fadeIn, stay, fadeOut)
 //        try {

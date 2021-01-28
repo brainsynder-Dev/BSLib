@@ -4,6 +4,7 @@ import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nbt.StorageTagList;
 import lib.brainsynder.nbt.StorageTagString;
 import lib.brainsynder.utils.Base64Wrapper;
+import lib.brainsynder.utils.Colorize;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -319,7 +320,7 @@ public class ItemBuilder {
             if (strip) {
                 msg = msg.replace(ChatColor.COLOR_CHAR, '&');
             } else {
-                msg = ChatColor.translateAlternateColorCodes('&', msg);
+                msg = Colorize.translateBungeeHex(msg);
             }
             newLore.add(msg);
         });
@@ -329,7 +330,7 @@ public class ItemBuilder {
         if (strip) {
             message = message.replace(ChatColor.COLOR_CHAR, '&');
         } else {
-            message = ChatColor.translateAlternateColorCodes('&', message);
+            message = Colorize.translateBungeeHex(message);
         }
         return message;
     }

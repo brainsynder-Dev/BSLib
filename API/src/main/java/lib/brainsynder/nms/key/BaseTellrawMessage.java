@@ -5,6 +5,7 @@ import lib.brainsynder.ServerVersion;
 import lib.brainsynder.apache.EnumUtils;
 import lib.brainsynder.nms.Tellraw;
 import lib.brainsynder.reflection.Reflection;
+import lib.brainsynder.utils.Colorize;
 import lib.brainsynder.utils.MessagePart;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -239,7 +240,7 @@ public class BaseTellrawMessage extends Tellraw {
             StringBuilder builder = new StringBuilder();
 
             for(int i = startIndex; i < endIndex; ++i) {
-                builder.append(net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', stringArray[i]));
+                builder.append(Colorize.translateBungeeHex(stringArray[i]));
                 builder.append(separator);
             }
 
