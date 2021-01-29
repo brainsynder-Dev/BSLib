@@ -19,16 +19,39 @@ public class Colorize {
         }
     }
 
+
+    /**
+     * Translates the {@param text} that use the '&' symbol
+     * Uses the Bungee {@link net.md_5.bungee.api.ChatColor#translateAlternateColorCodes(char, String)} method
+     *
+     * @param text - text to be translated
+     * @return the colorized text
+     */
     public static String translateBungee (String text) {
         if ((text == null) || text.isEmpty()) return text;
         return ChatColor.translateAlternateColorCodes('&', text);
     }
 
+
+    /**
+     * Translates the {@param text} that use the '&' symbol
+     * Uses the Bukkit {@link org.bukkit.ChatColor#translateAlternateColorCodes(char, String)} method
+     *
+     * @param text - text to be translated
+     * @return the colorized text
+     */
     public static String translateBukkit (String text) {
         if ((text == null) || text.isEmpty()) return text;
         return org.bukkit.ChatColor.translateAlternateColorCodes('&', text);
     }
 
+    /**
+     * Translates the {@param text} that use the '&' symbol
+     * It also allows for hex colors (Example: '&#FFFFFF' = white)
+     *
+     * @param text - text to be translated
+     * @return the colorized text
+     */
     public static String translateBungeeHex (String text) {
         if ((text == null) || text.isEmpty()) return text;
         Matcher matcher = HEX_PATTERN.matcher(text);
