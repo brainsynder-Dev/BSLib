@@ -96,7 +96,7 @@ public class ItemBuilder {
 
     /*  LORE METHODS  */
     public ItemBuilder withLore(List<String> lore) {
-        meta.setLore(lore);
+        meta.setLore(translate(lore, false));
         return this;
     }
 
@@ -105,7 +105,7 @@ public class ItemBuilder {
         if (meta.hasLore()) itemLore = meta.getLore();
 
         List<String> finalItemLore = itemLore;
-        Arrays.asList(lore).forEach(finalItemLore::add);
+        Arrays.asList(lore).forEach(s -> finalItemLore.add(translate(s, false)));
         meta.setLore(finalItemLore);
         return this;
     }
@@ -162,7 +162,7 @@ public class ItemBuilder {
      * @param name - Custom name for the item
      */
     public ItemBuilder withName(String name) {
-        meta.setDisplayName(name);
+        meta.setDisplayName(translate(name, false));
         return this;
     }
 
@@ -192,7 +192,7 @@ public class ItemBuilder {
                 }
                 newLore.add(line);
             }
-            meta.setLore(translate(newLore, false));
+            meta.setLore(newLore);
         }
         if (meta.hasDisplayName()) {
             String name = meta.getDisplayName();
@@ -201,7 +201,7 @@ public class ItemBuilder {
                 String replacement = entry.getValue();
                 name = name.replace(key, replacement);
             }
-            meta.setDisplayName(translate(name, false));
+            meta.setDisplayName(name);
         }
         item.setItemMeta(meta);
         return item;
@@ -319,6 +319,7 @@ public class ItemBuilder {
         message.forEach(msg -> {
             if (strip) {
                 msg = msg.replace(ChatColor.COLOR_CHAR, '&');
+                msg = Colorize.removeHexColor(msg);
             } else {
                 msg = Colorize.translateBungeeHex(msg);
             }
@@ -329,6 +330,7 @@ public class ItemBuilder {
     private String translate(String message, boolean strip) {
         if (strip) {
             message = message.replace(ChatColor.COLOR_CHAR, '&');
+            message = Colorize.removeHexColor(message);
         } else {
             message = Colorize.translateBungeeHex(message);
         }
