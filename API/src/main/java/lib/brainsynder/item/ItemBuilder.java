@@ -96,7 +96,7 @@ public class ItemBuilder {
 
     /*  LORE METHODS  */
     public ItemBuilder withLore(List<String> lore) {
-        meta.setLore(translate(lore, false));
+        meta.setLore(lore);
         return this;
     }
 
@@ -105,7 +105,7 @@ public class ItemBuilder {
         if (meta.hasLore()) itemLore = meta.getLore();
 
         List<String> finalItemLore = itemLore;
-        Arrays.asList(lore).forEach(s -> finalItemLore.add(translate(s, false)));
+        Arrays.asList(lore).forEach(finalItemLore::add);
         meta.setLore(finalItemLore);
         return this;
     }
@@ -162,7 +162,7 @@ public class ItemBuilder {
      * @param name - Custom name for the item
      */
     public ItemBuilder withName(String name) {
-        meta.setDisplayName(translate(name, false));
+        meta.setDisplayName(name);
         return this;
     }
 
@@ -192,7 +192,7 @@ public class ItemBuilder {
                 }
                 newLore.add(line);
             }
-            meta.setLore(newLore);
+            meta.setLore(translate(newLore, false));
         }
         if (meta.hasDisplayName()) {
             String name = meta.getDisplayName();
@@ -201,7 +201,7 @@ public class ItemBuilder {
                 String replacement = entry.getValue();
                 name = name.replace(key, replacement);
             }
-            meta.setDisplayName(name);
+            meta.setDisplayName(translate(name, false));
         }
         item.setItemMeta(meta);
         return item;
