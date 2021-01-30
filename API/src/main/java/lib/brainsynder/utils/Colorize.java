@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Colorize {
-    private static final Pattern HEX_PATTERN = Pattern.compile("/&#(\\w{5}[0-9a-f])/gmi");
+    private static final Pattern HEX_PATTERN = Pattern.compile("&#(\\w{5}[0-9a-f])");
     private static Method of;
 
     static {
