@@ -10,10 +10,11 @@ import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Constructor;
 
+@Deprecated
 public class AnvilGUI {
-    private Player player;
-    private Plugin plugin;
-    private IAnvilClickEvent handler;
+    private final Player player;
+    private final Plugin plugin;
+    private final IAnvilClickEvent handler;
 	private static Constructor constructor = null;
 
 
