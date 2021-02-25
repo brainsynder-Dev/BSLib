@@ -4,6 +4,8 @@ import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 import lib.brainsynder.ServerVersion;
+import lib.brainsynder.nbt.other.IStorageList;
+import lib.brainsynder.nbt.other.NBTException;
 import lib.brainsynder.reflection.FieldAccessor;
 import lib.brainsynder.reflection.Reflection;
 import org.bukkit.Material;

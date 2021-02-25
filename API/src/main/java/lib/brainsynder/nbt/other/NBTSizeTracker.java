@@ -1,4 +1,4 @@
-package lib.brainsynder.nbt;
+package lib.brainsynder.nbt.other;
 
 public class NBTSizeTracker {
     public static final NBTSizeTracker INFINITE = new NBTSizeTracker(0L) {

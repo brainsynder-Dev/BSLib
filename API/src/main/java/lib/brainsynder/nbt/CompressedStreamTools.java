@@ -1,5 +1,7 @@
 package lib.brainsynder.nbt;
 
+import lib.brainsynder.nbt.other.NBTSizeTracker;
+
 import java.io.*;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;

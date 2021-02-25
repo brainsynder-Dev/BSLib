@@ -1,6 +1,7 @@
 package lib.brainsynder.nbt;
 
 import lib.brainsynder.math.MathUtils;
+import lib.brainsynder.nbt.other.NBTSizeTracker;
 
 import java.io.DataInput;
 import java.io.DataOutput;

@@ -1,5 +1,8 @@
 package lib.brainsynder.nbt;
 
+import lib.brainsynder.nbt.other.IStorageList;
+import lib.brainsynder.nbt.other.NBTSizeTracker;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;

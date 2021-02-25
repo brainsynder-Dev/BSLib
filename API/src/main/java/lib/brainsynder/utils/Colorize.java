@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Colorize {
-    private static final Pattern HEX_PATTERN = Pattern.compile("&#(\\w{5}[0-9a-f])");
+    private static final Pattern HEX_PATTERN = Pattern.compile("&#(\\w{5}[0-9a-fA-F])");
     private static Method of;
 
     static {
@@ -23,6 +23,17 @@ public class Colorize {
         } catch (Exception e) {
             of = null;
         }
+    }
+
+    public static ChatColor fetchColor (String hex) {
+        return fetchColor(hex, ChatColor.WHITE);
+    }
+    public static ChatColor fetchColor (String hex, ChatColor fallback) {
+        if (of == null) return fallback;
+        if ((hex == null) || hex.isEmpty()) return fallback;
+        if (hex.startsWith("&#")) hex = hex.replace("&", "");
+        if (!hex.startsWith("#")) hex = "#"+hex;
+        return (ChatColor) Reflection.invoke(of, null, hex);
     }
 
 
@@ -60,6 +71,7 @@ public class Colorize {
      */
     public static boolean containsHexColors(String text) {
         if ((text == null) || text.isEmpty()) return false;
+        text = text.replace(ChatColor.COLOR_CHAR, '&');
         Matcher matcher = HEX_PATTERN.matcher(text);
         return matcher.find();
     }
@@ -73,6 +85,7 @@ public class Colorize {
      */
     public static String translateBungeeHex(String text) {
         if ((text == null) || text.isEmpty()) return text;
+        text = text.replace(ChatColor.COLOR_CHAR, '&');
         Matcher matcher = HEX_PATTERN.matcher(text);
         StringBuffer buffer = new StringBuffer();
 
@@ -105,7 +118,7 @@ public class Colorize {
         if ((text == null) || text.isEmpty()) return text;
 
         // The String does not contain any valid hex
-        if (!containsHexColors(text)) return text;
+        //if (!containsHexColors(text)) return text;
 
         // Replaces the COLOR_CHAR('§') to '&'
         text = text.replace(ChatColor.COLOR_CHAR, '&');
@@ -130,6 +143,7 @@ public class Colorize {
         return text;
     }
 
+    // Generates JSON: {"text":"","extra":[{"text","color"}]}
     public static JsonObject convertParts2Json (List<Part> parts) {
         JsonObject json = new JsonObject();
         json.add("text", "");
@@ -191,5 +205,19 @@ public class Colorize {
                 Integer.valueOf(hex.substring(3, 5), 16),
                 Integer.valueOf(hex.substring(5, 7), 16)
         );
+    }
+
+
+
+    public static String toHex(int r, int g, int b) {
+        return "#" + toBrowserHexValue(r) + toBrowserHexValue(g) + toBrowserHexValue(b);
+    }
+
+    private static String toBrowserHexValue(int number) {
+        StringBuilder builder = new StringBuilder(Integer.toHexString(number & 0xff));
+        while (builder.length() < 2) {
+            builder.append("0");
+        }
+        return builder.toString().toUpperCase();
     }
 }

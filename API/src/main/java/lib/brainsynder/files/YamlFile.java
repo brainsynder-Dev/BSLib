@@ -1,6 +1,7 @@
 package lib.brainsynder.files;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import lib.brainsynder.files.options.YamlOption;
 import lib.brainsynder.utils.Colorize;
 import lib.brainsynder.utils.Utilities;
@@ -24,6 +25,7 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     private File file;
     private FileConfiguration configuration;
     private FileConfiguration tempConfig;
+    private final HashMap<String, String> movedKeys;
     private final HashMap<String, String> comments;
     private final HashMap<String, String> sections;
     private final HashMap<String, Utilities.AlignText> sectionAlign;
@@ -49,6 +51,7 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     }
 
     public YamlFile(File file) {
+        movedKeys = new HashMap<>();
         comments = new HashMap<>();
         sections = new HashMap<>();
         sectionAlign = new HashMap<>();
@@ -90,26 +93,26 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     }
 
     public void addComment(String path, String comment) {
-        comments.put(path, comment);
+        comments.put(fetchKey(path), comment);
     }
 
     public void addSectionHeader(String path, String text) {
-        sections.put(path, text);
+        sections.put(fetchKey(path), text);
     }
     public void addSectionHeader(String path, Utilities.AlignText alignText, String text) {
-        sections.put(path, text);
-        sectionAlign.put(path, alignText);
+        sections.put(fetchKey(path), text);
+        sectionAlign.put(fetchKey(path), alignText);
     }
 
     @Override
     public void addDefault(String key, Object value) {
-        configuration.addDefault(key, value);
-        tempConfig.set(key, configuration.get(key));
+        configuration.addDefault(fetchKey(key), value);
+        tempConfig.set(fetchKey(key), configuration.get(key));
     }
 
     public void addDefault(String key, Object value, String comment) {
-        configuration.addDefault(key, value);
-        tempConfig.set(key, configuration.get(key));
+        configuration.addDefault(fetchKey(key), value);
+        tempConfig.set(fetchKey(key), configuration.get(key));
         addComment(key, comment);
     }
 
@@ -117,6 +120,7 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     public void addDefault(YamlOption option) {
         configuration.addDefault(option.getPath(), option.getDefault());
         tempConfig.set(option.getPath(), configuration.get(option.getPath()));
+        if (!option.getComment().isEmpty()) addComment(option.getPath(), option.getComment());
     }
 
     public void addDefault(YamlOption option, String comment) {
@@ -154,14 +158,14 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
                         currentLines.add(currentLine, "");
                         currentLine++;
                     }
-                    String[] rawComment = comments.get(path).split("\n");
+                    String[] rawComment = comments.get(fetchKey(path)).split("\n");
                     for (String commentPart : rawComment) {
                         currentLines.add(currentLine, indent + "# " + commentPart);
                         currentLine++;
                     }
                     break;
                 } else {
-                    writeComment(path, divisions, iteration, i + 1);
+                    writeComment(fetchKey(path), divisions, iteration, i + 1);
                 }
             }
         }
@@ -189,7 +193,7 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
                     line.startsWith(indent.toString() + "'" + divisions[iteration] + "'")) {
                 iteration += 1;
                 if (iteration == divisions.length) {
-                    String section = sections.get(path);
+                    String section = sections.get(fetchKey(path));
                     StringBuilder length = new StringBuilder();
                     length.append("###");
 
@@ -217,7 +221,7 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
                     currentLines.add(i, "");
                     break;
                 } else {
-                    writeSection(path, divisions, iteration);
+                    writeSection(fetchKey(path), divisions, iteration);
                 }
             }
         }
@@ -267,7 +271,7 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     @Override
     public String getString(String tag, String fallback) {
         if (!contains(tag)) return fallback;
-        return configuration.getString(tag, fallback);
+        return configuration.getString(fetchKey(tag), fallback);
     }
     public String getString(YamlOption option) {
         return getString(option.getPath(), String.valueOf(option.getDefault()));
@@ -275,7 +279,7 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
 
     @Override
     public boolean isString(String tag) {
-        return configuration.isString(tag);
+        return configuration.isString(fetchKey(tag));
     }
 
 
@@ -287,12 +291,12 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     @Override
     public ItemStack getItemStack(String tag, ItemStack fallback) {
         if (!contains(tag)) return fallback;
-        return configuration.getItemStack(tag, fallback);
+        return configuration.getItemStack(fetchKey(tag), fallback);
     }
 
     @Override
     public boolean isItemStack(String tag) {
-        return configuration.isItemStack(tag);
+        return configuration.isItemStack(fetchKey(tag));
     }
 
     @Override
@@ -303,23 +307,23 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     @Override
     public Color getColor(String tag, Color fallback) {
         if (!contains(tag)) return fallback;
-        return configuration.getColor(tag, fallback);
+        return configuration.getColor(fetchKey(tag), fallback);
     }
 
     @Override
     public boolean isColor(String tag) {
-        return configuration.isColor(tag);
+        return configuration.isColor(fetchKey(tag));
     }
 
 
     @Override
     public ConfigurationSection getConfigurationSection(String tag) {
-        return configuration.getConfigurationSection(tag);
+        return configuration.getConfigurationSection(fetchKey(tag));
     }
 
     @Override
     public boolean isConfigurationSection(String tag) {
-        return configuration.isConfigurationSection(tag);
+        return configuration.isConfigurationSection(fetchKey(tag));
     }
 
     @Override
@@ -339,12 +343,12 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     @Override
     public boolean getBoolean(String tag, boolean fallback) {
         if (!contains(tag)) return fallback;
-        return configuration.getBoolean(tag, fallback);
+        return configuration.getBoolean(fetchKey(tag), fallback);
     }
 
     @Override
     public boolean isBoolean(String tag) {
-        return configuration.isBoolean(tag);
+        return configuration.isBoolean(fetchKey(tag));
     }
 
 
@@ -359,12 +363,12 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     @Override
     public int getInt(String tag, int fallback) {
         if (!contains(tag)) return fallback;
-        return configuration.getInt(tag, fallback);
+        return configuration.getInt(fetchKey(tag), fallback);
     }
 
     @Override
     public boolean isInt(String tag) {
-        return configuration.isInt(tag);
+        return configuration.isInt(fetchKey(tag));
     }
 
 
@@ -379,12 +383,12 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     @Override
     public double getDouble(String tag, double fallback) {
         if (!contains(tag)) return fallback;
-        return this.configuration.getDouble(tag, fallback);
+        return this.configuration.getDouble(fetchKey(tag), fallback);
     }
 
     @Override
     public boolean isDouble(String tag) {
-        return configuration.isDouble(tag);
+        return configuration.isDouble(fetchKey(tag));
     }
 
 
@@ -399,29 +403,29 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     @Override
     public long getLong(String tag, long fallback) {
         if (!contains(tag)) return fallback;
-        return configuration.getLong(tag, fallback);
+        return configuration.getLong(fetchKey(tag), fallback);
     }
 
     @Override
     public boolean isLong(String tag) {
-        return configuration.isLong(tag);
+        return configuration.isLong(fetchKey(tag));
     }
 
 
     @Override
     public List<?> getList(String tag) {
-        return configuration.getList(tag);
+        return configuration.getList(fetchKey(tag));
     }
 
     @Override
     public List<?> getList(String tag, List<?> fallback) {
         if (!contains(tag)) return fallback;
-        return configuration.getList(tag, fallback);
+        return configuration.getList(fetchKey(tag), fallback);
     }
 
     @Override
     public boolean isList(String tag) {
-        return configuration.isList(tag);
+        return configuration.isList(fetchKey(tag));
     }
 
 
@@ -437,20 +441,20 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
 
     @Override
     public boolean contains(String tag) {
-        return configuration.get(tag) != null;
+        return configuration.get(fetchKey(tag)) != null;
     }
     public boolean contains(YamlOption option) {
-        return configuration.get(option.getPath()) != null;
+        return configuration.get(fetchKey(option.getPath())) != null;
     }
 
     @Override
     public boolean contains(String tag, boolean ignoreDefault) {
-        return configuration.contains(tag, ignoreDefault);
+        return configuration.contains(fetchKey(tag), ignoreDefault);
     }
 
     @Override
     public boolean isSet(String tag) {
-        return configuration.isSet(tag);
+        return configuration.isSet(fetchKey(tag));
     }
 
 
@@ -482,117 +486,117 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
 
     public List<String> getStringList(String tag, List<String> fallback) {
         if (!contains(tag)) return fallback;
-        return this.configuration.getStringList(tag);
+        return this.configuration.getStringList(fetchKey(tag));
     }
 
 
     @Override
     public List<Integer> getIntegerList(String tag) {
-        return configuration.getIntegerList(tag);
+        return configuration.getIntegerList(fetchKey(tag));
     }
 
     @Override
     public List<Boolean> getBooleanList(String tag) {
-        return configuration.getBooleanList(tag);
+        return configuration.getBooleanList(fetchKey(tag));
     }
 
     @Override
     public List<Double> getDoubleList(String tag) {
-        return configuration.getDoubleList(tag);
+        return configuration.getDoubleList(fetchKey(tag));
     }
 
     @Override
     public List<Float> getFloatList(String tag) {
-        return configuration.getFloatList(tag);
+        return configuration.getFloatList(fetchKey(tag));
     }
 
     @Override
     public List<Long> getLongList(String tag) {
-        return configuration.getLongList(tag);
+        return configuration.getLongList(fetchKey(tag));
     }
 
     @Override
     public List<Byte> getByteList(String tag) {
-        return configuration.getByteList(tag);
+        return configuration.getByteList(fetchKey(tag));
     }
 
     @Override
     public List<Character> getCharacterList(String tag) {
-        return configuration.getCharacterList(tag);
+        return configuration.getCharacterList(fetchKey(tag));
     }
 
     @Override
     public List<Short> getShortList(String tag) {
-        return configuration.getShortList(tag);
+        return configuration.getShortList(fetchKey(tag));
     }
 
     @Override
     public List<Map<?, ?>> getMapList(String tag) {
-        return configuration.getMapList(tag);
+        return configuration.getMapList(fetchKey(tag));
     }
 
     @Override
     public <T> T getObject(String s, Class<T> aClass) {
-        return configuration.getObject(s, aClass);
+        return configuration.getObject(fetchKey(s), aClass);
     }
 
     @Override
     public <T> T getObject(String s, Class<T> aClass, T t) {
-        return configuration.getObject(s, aClass, t);
+        return configuration.getObject(fetchKey(s), aClass, t);
     }
 
     @Override
     public <T extends ConfigurationSerializable> T getSerializable(String s, Class<T> aClass) {
-        return configuration.getSerializable(s, aClass);
+        return configuration.getSerializable(fetchKey(s), aClass);
     }
 
     @Override
     public <T extends ConfigurationSerializable> T getSerializable(String s, Class<T> aClass, T t) {
-        return configuration.getSerializable(s, aClass, t);
+        return configuration.getSerializable(fetchKey(s), aClass, t);
     }
 
 
     @Override
     public Vector getVector(String tag) {
-        return configuration.getVector(tag);
+        return configuration.getVector(fetchKey(tag));
     }
 
     @Override
     public Vector getVector(String tag, Vector fallback) {
         if (!contains(tag)) return fallback;
-        return configuration.getVector(tag, fallback);
+        return configuration.getVector(fetchKey(tag), fallback);
     }
 
     @Override
     public boolean isVector(String tag) {
-        return configuration.isVector(tag);
+        return configuration.isVector(fetchKey(tag));
     }
 
 
     @Override
     public OfflinePlayer getOfflinePlayer(String tag) {
-        return configuration.getOfflinePlayer(tag);
+        return configuration.getOfflinePlayer(fetchKey(tag));
     }
 
     @Override
     public OfflinePlayer getOfflinePlayer(String tag, OfflinePlayer fallback) {
         if (!contains(tag)) return fallback;
-        return configuration.getOfflinePlayer(tag, fallback);
+        return configuration.getOfflinePlayer(fetchKey(tag), fallback);
     }
 
     @Override
     public boolean isOfflinePlayer(String tag) {
-        return configuration.isOfflinePlayer(tag);
+        return configuration.isOfflinePlayer(fetchKey(tag));
     }
 
 
     public ConfigurationSection getSection(String tag) {
-        return this.configuration.getConfigurationSection(tag);
+        return this.configuration.getConfigurationSection(fetchKey(tag));
     }
 
     @Override
     public Object get(String tag) {
-        return this.configuration.get(tag);
+        return this.configuration.get(fetchKey(tag));
     }
     public Object get(YamlOption option) {
         return get(option.getPath(), option.getDefault());
@@ -601,7 +605,7 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     @Override
     public Object get(String tag, Object fallback) {
         if (!contains(tag)) return fallback;
-        return this.configuration.get(tag);
+        return this.configuration.get(fetchKey(tag));
     }
 
     private String translate(String msg) {
@@ -618,8 +622,8 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
         currentLines = new ArrayList<>();
 
         // Set the new data
-        configuration.set(tag, data);
-        tempConfig.set(tag, data);
+        configuration.set(fetchKey(tag), data);
+        tempConfig.set(fetchKey(tag), data);
 
         // Handle the saving now
         save(true);
@@ -631,12 +635,12 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
 
     @Override
     public ConfigurationSection createSection(String tag) {
-        return configuration.createSection(tag);
+        return configuration.createSection(fetchKey(tag));
     }
 
     @Override
     public ConfigurationSection createSection(String tag, Map<?, ?> fallback) {
-        return configuration.createSection(tag, fallback);
+        return configuration.createSection(fetchKey(tag), fallback);
     }
 
     public void setHeader(String... header) {
@@ -666,6 +670,7 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     @Override
     public boolean move(String oldKey, String newKey) {
         if (contains(oldKey)) {
+            movedKeys.putIfAbsent(oldKey, newKey);
 
             // Will ensure the comments get moved as well
             if ((!comments.containsKey(newKey)) && comments.containsKey(oldKey)) comments.put(newKey, comments.get(oldKey));
@@ -678,16 +683,28 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
         return false;
     }
 
+    @Override
+    public void registerMovedKeys(String newKey, String... oldKeys) {
+        Lists.newArrayList(oldKeys).forEach(oldKey -> movedKeys.putIfAbsent(oldKey, newKey));
+    }
+
+    // Checks if the key was moved, if it was it will return the correct key
+    private String fetchKey (String key) {
+        if (key == null) return null;
+        if (key.isEmpty()) return key;
+        return movedKeys.getOrDefault(key, key);
+    }
+
     public Location getLocation(String path) {
-        return this.getSerializable(path, Location.class);
+        return this.getSerializable(fetchKey(path), Location.class);
     }
 
     public Location getLocation(String path, Location def) {
-        return this.getSerializable(path, Location.class, def);
+        return this.getSerializable(fetchKey(path), Location.class, def);
     }
 
     public boolean isLocation(String path) {
-        return this.getSerializable(path, Location.class) != null;
+        return this.getSerializable(fetchKey(path), Location.class) != null;
     }
 
 }

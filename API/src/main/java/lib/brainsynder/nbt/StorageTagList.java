@@ -1,6 +1,8 @@
 package lib.brainsynder.nbt;
 
 import com.google.common.collect.Lists;
+import lib.brainsynder.nbt.other.IStorageList;
+import lib.brainsynder.nbt.other.NBTSizeTracker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -1,6 +1,7 @@
 package lib.brainsynder.nbt;
 
 import com.google.common.collect.Lists;
+import lib.brainsynder.nbt.other.NBTException;
 
 import java.util.List;
 import java.util.regex.Pattern;

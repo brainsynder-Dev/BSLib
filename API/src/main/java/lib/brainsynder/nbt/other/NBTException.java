@@ -1,9 +1,10 @@
-package lib.brainsynder.nbt;
+package lib.brainsynder.nbt.other;
 
 public class NBTException extends Exception {
     public static final int CONTEXT_AMOUNT = 10;
-    private String input, message;
-    private int cursor;
+    private final String input;
+    private final String message;
+    private final int cursor;
 
     public NBTException(String message, String input, int cursor) {
         super(message, null, true, true);

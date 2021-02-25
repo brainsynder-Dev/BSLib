@@ -282,13 +282,13 @@ public class ItemBuilder {
         StorageTagCompound compound = new StorageTagCompound();
         compound.setEnum("material", item.getType());
         if (item.getAmount() > 1) compound.setInteger("amount", item.getAmount());
-        if (meta.hasDisplayName()) compound.setString("name", translate(meta.getDisplayName(), true));
+        if (meta.hasDisplayName()) compound.setString("name", Colorize.removeHexColor(meta.getDisplayName().replace(ChatColor.COLOR_CHAR, '&')));
         if (meta.isUnbreakable()) compound.setBoolean("unbreakable", meta.isUnbreakable());
         if (item.getDurability() > 0) compound.setInteger("durability", item.getDurability());
 
         if (meta.hasLore()) {
             StorageTagList lore = new StorageTagList();
-            translate(meta.getLore(), true).forEach(line -> lore.appendTag(new StorageTagString(line.replace("\"", ""))));
+            meta.getLore().forEach(line -> lore.appendTag(new StorageTagString(Colorize.removeHexColor(line.replace(ChatColor.COLOR_CHAR, '&')).replace("\"", ""))));
             compound.setTag("lore", lore);
         }
 
@@ -308,7 +308,9 @@ public class ItemBuilder {
             meta.getItemFlags().forEach(itemFlag -> flags.appendTag(new StorageTagString(itemFlag.name())));
             compound.setTag("flags", flags);
         }
-        compound.setTag("meta", ItemTools.toCompound(meta));
+
+        StorageTagCompound meta = ItemTools.toCompound(this.meta);
+        if (!meta.hasNoTags()) compound.setTag("meta", meta);
         return compound;
     }
 

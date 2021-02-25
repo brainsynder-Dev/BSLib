@@ -25,4 +25,6 @@ public interface Movable {
         if (move) onMove.accept(oldKey, newKey);
         return move;
     }
+
+    default void registerMovedKeys (String newKey, String... oldKeys) {}
 }

@@ -19,4 +19,8 @@ public interface YamlOption {
      * If the option moved list the old path in this list and run the move method in {@link lib.brainsynder.files.Movable#move(YamlOption)}
      */
     List<String> getOldPaths();
+
+    default String getComment () {
+        return "";
+    }
 }

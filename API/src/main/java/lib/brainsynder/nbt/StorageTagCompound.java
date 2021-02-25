@@ -2,6 +2,10 @@ package lib.brainsynder.nbt;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import lib.brainsynder.nbt.other.IStorageList;
+import lib.brainsynder.nbt.other.NBTSizeTracker;
+import lib.brainsynder.nbt.other.StorageColorType;
+import lib.brainsynder.utils.Colorize;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.*;
@@ -244,7 +248,8 @@ public class StorageTagCompound extends StorageBase {
         booleans.add(key);
         return this;
     }
-    public boolean isBoolean (String key) {
+
+    public boolean isBoolean(String key) {
         return booleans.contains(key);
     }
 
@@ -286,8 +291,8 @@ public class StorageTagCompound extends StorageBase {
             return i == 1 || i == 2 || i == 3 || i == 4 || i == 5 || i == 6;
         }
     }
-    
-    public StorageTagCompound setLocation (String key, Location location) {
+
+    public StorageTagCompound setLocation(String key, Location location) {
         StorageTagCompound compound = new StorageTagCompound();
         compound.setString("world", location.getWorld().getName());
         compound.setDouble("x", location.getX());
@@ -298,7 +303,8 @@ public class StorageTagCompound extends StorageBase {
         setTag(key, compound);
         return this;
     }
-    public Location getLocation (String key) {
+
+    public Location getLocation(String key) {
         StorageTagCompound compound = getCompoundTag(key);
         World world = Bukkit.getWorld(compound.getString("world", "world"));
         double x = compound.getDouble("x", 0);
@@ -308,46 +314,113 @@ public class StorageTagCompound extends StorageBase {
         float pitch = compound.getFloat("pitch", 0f);
         return new Location(world, x, y, z, yaw, pitch);
     }
-    public Location getLocation (String key, Location fallback) {
+
+    public Location getLocation(String key, Location fallback) {
         return (hasKey(key) ? getLocation(key) : fallback);
     }
 
-    public StorageTagCompound setColor (String key, Color color) {
-        StorageTagCompound compound = new StorageTagCompound();
-        compound.setInteger("r", color.getRed());
-        compound.setInteger("g", color.getGreen());
-        compound.setInteger("b", color.getBlue());
-        setTag(key, compound);
-        return this;
-    }
-    public Color getColor (String key) {
-        StorageTagCompound compound = getCompoundTag(key);
-        int r = compound.getInteger("r", 0);
-        if (r > 255) r = 255;
-        if (r < 0) r = 0;
-        
-        int g = compound.getInteger("g", 0);
-        if (g > 255) r = 255;
-        if (g < 0) r = 0;
-        
-        int b = compound.getInteger("b", 0);
-        if (b > 255) r = 255;
-        if (b < 0) r = 0;
-        
-        return Color.fromRGB(r, g, b);
-    }
-    public Color getColor (String key, Color fallback) {
-        return (hasKey(key) ? getColor(key) : fallback);
+    public StorageTagCompound setColor(String key, Color color) {
+        return setColor(key, color, StorageColorType.COMPOUND);
     }
 
-    public StorageTagCompound setEnum (String key, Enum anEnum) {
+    public StorageTagCompound setColor(String key, Color color, StorageColorType type) {
+        switch (type) {
+            case HEX:
+                setString(key, Colorize.toHex(color.getRed(), color.getGreen(), color.getBlue()));
+                break;
+            case INT:
+                setInteger(key, color.asRGB());
+                break;
+            case STRING:
+                setString(key, color.getRed() + "," + color.getGreen() + "," + color.getBlue());
+                break;
+            case COMPOUND:
+                StorageTagCompound compound = new StorageTagCompound();
+                compound.setInteger("r", color.getRed());
+                compound.setInteger("g", color.getGreen());
+                compound.setInteger("b", color.getBlue());
+                setTag(key, compound);
+                break;
+        }
+        return this;
+    }
+
+    public Color getColor(String key) {
+        return getColor(key, Color.RED);
+    }
+
+    public Color getColor(String key, Color fallback) {
+        if (!hasKey(key)) return fallback;
+
+        StorageBase base = getTag(key);
+        // Was saved as a Compound {R,G,B}
+        if (base instanceof StorageTagCompound) {
+            StorageTagCompound compound = getCompoundTag(key);
+            int r = compound.getInteger("r", 0);
+            if (r > 255) r = 255;
+            if (r < 0) r = 0;
+
+            int g = compound.getInteger("g", 0);
+            if (g > 255) r = 255;
+            if (g < 0) r = 0;
+
+            int b = compound.getInteger("b", 0);
+            if (b > 255) r = 255;
+            if (b < 0) r = 0;
+
+            return Color.fromRGB(r, g, b);
+        }
+
+        // Was saved as an int
+        if (base instanceof StorageTagInt) return Color.fromRGB(((StorageTagInt) base).getInt());
+
+        if (base instanceof StorageTagString) {
+            StorageTagString tagString = (StorageTagString) base;
+            String string = tagString.getString();
+
+            // String is a HEX code
+            if (string.startsWith("#")) {
+                return Color.fromRGB(
+                        Integer.valueOf(string.substring(1, 3), 16),
+                        Integer.valueOf(string.substring(3, 5), 16),
+                        Integer.valueOf(string.substring(5, 7), 16)
+                );
+            }
+
+            // String is a split R,G,B
+            if (string.contains(",")) {
+                String[] args = string.split(",");
+                int r = 255, g = 255, b = 255;
+                if (args.length >= 3) {
+                    r = Integer.parseInt(args[0].trim());
+                    g = Integer.parseInt(args[1].trim());
+                    b = Integer.parseInt(args[2].trim());
+                }
+                return Color.fromRGB(r, g, b);
+            }
+
+            try {
+                // String is a rgb integer, someone added some quotes
+                int rgb = Integer.parseInt(string);
+                return Color.fromRGB(rgb);
+            } catch (NumberFormatException e) {
+                return fallback;
+            }
+        }
+
+        return fallback;
+    }
+
+    public StorageTagCompound setEnum(String key, Enum anEnum) {
         setString(key, anEnum.name());
         return this;
     }
-    public <E extends Enum>E getEnum (String key, Class<E> type) {
+
+    public <E extends Enum> E getEnum(String key, Class<E> type) {
         return getEnum(key, type, null);
     }
-    public <E extends Enum>E getEnum (String key, Class<E> type, E fallback) {
+
+    public <E extends Enum> E getEnum(String key, Class<E> type, E fallback) {
         if (!hasKey(key)) return fallback;
         return (E) E.valueOf(type, getString(key));
     }
@@ -358,10 +431,11 @@ public class StorageTagCompound extends StorageBase {
     public byte getByte(String key) {
         StorageBase storage = this.tagMap.get(key);
         if (storage.getId() == 1) {
-            return ((StorageTagByte)storage).getByte();
+            return ((StorageTagByte) storage).getByte();
         }
         return 0;
     }
+
     public byte getByte(String key, byte fallback) {
         return (hasKey(key) ? getByte(key) : fallback);
     }
@@ -372,6 +446,7 @@ public class StorageTagCompound extends StorageBase {
     public short getShort(String key) {
         return Short.parseShort(getValue(key));
     }
+
     public short getShort(String key, short fallback) {
         return (hasKey(key) ? getShort(key) : fallback);
     }
@@ -382,6 +457,7 @@ public class StorageTagCompound extends StorageBase {
     public int getInteger(String key) {
         return Integer.parseInt(getValue(key));
     }
+
     public int getInteger(String key, int fallback) {
         return (hasKey(key) ? getInteger(key) : fallback);
     }
@@ -392,6 +468,7 @@ public class StorageTagCompound extends StorageBase {
     public long getLong(String key) {
         return Long.parseLong(getValue(key));
     }
+
     public long getLong(String key, long fallback) {
         return (hasKey(key) ? getLong(key) : fallback);
     }
@@ -402,6 +479,7 @@ public class StorageTagCompound extends StorageBase {
     public float getFloat(String key) {
         return Float.parseFloat(getValue(key));
     }
+
     public float getFloat(String key, float fallback) {
         return (hasKey(key) ? getFloat(key) : fallback);
     }
@@ -412,6 +490,7 @@ public class StorageTagCompound extends StorageBase {
     public double getDouble(String key) {
         return Double.parseDouble(getValue(key));
     }
+
     public double getDouble(String key, double fallback) {
         return (hasKey(key) ? getDouble(key) : fallback);
     }
@@ -422,6 +501,7 @@ public class StorageTagCompound extends StorageBase {
     public String getString(String key) {
         return getValue(key);
     }
+
     public String getString(String key, String fallback) {
         return (hasKey(key) ? getValue(key) : fallback);
     }
@@ -545,18 +625,21 @@ public class StorageTagCompound extends StorageBase {
     public boolean getBoolean(String key) {
         return getByte(key) != 0;
     }
+
     public boolean getBoolean(String key, boolean fallback) {
         return (hasKey(key) ? getBoolean(key) : fallback);
     }
 
-    public StorageTagCompound setItemStack (String key, ItemStack item) {
+    public StorageTagCompound setItemStack(String key, ItemStack item) {
         setTag(key, StorageTagTools.fromItemStack(item));
         return this;
     }
-    public ItemStack getItemStack (String key) {
+
+    public ItemStack getItemStack(String key) {
         return getItemStack(key, new ItemStack(Material.AIR));
     }
-    public ItemStack getItemStack (String key, ItemStack fallback) {
+
+    public ItemStack getItemStack(String key, ItemStack fallback) {
         if (!hasKey(key)) return fallback;
         return StorageTagTools.toItemStack(getCompoundTag(key));
     }
@@ -613,7 +696,7 @@ public class StorageTagCompound extends StorageBase {
     /**
      * Remove the specified tag.
      */
-    public StorageTagCompound remove (String key) {
+    public StorageTagCompound remove(String key) {
         if (hasKey(key)) tagMap.remove(key);
         booleans.remove(key);
         return this;

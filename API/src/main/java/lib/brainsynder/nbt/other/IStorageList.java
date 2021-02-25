@@ -1,4 +1,4 @@
-package lib.brainsynder.nbt;
+package lib.brainsynder.nbt.other;
 
 public interface IStorageList<T> {
     T getList();

@@ -1,5 +1,7 @@
 package lib.brainsynder.nbt;
 
+import lib.brainsynder.nbt.other.NBTException;
+
 public class StringReader  {
     private static final char SYNTAX_ESCAPE = '\\';
     private static final char SYNTAX_DOUBLE_QUOTE = '"';

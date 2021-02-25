@@ -7,11 +7,8 @@ import lib.brainsynder.utils.DyeColorWrapper;
 import org.bukkit.Material;
 
 public class DataConverter {
-    public static ItemBuilder getColoredMaterial(MaterialType type, int data) {
-        if (ServerVersion.isOlder(ServerVersion.v1_13_R1)) return toBuilder(getMaterial(type.name()), data);
-
-        DyeColorWrapper dye = DyeColorWrapper.getByWoolData((byte) data);
-        if ((type == MaterialType.DYE) || (type == MaterialType.INK_SACK)) dye = DyeColorWrapper.getByDyeData((byte) data);
+    public static ItemBuilder getColoredMaterial(MaterialType type, DyeColorWrapper dye) {
+        if (ServerVersion.isOlder(ServerVersion.v1_13_R1)) return toBuilder(getMaterial(type.name()), dye.getWoolData());
 
         String name = dye.name();
         if (name.equalsIgnoreCase("SILVER")) name = "LIGHT_GRAY";

@@ -1,5 +1,6 @@
 package lib.brainsynder.nbt;
 
+import lib.brainsynder.nbt.other.NBTSizeTracker;
 import org.bukkit.Color;
 
 import java.io.DataInput;
