@@ -37,6 +37,9 @@ public class RandomCollection<E> {
         this.random = var1;
     }
 
+    public void add(E value) {
+        add(50, value);
+    }
     public void add(double percent, E value) {
         if (percent > 0.0D) {
             this.total += percent;
@@ -51,6 +54,14 @@ public class RandomCollection<E> {
     public E next() {
         double var1 = this.random.nextDouble() * this.total;
         return this.map.ceilingEntry(var1).getValue();
+    }
+
+    public boolean isEmpty () {
+        return map.isEmpty();
+    }
+
+    public int getSize () {
+        return map.size();
     }
 
     // Will fetch the next random value, while also removing it from the selections
