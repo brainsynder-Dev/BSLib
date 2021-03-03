@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.*;
 
 public class ItemBuilder {
+    private Map<String, String> masterReplace = new HashMap<>();
     private Map<String, String> replaceLore = new HashMap<>();
     private Map<String, String> replaceName = new HashMap<>();
     private final ItemStack item;
@@ -86,6 +87,11 @@ public class ItemBuilder {
 
     public ItemBuilder replaceInName(String key, Object replacement) {
         replaceName.put(key, String.valueOf(replacement));
+        return this;
+    }
+
+    public ItemBuilder replaceString(String key, Object replacement) {
+        masterReplace.put(key, String.valueOf(replacement));
         return this;
     }
 
@@ -190,7 +196,12 @@ public class ItemBuilder {
                     String replacement = entry.getValue();
                     line = line.replace(key, replacement);
                 }
-                newLore.add(line);
+                for (Map.Entry<String, String> entry : masterReplace.entrySet()) {
+                    String key = entry.getKey();
+                    String replacement = entry.getValue();
+                    line = line.replace(key, replacement);
+                }
+                newLore.add(Colorize.translateBungeeHex(line));
             }
             meta.setLore(newLore);
         }
@@ -201,7 +212,12 @@ public class ItemBuilder {
                 String replacement = entry.getValue();
                 name = name.replace(key, replacement);
             }
-            meta.setDisplayName(name);
+            for (Map.Entry<String, String> entry : masterReplace.entrySet()) {
+                String key = entry.getKey();
+                String replacement = entry.getValue();
+                name = name.replace(key, replacement);
+            }
+            meta.setDisplayName(Colorize.translateBungeeHex(name));
         }
         item.setItemMeta(meta);
         return item;
@@ -245,6 +261,7 @@ public class ItemBuilder {
         ItemBuilder builder = fromCompound(toCompound());
         builder.replaceName = replaceName;
         builder.replaceLore = replaceLore;
+        builder.masterReplace = masterReplace;
         return builder;
     }
 
