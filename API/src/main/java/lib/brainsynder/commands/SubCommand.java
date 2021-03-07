@@ -20,6 +20,7 @@ import java.util.*;
 public class SubCommand implements CommandExecutor, TabCompleter {
     private final Map<Integer, List<String>> tabCompletion = new HashMap<>();
     private final Map<Integer, List<Complete>> tabCompletionArg = new HashMap<>();
+    private String masterFormat;
 
     public void run(CommandSender sender) {
         run(sender, new String[0]);
@@ -29,6 +30,9 @@ public class SubCommand implements CommandExecutor, TabCompleter {
         run(sender);
     }
 
+    public void setMasterFormat(String masterFormat) {
+        this.masterFormat = masterFormat;
+    }
 
     /**
      * Generate your own tab completion
@@ -71,24 +75,17 @@ public class SubCommand implements CommandExecutor, TabCompleter {
         String usage = command.usage();
         String description = command.description();
 
-        String style = getUsageStyle();
+        String style = command.consoleStyle();
+        if (sender instanceof Player) style = getUsageStyle();
+        if (masterFormat != null) style = masterFormat;
 
-        if (usage.isEmpty()) {
-            style = style.replace(" {usage} ", "");
-            style = style.replace(" {usage}", "");
-        }
-        if (description.isEmpty()) style = style.replace(" - {description}", "");
-
-
+        style = style.replace("{name}", command.name());
+        style = style.replace("{usage}", usage.isEmpty() ? "" : usage);
         if (sender instanceof Player) {
             style = style.replace(" - {description}", "");
             Tellraw.getInstance(style).tooltip(ChatColor.GRAY + description).send((Player) sender);
         } else {
-
-            // Will format it to send to console
-            style = style.replace("{name}", command.name());
-            style = style.replace("{usage}", usage);
-            style = style.replace("{description}", description);
+            style = style.replace("{description}", description.isEmpty() ? "" : description);
             sender.sendMessage(Colorize.translateBungeeHex(style.replace("/", " - ")));
         }
     }
