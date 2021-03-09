@@ -121,7 +121,7 @@ public class SubCommand implements CommandExecutor, TabCompleter {
             }
             for (String command : replacements) {
                 if (command.isEmpty()) continue;
-                if (StringUtil.startsWithIgnoreCase(command, toComplete)) {
+                if (StringUtil.startsWithIgnoreCase(net.md_5.bungee.api.ChatColor.stripColor(command), net.md_5.bungee.api.ChatColor.stripColor(toComplete))) {
                     completions.add(command);
                 }
             }
