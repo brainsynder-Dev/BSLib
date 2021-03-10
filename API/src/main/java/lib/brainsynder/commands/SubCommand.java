@@ -95,6 +95,15 @@ public class SubCommand implements CommandExecutor, TabCompleter {
         return clazz.getAnnotation(ICommand.class);
     }
 
+    private boolean failedLastCompletion (List<Complete> previous, CommandSender sender, String last){
+        for (Complete complete : previous) {
+            if (!complete.handleReplacement(sender, new ArrayList<>(), last.toLowerCase(Locale.ENGLISH))){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public Map<Integer, List<String>> getTabCompletion() {
         return tabCompletion;
     }
@@ -105,6 +114,9 @@ public class SubCommand implements CommandExecutor, TabCompleter {
         if ((!tabCompletion.isEmpty()) || (!tabCompletionArg.isEmpty())) {
             int length = args.length;
             String toComplete = args[length - 1].toLowerCase(Locale.ENGLISH);
+            try {
+                if (failedLastCompletion(tabCompletionArg.getOrDefault(length-1, new ArrayList<>()), sender, args[length - 3])) return;
+            }catch (Exception ignored) {}
 
             List<String> replacements = tabCompletion.getOrDefault(length, new ArrayList<>());
             if ((length - 2) >= 0) {
