@@ -1,5 +1,8 @@
 package lib.brainsynder.nms.key;
 
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
+import com.google.common.collect.Lists;
 import com.google.gson.stream.JsonWriter;
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.apache.EnumUtils;
@@ -23,12 +26,26 @@ import java.util.List;
 import java.util.UUID;
 
 public class BaseTellrawMessage extends Tellraw {
-    private final List<MessagePart> messageParts = new ArrayList<>();
+    private List<MessagePart> messageParts = new ArrayList<>();
     private String jsonString = null;
     private boolean dirty = false;
     private Constructor packet = null;
     private Method serializerMethod = null;
     private Object messagetype, uuid;
+
+    /**
+     * Will convert the string from "&cString" to the JSON equivalent used for the tellraw command
+     *
+     * @param text - string used for the conversion
+     */
+    public BaseTellrawMessage fromLegacy0 (String text) {
+        if ((text == null) || text.isEmpty()) throw new NullPointerException("Missing text input");
+        BaseTellrawMessage message = new BaseTellrawMessage ();
+        List<MessagePart> split = splitMessageToParts(text);
+        message.messageParts = split;
+        message.jsonString = convertParts2Json(split).toString();
+        return message;
+    }
 
     public BaseTellrawMessage() {
         try {
@@ -112,13 +129,13 @@ public class BaseTellrawMessage extends Tellraw {
         this.dirty = true;
         return this;
     }
-    public BaseTellrawMessage style(ChatColor[] styles) {
+    public BaseTellrawMessage style(ChatColor... styles) {
         for (ChatColor style : styles) {
             if (!style.isFormat()) {
                 throw new IllegalArgumentException(style.name() + " is not a style");
             }
         }
-        latest().styles = styles;
+        latest().styles = Lists.newArrayList(styles);
         this.dirty = true;
         return this;
     }
@@ -261,5 +278,77 @@ public class BaseTellrawMessage extends Tellraw {
         latest.hoverActionName = name;
         latest.hoverActionData = data;
         this.dirty = true;
+    }
+
+
+
+
+    // Generates JSON: {"text":"","extra":[{"text","color"}]}
+    public static JsonObject convertParts2Json (List<MessagePart> parts) {
+        JsonObject json = new JsonObject();
+        json.add("text", "");
+
+        JsonArray extra = new JsonArray();
+        for (MessagePart part : parts) {
+            extra.add(part.toJson());
+        }
+        json.add("extra", extra);
+        return json;
+    }
+
+    private List<MessagePart> splitMessageToParts(String value) {
+        List<MessagePart> parts = new ArrayList<>();
+        // String is empty
+        if ((value == null) || value.isEmpty()) return parts;
+        value = value.replace(org.bukkit.ChatColor.COLOR_CHAR, '&');
+
+        if (value.contains("&")) {
+            String[] args = value.split("&");
+
+            for (String string : args) {
+                if (string == null) continue;
+                if (string.isEmpty()) continue;
+
+                // Has hex color
+
+                MessagePart part = new MessagePart();
+                if (string.startsWith("#")) {
+                    // 0-6
+
+                    StringBuilder HEX = new StringBuilder();
+                    int end = 6;
+                    // If the '&x' is at the end of the string ignore it
+                    for (int i = -1; i < end; i++) HEX.append(string.charAt(i + 1));
+                    part.text = string.replace(HEX.toString(), "");
+                    part.customColor = hex2Color(HEX.toString());
+                } else {
+                    org.bukkit.ChatColor color = org.bukkit.ChatColor.getByChar(string.charAt(0));
+                    if (color == null) {
+                        part.text = "&" + string;
+                    } else {
+                        part.text = string.replaceFirst(String.valueOf(string.charAt(0)), "");
+                        if (color.isFormat()){
+                            if (part.styles == null) part.styles = Lists.newArrayList();
+                            part.styles.add(color);
+                        } else {
+                            part.color = color;
+                        }
+                    }
+                }
+                parts.add(part);
+            }
+        } else {
+            // 'value' does not contain '&'
+            parts.add(new MessagePart(value));
+        }
+        return parts;
+    }
+
+    private Color hex2Color(String hex) {
+        return Color.fromRGB(
+                Integer.valueOf(hex.substring(1, 3), 16),
+                Integer.valueOf(hex.substring(3, 5), 16),
+                Integer.valueOf(hex.substring(5, 7), 16)
+        );
     }
 }
