@@ -1,5 +1,6 @@
 package lib.brainsynder.commands;
 
+import com.google.common.collect.Lists;
 import lib.brainsynder.commands.annotations.ICommand;
 import lib.brainsynder.nms.Tellraw;
 import lib.brainsynder.utils.Colorize;
@@ -95,30 +96,42 @@ public class SubCommand implements CommandExecutor, TabCompleter {
         return clazz.getAnnotation(ICommand.class);
     }
 
-    private boolean failedLastCompletion (List<Complete> previous, CommandSender sender, String last){
+    private boolean failedLastCompletion (String[] args, List<Complete> previous, int index, CommandSender sender, String last){
+        List<String> replace = tabCompletion.getOrDefault(index, new ArrayList<>());
+
         for (Complete complete : previous) {
-            if (!complete.handleReplacement(sender, new ArrayList<>(), last.toLowerCase(Locale.ENGLISH))){
+            if (!complete.handleReplacement(sender, replace, last.toLowerCase(Locale.ENGLISH))){
                 return false;
             }
         }
-        return true;
+        replace.addAll(handleCompletions(Lists.newArrayList(), sender, index, args));
+        return replace.isEmpty();
     }
 
     public Map<Integer, List<String>> getTabCompletion() {
         return tabCompletion;
     }
 
+    public List<String> handleCompletions (List<String> completions, CommandSender sender, int index, String[] args) {
+        return completions;
+    }
+
     public void tabComplete(List<String> completions, CommandSender sender, String[] args) {
         Validate.notNull(sender, "Sender cannot be null");
         Validate.notNull(args, "Arguments cannot be null");
-        if ((!tabCompletion.isEmpty()) || (!tabCompletionArg.isEmpty())) {
-            int length = args.length;
-            String toComplete = args[length - 1].toLowerCase(Locale.ENGLISH);
-            try {
-                if (failedLastCompletion(tabCompletionArg.getOrDefault(length-1, new ArrayList<>()), sender, args[length - 3])) return;
-            }catch (Exception ignored) {}
+        int length = args.length;
+        if (length == 0) return;
 
-            List<String> replacements = tabCompletion.getOrDefault(length, new ArrayList<>());
+        try {
+            int previous = (length-1);
+            if (((length-3) >= 0)
+                    && failedLastCompletion(args, tabCompletionArg.getOrDefault(previous, new ArrayList<>()), previous, sender, args[length - 3])) return;
+        }catch (Exception ignored) {}
+
+        String toComplete = args[length - 1].toLowerCase(Locale.ENGLISH);
+        List<String> replacements = tabCompletion.getOrDefault(length, new ArrayList<>());
+
+        if ((!tabCompletion.isEmpty()) || (!tabCompletionArg.isEmpty())) {
             if ((length - 2) >= 0) {
                 List<Complete> completes = tabCompletionArg.getOrDefault(length, new ArrayList<>());
                 if (!completes.isEmpty()) {
@@ -131,11 +144,20 @@ public class SubCommand implements CommandExecutor, TabCompleter {
                     }
                 }
             }
-            for (String command : replacements) {
-                if (command.isEmpty()) continue;
-                if (StringUtil.startsWithIgnoreCase(net.md_5.bungee.api.ChatColor.stripColor(command), net.md_5.bungee.api.ChatColor.stripColor(toComplete))) {
-                    completions.add(command);
-                }
+        }
+
+        List<String> strings = handleCompletions(Lists.newArrayList(), sender, length, args);
+        if (!strings.isEmpty()) {
+            for (String s : strings) {
+                if (!replacements.contains(s)) replacements.add(s);
+            }
+        }
+
+
+        for (String command : replacements) {
+            if (command.isEmpty()) continue;
+            if (StringUtil.startsWithIgnoreCase(net.md_5.bungee.api.ChatColor.stripColor(command), net.md_5.bungee.api.ChatColor.stripColor(toComplete))) {
+                completions.add(command);
             }
         }
     }
