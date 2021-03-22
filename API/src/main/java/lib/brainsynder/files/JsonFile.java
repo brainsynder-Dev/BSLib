@@ -49,10 +49,29 @@ public abstract class JsonFile implements Movable {
     }
 
     public boolean save() {
+        return save(false);
+    }
+
+    /**
+     * Will save the JSON data to the file
+     *
+     * @param clearFile - Should the file be cleared each time to prevent text duplication (happens on occasion)
+     */
+    public boolean save(boolean clearFile) {
         String text = json.toString(WriterConfig.PRETTY_PRINT).replace("\u0026", "&");
+        OutputStreamWriter fw;
+
+        // Will clear the file of existing text to prevent text duplication
+        if (file.exists() && clearFile) {
+            file.delete();
+            try {
+                file.createNewFile();
+            } catch (Exception ignored) {}
+        }
+
 
         try {
-            OutputStreamWriter fw = new OutputStreamWriter(new FileOutputStream(file), ENCODE);
+            fw = new OutputStreamWriter(new FileOutputStream(file), ENCODE);
             try {
                 fw.write(text);
             } finally {
@@ -69,6 +88,9 @@ public abstract class JsonFile implements Movable {
         return file.getName().replace(".json", "");
     }
 
+    public boolean containsKey (String key) {
+        return hasKey(key) || hasDefaultKey(key);
+    }
     public boolean hasKey (String key) {
         return json.names().contains(key);
     }

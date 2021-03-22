@@ -67,7 +67,7 @@ public class UpdateUtils {
     public void checkUpdate() {
         if (properties == null) return;
         int build = Integer.parseInt(properties.getProperty("buildnumber"));
-        String url = "http://pluginwiki.us/version/builds.json";
+        String url = "https://pluginwiki.us/version/builds.json";
         result.getPreStart().run();
 
         WebConnector.getInputStreamString(url, plugin, string -> {
