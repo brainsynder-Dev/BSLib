@@ -83,7 +83,7 @@ public class SubCommand implements CommandExecutor, TabCompleter {
         style = style.replace("{name}", command.name());
         style = style.replace("{usage}", usage.isEmpty() ? "" : usage);
         if (sender instanceof Player) {
-            style = style.replace(" - {description}", "");
+            style = Colorize.translateBungeeHex(style.replace(" - {description}", ""));
             Tellraw.getInstance(style).tooltip(ChatColor.GRAY + description).send((Player) sender);
         } else {
             style = style.replace("{description}", description.isEmpty() ? "" : description);

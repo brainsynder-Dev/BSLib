@@ -80,6 +80,7 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
         writeSections();
         writeComments();
         save(false);
+
         try {
             configuration.load(file);
         } catch (IOException | InvalidConfigurationException e) {
