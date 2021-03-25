@@ -21,16 +21,17 @@ public class UpdateUtils {
         this.plugin = plugin;
 
 
-        Properties prop = null;
+        Properties prop = new Properties();
         try {
-            prop = new Properties();
             prop.load(plugin.getClass().getResourceAsStream("/jenkins.properties"));
         } catch (IOException ignored) {} // If it fails, it means there is no 'jenkins.properties' file
 
         properties = prop;
-        result.setCurrentBuild(Integer.parseInt(properties.getProperty("buildnumber")));
-        result.setRepo(properties.getProperty("repo"));
         this.result = result;
+        if ((!prop.containsKey("buildnumber")) || (!prop.containsKey("repo"))) return;
+
+        this.result.setCurrentBuild(Integer.parseInt(properties.getProperty("buildnumber", "-1")));
+        this.result.setRepo(properties.getProperty("repo", "Unknown"));
     }
 
     public Properties getProperties() {
