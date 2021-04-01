@@ -221,7 +221,8 @@ public class BaseTellrawMessage extends Tellraw {
         StringBuilder builder = new StringBuilder();
         messageParts.forEach(part -> {
             if (part.color != null) builder.append(part.color);
-            if (part.styles != null) {
+            if (part.customColor != null) builder.append(Colorize.fetchColor(part.customColor));
+            if ((part.styles != null) && !part.styles.isEmpty()) {
                 for (ChatColor style : part.styles) builder.append(style);
             }
             builder.append(part.text);
