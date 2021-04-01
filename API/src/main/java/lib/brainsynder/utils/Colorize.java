@@ -35,6 +35,10 @@ public class Colorize {
         if (!hex.startsWith("#")) hex = "#"+hex;
         return (ChatColor) Reflection.invoke(of, null, hex);
     }
+    public static ChatColor fetchColor (Color color) {
+        if (color == null) return ChatColor.WHITE;
+        return fetchColor(toHex(color.getRed(), color.getGreen(), color.getBlue()));
+    }
 
 
     /**
