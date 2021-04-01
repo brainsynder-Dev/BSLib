@@ -146,6 +146,41 @@ public class StorageTagCompound extends StorageBase {
         return this.tagMap.size();
     }
 
+    public StorageTagCompound set (String key, Object object) {
+        if (object instanceof Boolean){
+            setBoolean(key, (Boolean) object);
+        }else if (object instanceof Integer){
+            setInteger(key, (Integer) object);
+        }else if (object instanceof Byte){
+            setByte(key, (Byte) object);
+        }else if (object instanceof Float){
+            setFloat(key, (Float) object);
+        }else if (object instanceof Double){
+            setDouble(key, (Double) object);
+        }else if (object instanceof Long){
+            setLong(key, (Long) object);
+        }else if (object instanceof Short){
+            setShort(key, (Short) object);
+        }else if (object instanceof Location){
+            setLocation(key, (Location) object);
+        }else if (object instanceof Enum){
+            setEnum(key, (Enum) object);
+        }else if (object instanceof Color){
+            setColor(key, (Color) object);
+        }else if (object instanceof byte[]){
+            setByteArray(key, (byte[]) object);
+        }else if (object instanceof int[]){
+            setIntArray(key, (int[]) object);
+        }else if (object instanceof String){
+            setString(key, (String) object);
+        }else if (object instanceof ItemStack){
+            setItemStack(key, (ItemStack) object);
+        }else if (object instanceof UUID){
+            setUniqueId(key, (UUID) object);
+        }
+        return this;
+    }
+
     /**
      * Stores the given tag into the map with the given string key. This is mostly used to store tag lists.
      */
@@ -187,17 +222,21 @@ public class StorageTagCompound extends StorageBase {
     }
 
     public StorageTagCompound setUniqueId(String key, UUID value) {
-        this.setLong(key + "Most", value.getMostSignificantBits());
-        this.setLong(key + "Least", value.getLeastSignificantBits());
+        setString(key, value.toString());
         return this;
     }
 
     public UUID getUniqueId(String key) {
-        return new UUID(this.getLong(key + "Most"), this.getLong(key + "Least"));
-    }
+        if (this.hasKey(key + "Most", 99) && this.hasKey(key + "Least", 99))
+            return new UUID(this.getLong(key + "Most"), this.getLong(key + "Least"));
+        if (hasKey(key)) {
+            String raw = getString(key);
+            try {
+                return UUID.fromString(raw);
+            }catch (IllegalArgumentException ignored) {}
+        }
 
-    public boolean hasUniqueId(String key) {
-        return this.hasKey(key + "Most", 99) && this.hasKey(key + "Least", 99);
+        return UUID.randomUUID();
     }
 
     /**
