@@ -101,7 +101,7 @@ public class WebConnector {
     public static void uploadPaste(Plugin plugin, String text, Callback<String, String> callback) {
         CompletableFuture.runAsync(() -> {
             try {
-                String url = "http://pastelog.us/documents";
+                String url = "https://www.pastelog.us/documents";
                 URL obj = new URL(url);
                 HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
@@ -131,7 +131,7 @@ public class WebConnector {
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    callback.success("http://pastelog.us/"+key);
+                                    callback.success("https://www.pastelog.us/"+key);
                                 }
                             }.runTask(plugin);
                             return;
