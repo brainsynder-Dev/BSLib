@@ -273,4 +273,8 @@ public abstract class JsonFile implements Movable {
         }
         return false;
     }
+
+    public File getFile() {
+        return file;
+    }
 }

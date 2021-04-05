@@ -714,4 +714,7 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
         return this.getSerializable(fetchKey(path), Location.class) != null;
     }
 
+    public File getFile() {
+        return file;
+    }
 }
