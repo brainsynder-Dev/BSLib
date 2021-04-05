@@ -28,6 +28,7 @@ public class UpdateUtils {
 
         properties = prop;
         this.result = result;
+        if (prop.isEmpty()) return;
         if ((!prop.containsKey("buildnumber")) || (!prop.containsKey("repo"))) return;
 
         this.result.setCurrentBuild(Integer.parseInt(properties.getProperty("buildnumber", "-1")));
