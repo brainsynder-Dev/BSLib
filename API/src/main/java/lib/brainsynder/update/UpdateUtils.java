@@ -68,6 +68,9 @@ public class UpdateUtils {
      */
     public void checkUpdate() {
         if (properties == null) return;
+        if (!properties.contains("buildnumber")) return;
+        if (!properties.contains("repo")) return;
+
         int build = Integer.parseInt(properties.getProperty("buildnumber"));
         String url = "https://pluginwiki.us/version/builds.json";
         result.getPreStart().run();
