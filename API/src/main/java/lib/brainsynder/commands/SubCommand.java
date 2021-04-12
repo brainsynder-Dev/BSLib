@@ -113,7 +113,6 @@ public class SubCommand implements CommandExecutor, TabCompleter {
         Validate.notNull(args, "Arguments cannot be null");
         if ((!tabCompletion.isEmpty()) || (!tabCompletionArg.isEmpty())) {
             int length = args.length;
-            if (length == 0) return;
             String toComplete = args[length - 1].toLowerCase(Locale.ENGLISH);
             try {
                 if (failedLastCompletion(tabCompletionArg.getOrDefault(length-1, new ArrayList<>()), sender, args[length - 3])) return;
