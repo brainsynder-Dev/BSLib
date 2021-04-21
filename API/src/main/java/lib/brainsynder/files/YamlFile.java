@@ -695,8 +695,10 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
         Lists.newArrayList(oldKeys).forEach(oldKey -> movedKeys.putIfAbsent(oldKey, newKey));
     }
 
-    // Checks if the key was moved, if it was it will return the correct key
-    private String fetchKey (String key) {
+    /**
+     * Checks if the key was moved, if it was it will return the correct key
+     */
+    public String fetchKey (String key) {
         if (key == null) return null;
         if (key.isEmpty()) return key;
         return movedKeys.getOrDefault(key, key);
