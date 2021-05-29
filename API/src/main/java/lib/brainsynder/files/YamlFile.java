@@ -100,7 +100,9 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     }
 
     public void addComment(String path, String comment) {
-        comments.put(fetchKey(path), comment);
+        String key = fetchKey(path);
+        if (comments.containsKey(key)) return;
+        comments.put(key, comment);
     }
 
     public void addSectionHeader(String path, String text) {
@@ -625,6 +627,10 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     }
     @Override
     public void set(String tag, Object data) {
+        set(tag, data, true);
+    }
+
+    public void set(String tag, Object data, boolean save) {
         // Resets the `currentLines` to clear the previous generations
         currentLines = new ArrayList<>();
 
@@ -632,6 +638,10 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
         configuration.set(fetchKey(tag), data);
         tempConfig.set(fetchKey(tag), data);
 
+        if (save) save();
+    }
+
+    public void save () {
         // Handle the saving now
         save(true);
 

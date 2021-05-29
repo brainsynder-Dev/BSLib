@@ -22,20 +22,8 @@ public class ParentCommand<T extends SubCommand> extends SubCommand {
         if (parent) sendUsage(sender);
         if (!subCommands.isEmpty())
             subCommands.forEach(subCommand -> {
-                ICommand command = subCommand.getCommand(subCommand.getClass());
-                String usage = Colorize.translateBungeeHex(command.usage());
-                String description = "";
-                Tellraw raw = Tellraw.getInstance("/"+getCommand(getClass()).name()+" "+command.name()+ " " +usage);
-
-                if (!command.description().isEmpty()) {
-                    description = Colorize.translateBungeeHex(command.description());
-                    raw.tooltip(ChatColor.GRAY+description);
-                }
-
-                if (!(sender instanceof Player)) {
-                    if (!description.isEmpty()) raw.then(" "+description);
-                }
-                raw.send(sender);
+                if (!subCommand.getMasterFormat().equals(getMasterFormat())) subCommand.setMasterFormat(getMasterFormat());
+                subCommand.sendUsage(sender);
             });
     }
 
