@@ -34,23 +34,28 @@ public class StorageTagTools {
     private static final Method parseString;
 
     static {
-        Class parser = Reflection.getNmsClass("MojangsonParser");
+        Class parser = Reflection.getNmsClass("MojangsonParser", "nbt");
         parseString = Reflection.getMethod(parser, "parse", String.class);
 
         craftStack = Reflection.getCBCClass("inventory.CraftItemStack");
-        Class keyClass = Reflection.getNmsClass("MinecraftKey");
+        Class keyClass = Reflection.getNmsClass("MinecraftKey", "resources");
 
         newKey = Reflection.getConstructor(keyClass, String.class);
-        nbtTag = Reflection.getNmsClass("NBTTagCompound");
-        stackClass = Reflection.getNmsClass("ItemStack"); /** {@link net.minecraft.server.v1_13_R1.ItemStack} */
+        nbtTag = Reflection.getNmsClass("NBTTagCompound", "nbt");
+        stackClass = Reflection.getNmsClass("ItemStack", "world.item"); /** {@link net.minecraft.server.v1_13_R1.ItemStack} */
         newStack = Reflection.getConstructor(stackClass, nbtTag);
 
         if (ServerVersion.isEqualNew(ServerVersion.v1_14_R1)) { // TODO: Find the correct version this changed in
-            FieldAccessor accessor = FieldAccessor.getField(Reflection.getNmsClass("IRegistry"), "ITEM", Object.class);
+            FieldAccessor accessor;
+            try {
+                accessor = FieldAccessor.getField(Reflection.getNmsClass("IRegistry", "core"), "ITEM", Object.class);
+            } catch (IllegalArgumentException ex) {
+                accessor = FieldAccessor.getField(Reflection.getNmsClass("IRegistry", "core"), "Z", Object.class);
+            }
             registry = accessor.get(null);
             getItem = Reflection.getMethod(registry.getClass(), "get", keyClass);
         }else{
-            getItem = Reflection.getMethod(Reflection.getNmsClass("Items"), "get", String.class);
+            getItem = Reflection.getMethod(Reflection.getNmsClass("Items", "world.item"), "get", String.class);
         }
         if (ServerVersion.isEqualNew(ServerVersion.v1_13_R1))
             newItem = Reflection.getMethod(stackClass, "a", nbtTag);

@@ -25,8 +25,8 @@ public class BaseParticlePacket extends ParticlePacket {
     public BaseParticlePacket() {
         try {
             dustOption = Reflection.getConstructor(Class.forName("org.bukkit.Particle$DustOptions"), Color.class, Float.TYPE);
-            packetConstructor = Reflection.getNmsClass("PacketPlayOutWorldParticles").getDeclaredConstructor(
-                    Reflection.getNmsClass("ParticleParam"),
+            packetConstructor = Reflection.getNmsClass("PacketPlayOutWorldParticles", "network.protocol.game").getDeclaredConstructor(
+                    Reflection.getNmsClass("ParticleParam", "core.particles"),
                     Boolean.TYPE, // longDistance
                     Double.TYPE, // x
                     Double.TYPE, // y

@@ -342,11 +342,11 @@ public class Utilities {
         /**
          * {@link net.minecraft.server.v1_16_R2.EntityTypes}
          */
-        typeClass = Reflection.getNmsClass("EntityTypes");
-        Class<?> entity = Reflection.getNmsClass("Entity");
-        Class<?> entityClass = Reflection.getNmsClass("EntityMagmaCube");
-        entityConstructor = Reflection.getConstructor(entityClass, typeClass, Reflection.getNmsClass("World"));
-        teleportSyncMethod = Reflection.getMethod(Reflection.getNmsClass("Entity"), "teleportAndSync", Double.TYPE, Double.TYPE, Double.TYPE);
+        typeClass = Reflection.getNmsClass("EntityTypes", "world.entity");
+        Class<?> entity = Reflection.getNmsClass("Entity", "world.entity");
+        Class<?> entityClass = Reflection.getNmsClass("EntityMagmaCube", "world.entity.monster");
+        entityConstructor = Reflection.getConstructor(entityClass, typeClass, Reflection.getNmsClass("World", "world.level"));
+        teleportSyncMethod = Reflection.getMethod(Reflection.getNmsClass("Entity", "world.entity"), "teleportAndSync", Double.TYPE, Double.TYPE, Double.TYPE);
         a = Reflection.getMethod(typeClass, "a", String.class);
 
         setSize = Reflection.getMethod(entityClass, "setSize", Integer.TYPE, Boolean.TYPE);
@@ -355,10 +355,10 @@ public class Utilities {
         getID = Reflection.getMethod(entity, "getId");
 
         // new PacketPlayOutSpawnEntityLiving(EntityLiving)
-        spawnEntity = Reflection.getConstructor(Reflection.getNmsClass("PacketPlayOutSpawnEntityLiving"), Reflection.getNmsClass("EntityLiving"));
+        spawnEntity = Reflection.getConstructor(Reflection.getNmsClass("PacketPlayOutSpawnEntityLiving", "network.protocol.game"), Reflection.getNmsClass("EntityLiving", "world.entity"));
 
         // new PacketPlayOutEntityDestroy (int: Entity.getId())
-        removeEntity = Reflection.getConstructor(Reflection.getNmsClass("PacketPlayOutEntityDestroy"), Integer.TYPE);
+        removeEntity = Reflection.getConstructor(Reflection.getNmsClass("PacketPlayOutEntityDestroy", "network.protocol.game"), Integer.TYPE);
     }
 
     public enum AlignText {

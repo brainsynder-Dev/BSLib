@@ -18,25 +18,25 @@ public class ActionMessage {
     private Object uuid;
 
     public ActionMessage() {
-        Class packetPlayOutChatClass = Reflection.getNmsClass("PacketPlayOutChat");
+        Class packetPlayOutChatClass = Reflection.getNmsClass("PacketPlayOutChat", "network.protocol.game");
         try {
             if (ServerVersion.isEqualOld(ServerVersion.v1_11_R1)) {
-                packet = packetPlayOutChatClass.getConstructor(Reflection.getNmsClass("IChatBaseComponent"), byte.class);
+                packet = packetPlayOutChatClass.getConstructor(Reflection.getNmsClass("IChatBaseComponent", "network.chat"), byte.class);
                 value = (byte)2;
             }else{
                 if (ServerVersion.isEqualNew(ServerVersion.v1_16_R1)) {
-                    uuid = Reflection.getFieldValue(Reflection.getField(Reflection.getNmsClass("SystemUtils"), "b"), null);
-                    packet = packetPlayOutChatClass.getConstructor(Reflection.getNmsClass("IChatBaseComponent"), Reflection.getNmsClass("ChatMessageType"), UUID.class);
+                    uuid = Reflection.getFieldValue(Reflection.getField(Reflection.getNmsClass("SystemUtils", ""), "b"), null);
+                    packet = packetPlayOutChatClass.getConstructor(Reflection.getNmsClass("IChatBaseComponent", "network.chat"), Reflection.getNmsClass("ChatMessageType", "network.chat"), UUID.class);
                 }else{
-                    packet = packetPlayOutChatClass.getConstructor(Reflection.getNmsClass("IChatBaseComponent"), Reflection.getNmsClass("ChatMessageType"));
+                    packet = packetPlayOutChatClass.getConstructor(Reflection.getNmsClass("IChatBaseComponent", "network.chat"), Reflection.getNmsClass("ChatMessageType", "network.chat"));
                 }
-                value = Reflection.invoke(Reflection.getMethod(Reflection.getNmsClass("ChatMessageType"), "a", byte.class), null, (byte)2);
+                value = Reflection.invoke(Reflection.getMethod(Reflection.getNmsClass("ChatMessageType", "network.chat"), "a", byte.class), null, (byte)2);
             }
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
 
-        Class chatSerializer = Reflection.getNmsClass("IChatBaseComponent$ChatSerializer");
+        Class chatSerializer = Reflection.getNmsClass("IChatBaseComponent$ChatSerializer", "network.chat");
         serializerMethod = Reflection.getMethod(chatSerializer, "a", String.class);
     }
 

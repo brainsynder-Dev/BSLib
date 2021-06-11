@@ -19,13 +19,13 @@ public class Reflection {
         if (packet == null) return;
         Object handle = getHandle(player);
         if (handle == null) return;
-        Field connection = getField(handle.getClass(), "playerConnection");
-        Method sendPacket = getMethod(getNmsClass("PlayerConnection"), "sendPacket", getNmsClass("Packet"));
+        Object connection = getNMSFields(handle, "server.level", "playerConnection", "b");
+        Method sendPacket = getMethod(getNmsClass("PlayerConnection", "server.network"), "sendPacket", getNmsClass("Packet", "network.protocol"));
 
         if (connection == null) return;
         if (sendPacket == null) return;
         try {
-            sendPacket.invoke(connection.get(handle), packet);
+            sendPacket.invoke(connection, packet);
         } catch (IllegalAccessException | InvocationTargetException ex) {
             ex.printStackTrace();
         }
@@ -59,10 +59,14 @@ public class Reflection {
         return null;
     }
 
+    @Deprecated
     public static <T> T invokeNMSMethod(String className, String method, Object invoker, Class<?>[] parameterClasses, Object... params) {
+        return invokeNMSMethod(className, "", method, invoker, parameterClasses);
+    }
 
+    public static <T> T invokeNMSMethod(String className, String subLoc, String method, Object invoker, Class<?>[] parameterClasses, Object... params) {
         try {
-            Class e = getNmsClass(className);
+            Class e = getNmsClass(className, subLoc);
             Method m = e.getDeclaredMethod(method, parameterClasses);
             m.setAccessible(true);
             return (T) m.invoke(invoker, params);
@@ -83,12 +87,17 @@ public class Reflection {
     }
 
     public static Object newNMS(String className) {
-        return newNMS(className, new Class[0]);
+        return newNMS(className, "", new Class[0]);
     }
 
+    @Deprecated
     public static Object newNMS(String className, Class<?>[] parameterClasses, Object... params) {
+        return newNMS(className, "", parameterClasses, params);
+    }
+
+    public static Object newNMS(String className, String subLoc, Class<?>[] parameterClasses, Object... params) {
         try {
-            Class ex = getNmsClass(className);
+            Class ex = getNmsClass(className, subLoc);
             Constructor constructor = ex.getDeclaredConstructor(parameterClasses);
             constructor.setAccessible(true);
             return constructor.newInstance(params);
@@ -98,23 +107,33 @@ public class Reflection {
         }
     }
 
-    public static <T> T getNMSField(Object owner, String fieldName) {
+    public static <T> T getNMSFields(Object owner, String subLoc, String... fieldNames) {
+        for (String fieldName : fieldNames) {
+            try {
+                return getNMSField(owner.getClass().getSimpleName(), subLoc, owner, fieldName);
+            } catch (NoSuchFieldException | IllegalAccessException ignored) {
+            }
+        }
+        return null;
+    }
+
+    public static <T> T getNMSField(Object owner, String fieldName) throws NoSuchFieldException, IllegalAccessException {
         return getNMSField(owner.getClass().getSimpleName(), owner, fieldName);
     }
 
-    public static <T> T getNMSField(String className, Object owner, String fieldName) {
-        try {
-            Class ex = getNmsClass(className);
-            Field field = ex.getDeclaredField(fieldName);
-            field.setAccessible(true);
-            return (T) field.get(owner);
-        } catch (Exception var5) {
-            var5.printStackTrace();
-            return null;
-        }
+    @Deprecated
+    public static <T> T getNMSField(String className, Object owner, String fieldName) throws NoSuchFieldException, IllegalAccessException {
+        return getNMSField(className, "", owner, fieldName);
     }
 
-    public static <T> T getNMSStaticField(String className, String fieldName) {
+    public static <T> T getNMSField(String className, String subLoc, Object owner, String fieldName) throws NoSuchFieldException, IllegalAccessException {
+        Class ex = getNmsClass(className, subLoc);
+        Field field = ex.getDeclaredField(fieldName);
+        field.setAccessible(true);
+        return (T) field.get(owner);
+    }
+
+    public static <T> T getNMSStaticField(String className, String fieldName) throws NoSuchFieldException, IllegalAccessException {
         return getNMSField(className, null, fieldName);
     }
 
@@ -222,6 +241,20 @@ public class Reflection {
             clazz = Class.forName("net.minecraft.server." + getVersion() + "." + name);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        }
+        return clazz;
+    }
+
+    public static Class<?> getNmsClass(String name, String subLoc) {
+        Class<?> clazz;
+        try {
+            if (subLoc == null || subLoc.length() == 0) {
+                clazz = Class.forName("net.minecraft." + name);
+            } else {
+                clazz = Class.forName("net.minecraft." + subLoc + "." + name);
+            }
+        } catch (ClassNotFoundException ex) {
+            clazz = getNmsClass(name);
         }
         return clazz;
     }

@@ -52,21 +52,21 @@ public class BaseTellrawMessage extends Tellraw {
             /**
              * {@link net.minecraft.server.v1_15_R1.PacketPlayOutChat}
              */
-            Class clazz = Reflection.getNmsClass("PacketPlayOutChat");
-            Class component = Reflection.getNmsClass("IChatBaseComponent");
+            Class clazz = Reflection.getNmsClass("PacketPlayOutChat", "network.protocol.game");
+            Class component = Reflection.getNmsClass("IChatBaseComponent", "network.chat");
             if (ServerVersion.isEqualNew(ServerVersion.v1_16_R1)) {
-                Class typeClass = Reflection.getNmsClass("ChatMessageType");
+                Class typeClass = Reflection.getNmsClass("ChatMessageType", "network.chat");
                 packet = Reflection.getConstructor(clazz, component, typeClass, UUID.class);
 
                 messagetype = EnumUtils.getEnum(typeClass, "SYSTEM");
-                uuid = Reflection.getFieldValue(Reflection.getField(Reflection.getNmsClass("SystemUtils"), "b"), null);
+                uuid = Reflection.getFieldValue(Reflection.getField(Reflection.getNmsClass("SystemUtils", ""), "b"), null);
             }else{
                 packet = clazz.getConstructor(component);
             }
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
-        Class chatSerializer = Reflection.getNmsClass("IChatBaseComponent$ChatSerializer");
+        Class chatSerializer = Reflection.getNmsClass("IChatBaseComponent$ChatSerializer", "network.chat");
         serializerMethod = Reflection.getMethod(chatSerializer, "a", String.class);
     }
 

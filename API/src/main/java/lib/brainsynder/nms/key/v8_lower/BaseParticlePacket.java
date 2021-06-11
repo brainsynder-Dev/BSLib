@@ -14,7 +14,7 @@ public class BaseParticlePacket extends ParticlePacket {
 
     public BaseParticlePacket() {
         try {
-            Class<?> packetClass = Reflection.getNmsClass("PacketPlayOutWorldParticles");
+            Class<?> packetClass = Reflection.getNmsClass("PacketPlayOutWorldParticles", "network.protocol.game");
             packetConstructor = packetClass.getConstructor(
                     String.class,
                     Double.TYPE,

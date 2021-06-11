@@ -17,12 +17,12 @@ public class TabMessage {
     private final Method serializerMethod;
 
     private TabMessage() {
-        Class chatSerializer = Reflection.getNmsClass("IChatBaseComponent$ChatSerializer");
+        Class chatSerializer = Reflection.getNmsClass("IChatBaseComponent$ChatSerializer", "network.chat");
         serializerMethod = Reflection.getMethod(chatSerializer, "a", String.class);
 
-        Class packet = Reflection.getNmsClass("PacketPlayOutPlayerListHeaderFooter");
-        headerField = FieldAccessor.getField(packet, "a", Reflection.getNmsClass("IChatBaseComponent"));
-        footerField = FieldAccessor.getField(packet, "b", Reflection.getNmsClass("IChatBaseComponent"));
+        Class packet = Reflection.getNmsClass("PacketPlayOutPlayerListHeaderFooter", "network.protocol.game");
+        headerField = FieldAccessor.getField(packet, "a", Reflection.getNmsClass("IChatBaseComponent", "network.chat"));
+        footerField = FieldAccessor.getField(packet, "b", Reflection.getNmsClass("IChatBaseComponent", "network.chat"));
     }
 
     public String getHeader () {
@@ -48,7 +48,7 @@ public class TabMessage {
 
     public void send(Player player) {
         try {
-            Object packet = Reflection.getNmsClass("PacketPlayOutPlayerListHeaderFooter").newInstance();
+            Object packet = Reflection.getNmsClass("PacketPlayOutPlayerListHeaderFooter", "network.protocol.game").newInstance();
             if ((header != null) && (!header.isEmpty())) headerField.set(packet, buildMessage(header));
             if ((footer != null) && (!footer.isEmpty())) footerField.set(packet, buildMessage(footer));
             Reflection.sendPacket(player, packet);

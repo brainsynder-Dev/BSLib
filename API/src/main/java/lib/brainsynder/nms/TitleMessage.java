@@ -22,10 +22,11 @@ public class TitleMessage {
     private final Method serializer;
 
     public TitleMessage () {
-        Class chatSerializer = Reflection.getNmsClass("IChatBaseComponent$ChatSerializer");
+        Class chatSerializer = Reflection.getNmsClass("IChatBaseComponent$ChatSerializer", "network.chat");
         serializer = Reflection.getMethod(chatSerializer, "a", String.class);
 
-        Class titleAction = Reflection.getNmsClass("PacketPlayOutTitle$EnumTitleAction");
+        // TODO - will not work
+        Class titleAction = Reflection.getNmsClass("PacketPlayOutTitle$EnumTitleAction", "");
 
         TITLE = EnumUtils.getEnum(titleAction, "TITLE");
         SUBTITLE = EnumUtils.getEnum(titleAction, "SUBTITLE");
