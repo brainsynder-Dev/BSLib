@@ -57,4 +57,8 @@ public class StorageFile extends StorageTagCompound implements Movable{
         }
         return false;
     }
+
+    public File getFile() {
+        return file;
+    }
 }

@@ -32,7 +32,11 @@ public abstract class Tellraw {
     }
 
 
+
     public static Tellraw getInstance(String text) {
         return new BaseTellrawMessage().then(text);
+    }
+    public static Tellraw fromLegacy(String text) {
+        return new BaseTellrawMessage().fromLegacy0(text);
     }
 }

@@ -20,7 +20,7 @@
         <module.info>-parent</module.info>
         <!--suppress UnresolvedMavenProperty -->
         <jenkins.buildNumber>${env.BUILD_NUMBER}</jenkins.buildNumber>
-        <module.version>0.1-B${jenkins.buildNumber}</module.version>
+        <module.version>B${jenkins.buildNumber}</module.version>
     </properties>
 
     <build>

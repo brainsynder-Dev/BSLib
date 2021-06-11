@@ -1,5 +1,6 @@
 package lib.brainsynder.commands;
 
+import com.google.common.collect.Lists;
 import lib.brainsynder.commands.annotations.ICommand;
 import lib.brainsynder.nms.Tellraw;
 import lib.brainsynder.utils.Colorize;
@@ -20,6 +21,7 @@ import java.util.*;
 public class SubCommand implements CommandExecutor, TabCompleter {
     private final Map<Integer, List<String>> tabCompletion = new HashMap<>();
     private final Map<Integer, List<Complete>> tabCompletionArg = new HashMap<>();
+    private final List<String> tabKeyWords = new ArrayList<>();
     private String masterFormat;
 
     public void run(CommandSender sender) {
@@ -34,10 +36,68 @@ public class SubCommand implements CommandExecutor, TabCompleter {
         this.masterFormat = masterFormat;
     }
 
+    public String getMasterFormat() {
+        return masterFormat;
+    }
+
+    protected void registerTabCompleteKeyword(String keyword) {
+        tabKeyWords.add(keyword);
+    }
+
+    /**
+     * Use this method to handle addon the tab completions when it finds a registered key word
+     *
+     * @param keyword     The keyword that was found
+     * @param completions Current list of complretions
+     * @param sender      Command Sender
+     * @param index       Current index (length of args)
+     * @param args        The arguments for the command so far
+     * @return Will return a List of strings (the new completions)
+     */
+    public List<String> fetchCompletionsFromKeyword(String keyword, List<String> completions, CommandSender sender, int index, String[] args) {
+        return completions;
+    }
+
+    public List<String> handleCompletions(List<String> completions, CommandSender sender, int index, String[] args) {
+        ICommand command = getCommand(getClass());
+        if (command == null) return completions;
+        String usage = command.usage();
+        if (usage.isEmpty()) return completions;
+
+
+        // This will replace
+        String[] split = usage.split(" ");
+        int current = 1;
+        for (String value : split) {
+            for (String keyword : tabKeyWords) {
+                if (current == index) {
+                    if (value.contains(keyword)) {
+                        completions.addAll(fetchCompletionsFromKeyword(keyword, completions, sender, index, args));
+                        return completions;
+                    }
+                }
+            }
+            current++;
+        }
+
+        String string = "";
+        if (args.length != 0) string = args[index-1];
+
+        for (String keyword : tabKeyWords) {
+            if (keyword.startsWith(string)) {
+                completions.addAll(fetchCompletionsFromKeyword(keyword, completions, sender, index, args));
+                return completions;
+            }
+        }
+
+        return completions;
+    }
+
+
     /**
      * Generate your own tab completion
      *
-     * @param length - The arg you want to add a tab complete value to
+     * @param length       - The arg you want to add a tab complete value to
      * @param replacements - the list of values you wish to add as tab complete values
      */
     protected void registerCompletion(int length, List<String> replacements) {
@@ -48,7 +108,7 @@ public class SubCommand implements CommandExecutor, TabCompleter {
     /**
      * Generate your own tab completion
      *
-     * @param length - The arg you want to add a tab complete value to
+     * @param length   - The arg you want to add a tab complete value to
      * @param complete
      */
     protected void registerCompletion(int length, Complete complete) {
@@ -58,7 +118,7 @@ public class SubCommand implements CommandExecutor, TabCompleter {
         tabCompletionArg.put(length, completes);
     }
 
-    public String getUsageStyle () {
+    public String getUsageStyle() {
         ICommand command = getCommand(getClass());
         if ((command == null) || (command.style().isEmpty())) return "/{name} {usage} - {description}";
         return command.style();
@@ -83,7 +143,7 @@ public class SubCommand implements CommandExecutor, TabCompleter {
         style = style.replace("{usage}", usage.isEmpty() ? "" : usage);
         if (sender instanceof Player) {
             style = Colorize.translateBungeeHex(style.replace(" - {description}", ""));
-            Tellraw.getInstance(style).tooltip(ChatColor.GRAY + description).send((Player) sender);
+            Tellraw.fromLegacy(style).tooltip(ChatColor.GRAY + description).send((Player) sender);
         } else {
             style = style.replace("{description}", description.isEmpty() ? "" : description);
             sender.sendMessage(Colorize.translateBungeeHex(style.replace("/", " - ")));
@@ -95,13 +155,16 @@ public class SubCommand implements CommandExecutor, TabCompleter {
         return clazz.getAnnotation(ICommand.class);
     }
 
-    private boolean failedLastCompletion (List<Complete> previous, CommandSender sender, String last){
+    private boolean failedLastCompletion(String[] args, List<Complete> previous, int index, CommandSender sender, String last) {
+        List<String> replace = tabCompletion.getOrDefault(index, new ArrayList<>());
+
         for (Complete complete : previous) {
-            if (!complete.handleReplacement(sender, new ArrayList<>(), last.toLowerCase(Locale.ENGLISH))){
+            if (!complete.handleReplacement(sender, replace, last.toLowerCase(Locale.ENGLISH))) {
                 return false;
             }
         }
-        return true;
+        replace.addAll(handleCompletions(Lists.newArrayList(), sender, index, args));
+        return replace.isEmpty();
     }
 
     public Map<Integer, List<String>> getTabCompletion() {
@@ -111,31 +174,47 @@ public class SubCommand implements CommandExecutor, TabCompleter {
     public void tabComplete(List<String> completions, CommandSender sender, String[] args) {
         Validate.notNull(sender, "Sender cannot be null");
         Validate.notNull(args, "Arguments cannot be null");
-        if ((!tabCompletion.isEmpty()) || (!tabCompletionArg.isEmpty())) {
-            int length = args.length;
-            String toComplete = args[length - 1].toLowerCase(Locale.ENGLISH);
-            try {
-                if (failedLastCompletion(tabCompletionArg.getOrDefault(length-1, new ArrayList<>()), sender, args[length - 3])) return;
-            }catch (Exception ignored) {}
+        int length = args.length;
+        if (length == 0) return;
 
-            List<String> replacements = tabCompletion.getOrDefault(length, new ArrayList<>());
+        try {
+            int previous = (length - 1);
+            if (((length - 3) >= 0)
+                    && failedLastCompletion(args, tabCompletionArg.getOrDefault(previous, new ArrayList<>()), previous, sender, args[length - 3]))
+                return;
+        } catch (Exception ignored) {
+        }
+
+        String toComplete = args[length - 1].toLowerCase(Locale.ENGLISH);
+        List<String> replacements = tabCompletion.getOrDefault(length, new ArrayList<>());
+
+        if ((!tabCompletion.isEmpty()) || (!tabCompletionArg.isEmpty())) {
             if ((length - 2) >= 0) {
                 List<Complete> completes = tabCompletionArg.getOrDefault(length, new ArrayList<>());
                 if (!completes.isEmpty()) {
                     for (Complete complete : completes) {
                         List<String> replace = new ArrayList<>();
-                        if (complete.handleReplacement(sender, replace, args[length-2].toLowerCase(Locale.ENGLISH))){
+                        if (complete.handleReplacement(sender, replace, args[length - 2].toLowerCase(Locale.ENGLISH))) {
                             replacements = replace;
                             break;
                         }
                     }
                 }
             }
-            for (String command : replacements) {
-                if (command.isEmpty()) continue;
-                if (StringUtil.startsWithIgnoreCase(net.md_5.bungee.api.ChatColor.stripColor(command), net.md_5.bungee.api.ChatColor.stripColor(toComplete))) {
-                    completions.add(command);
-                }
+        }
+
+        List<String> strings = handleCompletions(Lists.newArrayList(), sender, length, args);
+        if (!strings.isEmpty()) {
+            for (String s : strings) {
+                if (!replacements.contains(s)) replacements.add(s);
+            }
+        }
+
+
+        for (String command : replacements) {
+            if (command.isEmpty()) continue;
+            if (StringUtil.startsWithIgnoreCase(net.md_5.bungee.api.ChatColor.stripColor(command), net.md_5.bungee.api.ChatColor.stripColor(toComplete))) {
+                completions.add(command);
             }
         }
     }
@@ -144,9 +223,8 @@ public class SubCommand implements CommandExecutor, TabCompleter {
      * Can the sender run the command?
      *
      * @param sender - The sender you wish to check
-     * @return
-     *      true - sender can run the command
-     *      false - sender can not run the command
+     * @return true - sender can run the command
+     * false - sender can not run the command
      */
     public boolean canExecute(CommandSender sender) {
         return true;
@@ -155,7 +233,7 @@ public class SubCommand implements CommandExecutor, TabCompleter {
     /**
      * Will allow you to combine a String[] into a single message
      *
-     * @param args - The Array that needs to be merged
+     * @param args  - The Array that needs to be merged
      * @param start - The location of where you want to start merging
      * @return - The Combined String
      */
@@ -195,7 +273,7 @@ public class SubCommand implements CommandExecutor, TabCompleter {
     }
 
     protected interface Complete {
-        boolean handleReplacement (CommandSender sender, List<String> replacements, String name);
+        boolean handleReplacement(CommandSender sender, List<String> replacements, String name);
     }
 
     /**
@@ -205,7 +283,7 @@ public class SubCommand implements CommandExecutor, TabCompleter {
      * Allowed Arguments: <Customizable>
      *
      * @param argument targeted player(s)
-     * @param value fetched player(s)
+     * @param value    fetched player(s)
      */
     public void send(Argument argument, ReturnValue<Player> value) {
         List<String> targets = new ArrayList<>();
@@ -220,11 +298,11 @@ public class SubCommand implements CommandExecutor, TabCompleter {
      * Allowed Arguments: <Customizable>
      *
      * @param argument targeted player(s)
-     * @param value fetched player(s)
-     * @param type return type
-     *             SUCCESS
-     *             NO_PLAYER <If there was no player found>
-     *             NO_TEAM <If the team selected was not found>
+     * @param value    fetched player(s)
+     * @param type     return type
+     *                 SUCCESS
+     *                 NO_PLAYER <If there was no player found>
+     *                 NO_TEAM <If the team selected was not found>
      */
     public void send(Argument argument, ReturnValue<Player> value, ReturnValue<ReturnType> type) {
         List<String> targets = new ArrayList<>();
@@ -243,10 +321,11 @@ public class SubCommand implements CommandExecutor, TabCompleter {
      * - <uuid> (Will target the selected player)
      *
      * @param argument targeted player(s)
-     * @param value fetched player(s)
+     * @param value    fetched player(s)
      */
-    public void send(String argument, ReturnValue<Player> value){
-        send(argument, value, value1 -> {});
+    public void send(String argument, ReturnValue<Player> value) {
+        send(argument, value, value1 -> {
+        });
     }
 
     /**
@@ -260,11 +339,11 @@ public class SubCommand implements CommandExecutor, TabCompleter {
      * - <uuid> (Will target the selected player)
      *
      * @param argument targeted player(s)
-     * @param value fetched player(s)
-     * @param type return type
-     *             SUCCESS
-     *             NO_PLAYER <If there was no player found>
-     *             NO_TEAM <If the team selected was not found>
+     * @param value    fetched player(s)
+     * @param type     return type
+     *                 SUCCESS
+     *                 NO_PLAYER <If there was no player found>
+     *                 NO_TEAM <If the team selected was not found>
      */
     public void send(String argument, ReturnValue<Player> value, ReturnValue<ReturnType> type) {
         if (argument.equals("@a")) {
@@ -299,7 +378,8 @@ public class SubCommand implements CommandExecutor, TabCompleter {
             type.run(ReturnType.SUCCESS);
             value.run(target);
             return;
-        }catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         // Checks if the argument is a player name
         Player target = Bukkit.getPlayer(argument);
@@ -318,10 +398,10 @@ public class SubCommand implements CommandExecutor, TabCompleter {
     }
 
     public interface Argument {
-        void target (List<String> targets);
+        void target(List<String> targets);
     }
 
-    public List<String> getOnlinePlayers () {
+    public List<String> getOnlinePlayers() {
         List<String> list = new ArrayList<>();
         Bukkit.getOnlinePlayers().forEach(player -> list.add(player.getName()));
         return list;
