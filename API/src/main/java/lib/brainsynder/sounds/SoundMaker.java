@@ -1176,7 +1176,7 @@ public enum SoundMaker {
     @EnumVersion(version = ServerVersion.v1_16_R2) ENTITY_PIGLIN_BRUTE_CONVERTED_TO_ZOMBIFIED,
     @EnumVersion(version = ServerVersion.v1_16_R2) ENTITY_PIGLIN_BRUTE_DEATH,
     @EnumVersion(version = ServerVersion.v1_16_R2) ENTITY_PIGLIN_BRUTE_HURT,
-    @EnumVersion(version = ServerVersion.v1_16_R2) ENTITY_PIGLIN_BRUTE_STEP
+    @EnumVersion(version = ServerVersion.v1_16_R2) ENTITY_PIGLIN_BRUTE_STEP,
 
 
     // ---- Sounds added in 1_17_R1 ---- //
