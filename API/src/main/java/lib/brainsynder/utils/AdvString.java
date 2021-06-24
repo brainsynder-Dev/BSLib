@@ -7,6 +7,25 @@ import java.util.ListIterator;
 
 public class AdvString {
     /**
+     * Replaces the last known {@param target} text in the {@param haystack} with the {@param replacement}
+     *
+     * @param target -- The text being targeted for replacement
+     * @param replacement -- The replacement of the targeted text
+     * @param haystack -- The text being scanned
+     * @return -- Returns the text after any replacement that has happened
+     *      Will return itself if it could not find the targeted text
+     */
+    public static String replaceLast(String target, String replacement, String haystack) {
+        int pos = haystack.lastIndexOf(target);
+        if (pos > -1) {
+            return haystack.substring(0, pos)
+                    + replacement
+                    + haystack.substring(pos + target.length());
+        } else {
+            return haystack;
+        }
+    }
+    /**
      * Retrieves the text that comes after the first instance of 'needle'
      *
      * @param needle
