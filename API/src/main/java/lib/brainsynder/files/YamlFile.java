@@ -1,5 +1,6 @@
 package lib.brainsynder.files;
 
+import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import lib.brainsynder.files.options.YamlOption;
@@ -240,7 +241,8 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
         try {
             if (isConfig) {
                 tempConfig.save(file);
-                BufferedReader reader = new BufferedReader(new FileReader(file));
+                FileInputStream stream = new FileInputStream(file);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(stream, Charsets.UTF_8));
                 String currentLine;
                 while ((currentLine = reader.readLine()) != null) {
                     if (currentLine.startsWith("#")) continue;
@@ -249,7 +251,8 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
                 reader.close();
             } else {
                 // Opens up a new file writer
-                FileWriter writer = new FileWriter(file);
+                FileOutputStream stream = new FileOutputStream(file);
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream, Charsets.UTF_8));
                 // For each line to write...
                 for (String line : currentLines) {
                     // Write that and add in a break.
