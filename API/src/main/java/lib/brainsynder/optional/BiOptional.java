@@ -18,6 +18,24 @@ public class BiOptional<T, U> {
         this.second = second;
     }
 
+    public static <T, U> BiOptional<T, U> of (T first) {
+        Optional<T> firstOption = Optional.empty();
+        if (first != null) firstOption = Optional.of(first);
+        return from(firstOption, Optional.empty());
+    }
+
+    public static <T, U> BiOptional<T, U> of (T first, U second) {
+        Optional<T> firstOption = Optional.empty();
+        Optional<U> secondOption = Optional.empty();
+        if (first != null) firstOption = Optional.of(first);
+        if (second != null) secondOption = Optional.of(second);
+        return from(firstOption, secondOption);
+    }
+
+    public static <T, U> BiOptional<T, U> empty () {
+        return from(Optional.empty(), Optional.empty());
+    }
+
     public static <T, U> BiOptional<T, U> from(Optional<T> first, Optional<U> second) {
         return new BiOptional<>(first.orElse(null), second.orElse(null));
     }
