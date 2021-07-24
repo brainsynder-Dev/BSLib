@@ -184,39 +184,39 @@ public abstract class JsonFile implements Movable {
 
     public void set(String key, int value) {
         update = true;
-        json.add(key, value);
+        json.set(key, value);
     }
     public void set(String key, long value) {
         update = true;
-        json.add(key, value);
+        json.set(key, value);
     }
     public void set(String key, float value) {
         update = true;
-        json.add(key, value);
+        json.set(key, value);
     }
     public void set(String key, short value) {
         update = true;
-        json.add(key, value);
+        json.set(key, value);
     }
     public void set(String key, byte value) {
         update = true;
-        json.add(key, value);
+        json.set(key, value);
     }
     public void set(String key, double value) {
         update = true;
-        json.add(key, value);
+        json.set(key, value);
     }
     public void set(String key, boolean value) {
         update = true;
-        json.add(key, value);
+        json.set(key, value);
     }
     public void set(String key, String value) {
         update = true;
-        json.add(key, value);
+        json.set(key, value);
     }
     public void set(String key, JsonValue value) {
         update = true;
-        json.add(key, value);
+        json.set(key, value);
     }
 
     public void remove (String key) {
