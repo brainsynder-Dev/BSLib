@@ -3,9 +3,6 @@ package lib.brainsynder.particle;
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.nbt.StorageTagCompound;
-import lib.brainsynder.nms.ParticlePacket;
-import lib.brainsynder.reflection.Reflection;
-import lib.brainsynder.storage.TriLoc;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -99,7 +96,6 @@ public class ParticleMaker {
         this.offsetX = offsetX;
         this.offsetY = offsetY;
         this.offsetZ = offsetZ;
-        particlePacket = ParticlePacket.getInstance();
     }
 
     public ParticleMaker (StorageTagCompound compound) {
@@ -195,18 +191,33 @@ public class ParticleMaker {
     }
 
     public void sendToPlayer(Player player, Location location) {
-        try {
-            Object packet = createPacket(location);
-            if (colored) {
-                for (int i = 0; i < repeatAmount; i++) {
-                    Reflection.sendPacket(player, packet);
-                }
-                return;
+        Object data = null;
+        if ((type == Particle.ITEM_CRACK)
+                || (type == Particle.BLOCK_CRACK)
+                || (type == Particle.ITEM_TAKE)
+                || (type == Particle.BLOCK_DUST)) {
+            if (this.data == null) {
+                data = new ItemStack(Material.STONE);
+            }else data = this.data;
+        } else if (type == Particle.REDSTONE) {
+            if (dustOptions == null) dustOptions = new DustOptions(Color.RED, 1);
+
+            if (ServerVersion.isEqualNew(ServerVersion.v1_13_R1)) {
+                data = new org.bukkit.Particle.DustOptions(dustOptions.getColor(), dustOptions.getSize());
+            }else{
+                offsetX = getColor(dustOptions.getColor().getRed());
+                offsetY = getColor(dustOptions.getColor().getGreen());
+                offsetZ = getColor(dustOptions.getColor().getBlue());
             }
-            Reflection.sendPacket(player, packet);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
+        if (colored) {
+            for (int i = 0; i < repeatAmount; i++) {
+                player.spawnParticle(org.bukkit.Particle.valueOf(type.name()), location.getX(), location.getY(), location.getZ(), count, offsetX, offsetY, offsetY, speed, data);
+            }
+            return;
+        }
+        player.spawnParticle(org.bukkit.Particle.valueOf(type.name()), location.getX(), location.getY(), location.getZ(), count, offsetX, offsetY, offsetY, speed, data);
     }
 
     public void sendToPlayers(List<Player> players, Location location) {
@@ -224,30 +235,5 @@ public class ParticleMaker {
         if (dustOptions != null) compound.setTag("dust", dustOptions.toCompound());
         if (data != null) compound.setTag("item", ItemBuilder.fromItem(data).toCompound());
         return compound;
-    }
-
-    private Object createPacket(Location location) {
-        Object data = null;
-        if ((type == Particle.ITEM_CRACK)
-                || (type == Particle.BLOCK_CRACK)
-                || (type == Particle.ITEM_TAKE)
-                || (type == Particle.BLOCK_DUST)) {
-            if (this.data == null) {
-                data = new ItemStack(Material.STONE);
-            }else data = this.data;
-        } else if (type == Particle.REDSTONE) {
-            if (dustOptions == null) dustOptions = new DustOptions(Color.RED, 1);
-
-            if (ServerVersion.isEqualNew(ServerVersion.v1_13_R1)) {
-                data = dustOptions;
-            }else{
-                offsetX = getColor(dustOptions.getColor().getRed());
-                offsetY = getColor(dustOptions.getColor().getGreen());
-                offsetZ = getColor(dustOptions.getColor().getBlue());
-            }
-        }
-
-
-        return particlePacket.getPacket(type, new TriLoc<>((float) location.getX(), (float) location.getY(), (float) location.getZ()), new TriLoc<>((float) offsetX, (float) offsetY, (float) offsetZ), (float) speed, count, data);
     }
 }
