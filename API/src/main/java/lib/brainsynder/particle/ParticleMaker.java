@@ -12,8 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 public class ParticleMaker {
-    private static ParticlePacket particlePacket = null;
-    private final Particle type;
+    private Particle type;
     private double speed = 0.0;
     private int count = 1;
     private double offsetX = 0.0;
@@ -113,6 +112,11 @@ public class ParticleMaker {
         if (compound.hasKey("item")) data = ItemBuilder.fromCompound(compound.getCompoundTag("item")).build();
     }
 
+    public ParticleMaker setType(Particle type) {
+        this.type = type;
+        return this;
+    }
+
     public ParticleMaker setSpeed(double speed) {
         this.speed = speed;
         return this;
@@ -148,6 +152,10 @@ public class ParticleMaker {
     public ParticleMaker setData(ItemStack item) {
         data = item;
         return this;
+    }
+
+    public Particle getType() {
+        return type;
     }
 
     public double getSpeed() {
