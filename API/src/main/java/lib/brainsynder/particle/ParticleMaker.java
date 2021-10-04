@@ -2,10 +2,14 @@ package lib.brainsynder.particle;
 
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.nbt.StorageBase;
 import lib.brainsynder.nbt.StorageTagCompound;
+import lib.brainsynder.nbt.StorageTagString;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,7 +23,7 @@ public class ParticleMaker {
     private double offsetY = 0.0;
     private double offsetZ = 0.0;
     private DustOptions dustOptions = null;
-    private ItemStack data = null;
+    private Object data = null;
     private boolean colored = false;
     private int repeatAmount = 1;
 
@@ -109,7 +113,14 @@ public class ParticleMaker {
             offsetZ = offset.getDouble("z", 0);
         }
         if (compound.hasKey("dust")) dustOptions = new DustOptions (compound.getCompoundTag("dust"));
-        if (compound.hasKey("item")) data = ItemBuilder.fromCompound(compound.getCompoundTag("item")).build();
+        if (compound.hasKey("item")) {
+            StorageBase base = compound.getTag("item");
+            if (base instanceof StorageTagCompound) {
+                data = ItemBuilder.fromCompound(compound.getCompoundTag("item")).build();
+            }else{
+                data = Bukkit.createBlockData(((StorageTagString)base).getString());
+            }
+        }
     }
 
     public ParticleMaker setType(Particle type) {
@@ -146,6 +157,11 @@ public class ParticleMaker {
 
     public ParticleMaker setData(Material material) {
         setData(material, (short) 0);
+        return this;
+    }
+
+    public ParticleMaker setData(BlockData blockData) {
+        data = blockData;
         return this;
     }
 
@@ -205,7 +221,11 @@ public class ParticleMaker {
                 || (type == Particle.ITEM_TAKE)
                 || (type == Particle.BLOCK_DUST)) {
             if (this.data == null) {
-                data = new ItemStack(Material.STONE);
+                if (type.name().contains("BLOCK")) {
+                    data = Material.STONE.createBlockData();
+                }else{
+                    data = new ItemStack(Material.STONE);
+                }
             }else data = this.data;
         } else if (type == Particle.REDSTONE) {
             if (dustOptions == null) dustOptions = new DustOptions(Color.RED, 1);
@@ -241,7 +261,13 @@ public class ParticleMaker {
         compound.setInteger("count", count);
         compound.setTag("offset", new StorageTagCompound().setDouble("x", offsetX).setDouble("y", offsetY).setDouble("z", offsetZ));
         if (dustOptions != null) compound.setTag("dust", dustOptions.toCompound());
-        if (data != null) compound.setTag("item", ItemBuilder.fromItem(data).toCompound());
+        if (data != null) {
+            if (data instanceof BlockData) {
+                compound.setString("item", ((BlockData) data).getAsString());
+            }else{
+                compound.setTag("item", ItemBuilder.fromItem((ItemStack) data).toCompound());
+            }
+        }
         return compound;
     }
 }
