@@ -46,6 +46,7 @@ public class ItemBuilder {
         }
         if (compound.hasKey("durability")) builder.withDurability(compound.getInteger("durability"));
         if (compound.hasKey("name")) builder.withName(compound.getString("name"));
+        if (compound.hasKey("custom-model-data")) builder.withCustomModel(compound.getInteger("custom-model-data"));
         if (compound.hasKey("unbreakable")) builder.setUnbreakable(compound.getBoolean("unbreakable"));
         if (compound.hasKey("lore")) {
             StorageTagList list = (StorageTagList) compound.getTag("lore");
@@ -137,6 +138,11 @@ public class ItemBuilder {
 
     public ItemBuilder removeEnchant(Enchantment enchant) {
         item.removeEnchantment(enchant);
+        return this;
+    }
+
+    public ItemBuilder withCustomModel(int customModelData) {
+        meta.setCustomModelData(customModelData);
         return this;
     }
 
@@ -244,6 +250,10 @@ public class ItemBuilder {
                     if (!mainMeta.getEnchants().equals(checkMeta.getEnchants())) return false;
                 }
 
+                if (mainMeta.hasCustomModelData() && checkMeta.hasCustomModelData()) {
+                    if (mainMeta.getCustomModelData() != checkMeta.getCustomModelData()) return false;
+                }
+
                 return ItemTools.toCompound(mainMeta).equals(ItemTools.toCompound(checkMeta));
             }
         }
@@ -302,6 +312,7 @@ public class ItemBuilder {
         if (meta.hasDisplayName()) compound.setString("name", Colorize.removeHexColor(meta.getDisplayName().replace(ChatColor.COLOR_CHAR, '&')));
         if (meta.isUnbreakable()) compound.setBoolean("unbreakable", meta.isUnbreakable());
         if (item.getDurability() > 0) compound.setInteger("durability", item.getDurability());
+        if (meta.hasCustomModelData()) compound.setInteger("custom-model-data", meta.getCustomModelData());
 
         if (meta.hasLore()) {
             StorageTagList lore = new StorageTagList();
