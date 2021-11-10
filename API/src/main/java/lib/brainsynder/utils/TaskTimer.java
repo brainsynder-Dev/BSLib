@@ -89,11 +89,15 @@ public class TaskTimer {
      *
      * @return Will return a {@link JsonArray} that will contain the duration of each task
      */
-    public JsonArray stop () {
-        // The timer already was ended, no need to end it again
-        if (previousName.equals("end")) return STORAGE.get(CLASS_NAME);
+    public JsonArray stop (){
+        return stop("end");
+    }
 
-        label("end");
+    public JsonArray stop (String label) {
+        // The timer already was ended, no need to end it again
+        if (previousName.equals(label)) return STORAGE.get(CLASS_NAME);
+
+        label(label);
         JsonArray array = new JsonArray();
         LinkedList<Record> records = STORED_TIME.get(CLASS_NAME);
         DecimalFormat decimalFormat = new DecimalFormat("#0.000", DecimalFormatSymbols.getInstance(Locale.US));

@@ -25,6 +25,27 @@ public class AdvString {
             return haystack;
         }
     }
+
+    /**
+     * Checks if the {@param string} contains the {@param character} X amount of times (the count)
+     *
+     * @param string The text being checked
+     * @param character the character you are checking for
+     * @param count How many times should that character be in the string
+     *              If count is set to -1 it will use the default String.contains method
+     * @return true if it contains the character X amount of times, else false
+     */
+    public static boolean contains (String string, char character, int count) {
+        if (count == -1) return string.contains(String.valueOf(character));
+
+        int i = 0;
+        for (char c : string.toCharArray()) {
+            if (c == character) i++;
+        }
+
+        return  (i == count);
+    }
+
     /**
      * Retrieves the text that comes after the first instance of 'needle'
      *
@@ -139,7 +160,7 @@ public class AdvString {
                 int rndm = (int) (Math.random() * characters.size());
                 output.append(characters.remove(rndm));
             }
-            out.append(output.toString()).append(' ');
+            out.append(output).append(' ');
         }
         return out.toString().trim();
     }
