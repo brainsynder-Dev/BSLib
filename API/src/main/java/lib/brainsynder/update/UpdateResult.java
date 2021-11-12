@@ -11,7 +11,7 @@ public class UpdateResult {
     private Runnable noNewBuilds;
 
     private int currentBuild = -1, latestBuild = 0;
-    private String repo;
+    private String repo, url = null;
 
     public UpdateResult() {
         this(value -> {}, () -> {
@@ -40,6 +40,17 @@ public class UpdateResult {
         this.noNewBuilds = noNewBuilds;
         this.onError = onError;
         this.failParse = failParse;
+    }
+
+    /**
+     * Sets the url location for the latest build
+     *
+     * @param url
+     * @return
+     */
+    public UpdateResult setUrl(String url) {
+        this.url = url;
+        return this;
     }
 
     /**
@@ -95,6 +106,10 @@ public class UpdateResult {
     public UpdateResult setOnError(Runnable onError) {
         this.onError = onError;
         return this;
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     ReturnValue<JsonObject> getNewBuild() {
