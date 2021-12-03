@@ -5,7 +5,6 @@ import lib.brainsynder.commands.annotations.ICommand;
 import lib.brainsynder.nms.Tellraw;
 import lib.brainsynder.utils.Colorize;
 import lib.brainsynder.utils.ReturnValue;
-import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -101,7 +100,7 @@ public class SubCommand implements CommandExecutor, TabCompleter {
      * @param replacements - the list of values you wish to add as tab complete values
      */
     protected void registerCompletion(int length, List<String> replacements) {
-        Validate.notNull(replacements, "Arguments cannot be null");
+        Objects.requireNonNull(replacements, "Arguments cannot be null");
         tabCompletion.put(length, replacements);
     }
 
@@ -112,7 +111,7 @@ public class SubCommand implements CommandExecutor, TabCompleter {
      * @param complete
      */
     protected void registerCompletion(int length, Complete complete) {
-        Validate.notNull(complete, "Arguments cannot be null");
+        Objects.requireNonNull(complete, "Arguments cannot be null");
         List<Complete> completes = tabCompletionArg.getOrDefault(length, new ArrayList<>());
         completes.add(complete);
         tabCompletionArg.put(length, completes);
@@ -172,8 +171,8 @@ public class SubCommand implements CommandExecutor, TabCompleter {
     }
 
     public void tabComplete(List<String> completions, CommandSender sender, String[] args) {
-        Validate.notNull(sender, "Sender cannot be null");
-        Validate.notNull(args, "Arguments cannot be null");
+        Objects.requireNonNull(sender, "Sender cannot be null");
+        Objects.requireNonNull(args, "Arguments cannot be null");
         int length = args.length;
         if (length == 0) return;
 
@@ -257,8 +256,8 @@ public class SubCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
-        Validate.notNull(sender, "Sender cannot be null");
-        Validate.notNull(args, "Arguments cannot be null");
+        Objects.requireNonNull(sender, "Sender cannot be null");
+        Objects.requireNonNull(args, "Arguments cannot be null");
         List<String> completions = new ArrayList();
         tabComplete(completions, sender, args);
         if (!completions.isEmpty()) return completions;

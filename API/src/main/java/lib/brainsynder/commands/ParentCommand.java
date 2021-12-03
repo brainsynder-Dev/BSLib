@@ -3,7 +3,6 @@ package lib.brainsynder.commands;
 import lib.brainsynder.commands.annotations.ICommand;
 import lib.brainsynder.nms.Tellraw;
 import lib.brainsynder.utils.Colorize;
-import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -49,8 +48,8 @@ public class ParentCommand<T extends SubCommand> extends SubCommand {
 
     @Override
     public void tabComplete(List<String> completions, CommandSender sender, String[] args) {
-        Validate.notNull(sender, "Sender cannot be null");
-        Validate.notNull(args, "Arguments cannot be null");
+        Objects.requireNonNull(sender, "Sender cannot be null");
+        Objects.requireNonNull(args, "Arguments cannot be null");
         if (!subCommands.isEmpty()) {
             if (!overrideTab) {
                 if (args.length == 1) {
@@ -124,8 +123,8 @@ public class ParentCommand<T extends SubCommand> extends SubCommand {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String s, String[] args) {
-        Validate.notNull(sender, "Sender cannot be null");
-        Validate.notNull(args, "Arguments cannot be null");
+        Objects.requireNonNull(sender, "Sender cannot be null");
+        Objects.requireNonNull(args, "Arguments cannot be null");
         List<String> completions = new ArrayList();
         tabComplete(completions, sender, args);
         if (!completions.isEmpty()) return completions;
