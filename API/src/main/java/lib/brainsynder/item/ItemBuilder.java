@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.*;
 
@@ -46,7 +47,9 @@ public class ItemBuilder {
         }
         if (compound.hasKey("durability")) builder.withDurability(compound.getInteger("durability"));
         if (compound.hasKey("name")) builder.withName(compound.getString("name"));
-        if (compound.hasKey("custom-model-data")) builder.withCustomModel(compound.getInteger("custom-model-data"));
+        if (compound.hasKey("custom-model-data")) {
+            builder.withCustomModel(compound.getInteger("custom-model-data"));
+        }else if (compound.hasKey("CustomModelData")) builder.withCustomModel(compound.getInteger("CustomModelData"));
         if (compound.hasKey("unbreakable")) builder.setUnbreakable(compound.getBoolean("unbreakable"));
         if (compound.hasKey("lore")) {
             StorageTagList list = (StorageTagList) compound.getTag("lore");
@@ -312,7 +315,7 @@ public class ItemBuilder {
         if (meta.hasDisplayName()) compound.setString("name", Colorize.removeHexColor(meta.getDisplayName().replace(ChatColor.COLOR_CHAR, '&')));
         if (meta.isUnbreakable()) compound.setBoolean("unbreakable", meta.isUnbreakable());
         if (item.getDurability() > 0) compound.setInteger("durability", item.getDurability());
-        if (meta.hasCustomModelData()) compound.setInteger("custom-model-data", meta.getCustomModelData());
+        if (meta.hasCustomModelData()) compound.setInteger("CustomModelData", meta.getCustomModelData());
 
         if (meta.hasLore()) {
             StorageTagList lore = new StorageTagList();

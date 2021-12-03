@@ -4,8 +4,8 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import lib.brainsynder.files.options.YamlOption;
+import lib.brainsynder.utils.AdvString;
 import lib.brainsynder.utils.Colorize;
-import lib.brainsynder.utils.Utilities;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -30,7 +30,7 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     private final HashMap<String, String> movedKeys;
     private final HashMap<String, String> comments;
     private final HashMap<String, String> sections;
-    private final HashMap<String, Utilities.AlignText> sectionAlign;
+    private final HashMap<String, AdvString.AlignText> sectionAlign;
     private List<String> currentLines;
 
     private void createParentDirs(File file) throws IOException {
@@ -45,7 +45,7 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     }
 
     public YamlFile(Plugin plugin, String directory, String fileName) {
-        this(new File(plugin.getDataFolder().toString() + File.separator + directory), fileName);
+        this(new File(plugin.getDataFolder() + File.separator + directory), fileName);
     }
 
     public YamlFile(File folder, String fileName) {
@@ -109,7 +109,7 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
     public void addSectionHeader(String path, String text) {
         sections.put(fetchKey(path), text);
     }
-    public void addSectionHeader(String path, Utilities.AlignText alignText, String text) {
+    public void addSectionHeader(String path, AdvString.AlignText alignText, String text) {
         sections.put(fetchKey(path), text);
         sectionAlign.put(fetchKey(path), alignText);
     }
@@ -159,8 +159,8 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
             String line = currentLines.get(i);
             if (!line.startsWith(indent.toString())) return;
             if (line.startsWith("#")) continue;
-            if (line.startsWith(indent.toString() + divisions[iteration]) ||
-                    line.startsWith(indent.toString() + "'" + divisions[iteration] + "'")) {
+            if (line.startsWith(indent + divisions[iteration]) ||
+                    line.startsWith(indent + "'" + divisions[iteration] + "'")) {
                 iteration += 1;
                 if (iteration == divisions.length) {
                     int currentLine = i;
@@ -199,8 +199,8 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
         // For each line in the file currently...
         for (int i = 0; i < currentLines.size(); i++) {
             String line = currentLines.get(i);
-            if (line.startsWith(indent.toString() + divisions[iteration]) ||
-                    line.startsWith(indent.toString() + "'" + divisions[iteration] + "'")) {
+            if (line.startsWith(indent + divisions[iteration]) ||
+                    line.startsWith(indent + "'" + divisions[iteration] + "'")) {
                 iteration += 1;
                 if (iteration == divisions.length) {
                     String section = sections.get(fetchKey(path));
@@ -225,7 +225,7 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
                     // This has to run in reverse to get the right order
                     for (int l = (sectionList.size() - 1); l > -1; l--) {
                         String s = sectionList.get(l);
-                        currentLines.add(i, indent + "#  " + Utilities.getPaddedString(s, ' ', largestString, sectionAlign.getOrDefault(path, Utilities.AlignText.CENTER)) + "  #");
+                        currentLines.add(i, indent + "#  " + AdvString.getPaddedString(s, ' ', largestString, sectionAlign.getOrDefault(path, AdvString.AlignText.CENTER)) + "  #");
                     }
                     currentLines.add(i, indent + length.toString());
                     currentLines.add(i, "");

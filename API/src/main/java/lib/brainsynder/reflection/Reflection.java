@@ -380,6 +380,16 @@ public class Reflection {
         }
     }
 
+    public static Method getMethod(Class<?> clazz, String[] methodName, Class<?>... params) {
+        for (String method : methodName) {
+            try {
+                return clazz.getDeclaredMethod(method, params);
+            } catch (NoSuchMethodException ignored) {}
+        }
+
+        return null;
+    }
+
     public static <T> T invokeMethod(Method method, Object instance, Object... args) {
         try {
             return (T) method.invoke(instance, args);

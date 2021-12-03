@@ -299,44 +299,6 @@ public class Utilities {
 
 
 
-    public static String getPaddedString(String text, char paddingChar, int maxPadding, AlignText alignText) {
-        if (text == null) {
-            throw new NullPointerException("Can not add padding in null String!");
-        }
-
-        int length = text.length();
-        int padding = (maxPadding - length) / 2;//decide left and right padding
-        if (padding <= 0) {
-            return text;// return actual String if padding is less than or equal to 0
-        }
-
-        String empty = "", hash = "#";//hash is used as a place holder
-
-        // extra character in case of String with even length
-        int extra = (length % 2 == 0) ? 1 : 0;
-
-        String leftPadding = "%" + padding + "s";
-        String rightPadding = "%" + (padding - extra) + "s";
-
-        // Will align the text to the selected side
-        switch (alignText) {
-            case LEFT:
-                leftPadding = "%s";
-                rightPadding = "%" + (padding+(padding - extra)) + "s";
-                break;
-            case RIGHT:
-                rightPadding = "%s";
-                leftPadding = "%" + (padding+(padding - extra)) + "s";
-                break;
-        }
-
-        String strFormat = leftPadding + "%s" + rightPadding;
-        String formattedString = String.format(strFormat, empty, hash, empty);
-
-        //Replace space with * and hash with provided String
-        String paddedString = formattedString.replace(' ', paddingChar).replace(hash, text);
-        return paddedString;
-    }
 
     static {
         /**
@@ -346,11 +308,11 @@ public class Utilities {
         Class<?> entity = Reflection.getNmsClass("Entity", "world.entity");
         Class<?> entityClass = Reflection.getNmsClass("EntityMagmaCube", "world.entity.monster");
         entityConstructor = Reflection.getConstructor(entityClass, typeClass, Reflection.getNmsClass("World", "world.level"));
-        teleportSyncMethod = Reflection.getMethod(Reflection.getNmsClass("Entity", "world.entity"), "teleportAndSync", Double.TYPE, Double.TYPE, Double.TYPE);
+        teleportSyncMethod = Reflection.getMethod(Reflection.getNmsClass("Entity", "world.entity"), new String[]{"teleportAndSync", "moveTo"}, Double.TYPE, Double.TYPE, Double.TYPE);
         a = Reflection.getMethod(typeClass, "a", String.class);
 
         setSize = Reflection.getMethod(entityClass, "setSize", Integer.TYPE, Boolean.TYPE);
-        setLoc = Reflection.getMethod(entity, "setLocation", Double.TYPE, Double.TYPE, Double.TYPE, Float.TYPE, Float.TYPE);
+        setLoc = Reflection.getMethod(entity, new String[]{"setLocation", "absMoveTo"}, Double.TYPE, Double.TYPE, Double.TYPE, Float.TYPE, Float.TYPE);
         setFlag = Reflection.getMethod(entity, "setFlag", Integer.TYPE, Boolean.TYPE);
         getID = Reflection.getMethod(entity, "getId");
 
@@ -359,9 +321,5 @@ public class Utilities {
 
         // new PacketPlayOutEntityDestroy (int: Entity.getId())
         removeEntity = Reflection.getConstructor(Reflection.getNmsClass("PacketPlayOutEntityDestroy", "network.protocol.game"), Integer.TYPE);
-    }
-
-    public enum AlignText {
-        LEFT, RIGHT, CENTER
     }
 }
