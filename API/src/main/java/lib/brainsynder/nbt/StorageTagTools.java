@@ -35,7 +35,7 @@ public class StorageTagTools {
 
     static {
         Class parser = Reflection.getNmsClass("MojangsonParser", "nbt");
-        parseString = Reflection.getMethod(parser, "parse", String.class);
+        parseString = Reflection.getMethod(parser, new String[]{"parse", "a"}, String.class);
 
         craftStack = Reflection.getCBCClass("inventory.CraftItemStack");
         Class keyClass = Reflection.getNmsClass("MinecraftKey", "resources");
@@ -53,7 +53,7 @@ public class StorageTagTools {
                 accessor = FieldAccessor.getField(Reflection.getNmsClass("IRegistry", "core"), "Z", Object.class);
             }
             registry = accessor.get(null);
-            getItem = Reflection.getMethod(registry.getClass(), "get", keyClass);
+            getItem = Reflection.getMethod(registry.getClass(), new String[]{"get", "a"}, keyClass);
         }else{
             getItem = Reflection.getMethod(Reflection.getNmsClass("Items", "world.item"), "get", String.class);
         }
@@ -61,7 +61,7 @@ public class StorageTagTools {
             newItem = Reflection.getMethod(stackClass, "a", nbtTag);
         asBukkitCopy = Reflection.getMethod(craftStack, "asBukkitCopy", stackClass);
 
-        save = Reflection.getMethod(stackClass, "save", nbtTag);
+        save = Reflection.getMethod(stackClass, new String[]{"save", "b"}, nbtTag);
         toString = Reflection.getMethod(nbtTag, "toString");
         asCopy = Reflection.getMethod(craftStack, "asNMSCopy", ItemStack.class);
     }

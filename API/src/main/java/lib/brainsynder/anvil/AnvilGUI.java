@@ -64,7 +64,7 @@ public class AnvilGUI {
         chatMessage = NMSManager.getNMSClass("ChatMessage");
         human = NMSManager.getNMSClass("EntityHuman");
         Class chatSerializer = Reflection.getNmsClass("IChatBaseComponent$ChatSerializer", "network.chat");
-        serializerMethod = Reflection.getMethod(chatSerializer, "a", String.class);
+        serializerMethod = Reflection.getMethod(chatSerializer, new String[]{"a", "fromJson"}, String.class);
 
         if (useNewVersion) {
             containerAccess = NMSManager.getNMSClass("ContainerAccess");

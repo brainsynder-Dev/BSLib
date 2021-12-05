@@ -20,8 +20,7 @@ public class Reflection {
         Object handle = getHandle(player);
         if (handle == null) return;
         Object connection = getNMSFields(handle, "server.level", "playerConnection", "b");
-        Method sendPacket = getMethod(getNmsClass("PlayerConnection", "server.network"), "sendPacket", getNmsClass("Packet", "network.protocol"));
-
+        Method sendPacket = getMethod(getNmsClass("PlayerConnection", "server.network"), new String[]{"sendPacket", "a"}, getNmsClass("Packet", "network.protocol"));
         if (connection == null) return;
         if (sendPacket == null) return;
         try {
@@ -386,7 +385,11 @@ public class Reflection {
                 return clazz.getDeclaredMethod(method, params);
             } catch (NoSuchMethodException ignored) {}
         }
-
+        try {
+            throw new NoSuchMethodException("Methods " + Arrays.toString(methodName) + " were not found to exist in class " + clazz.getSimpleName());
+        } catch (NoSuchMethodException e) { // temp
+            e.printStackTrace();
+        }
         return null;
     }
 

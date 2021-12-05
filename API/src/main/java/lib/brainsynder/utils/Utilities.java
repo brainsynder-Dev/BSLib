@@ -308,13 +308,13 @@ public class Utilities {
         Class<?> entity = Reflection.getNmsClass("Entity", "world.entity");
         Class<?> entityClass = Reflection.getNmsClass("EntityMagmaCube", "world.entity.monster");
         entityConstructor = Reflection.getConstructor(entityClass, typeClass, Reflection.getNmsClass("World", "world.level"));
-        teleportSyncMethod = Reflection.getMethod(Reflection.getNmsClass("Entity", "world.entity"), new String[]{"teleportAndSync", "moveTo"}, Double.TYPE, Double.TYPE, Double.TYPE);
+        teleportSyncMethod = Reflection.getMethod(Reflection.getNmsClass("Entity", "world.entity"), new String[]{"teleportAndSync", "moveTo", "a"}, Double.TYPE, Double.TYPE, Double.TYPE);
         a = Reflection.getMethod(typeClass, "a", String.class);
 
-        setSize = Reflection.getMethod(entityClass, "setSize", Integer.TYPE, Boolean.TYPE);
-        setLoc = Reflection.getMethod(entity, new String[]{"setLocation", "absMoveTo"}, Double.TYPE, Double.TYPE, Double.TYPE, Float.TYPE, Float.TYPE);
-        setFlag = Reflection.getMethod(entity, "setFlag", Integer.TYPE, Boolean.TYPE);
-        getID = Reflection.getMethod(entity, "getId");
+        setSize = Reflection.getMethod(entityClass, new String[]{"setSize", "a"}, Integer.TYPE, Boolean.TYPE);
+        setLoc = Reflection.getMethod(entity, new String[]{"setLocation", "absMoveTo", "a"}, Double.TYPE, Double.TYPE, Double.TYPE, Float.TYPE, Float.TYPE);
+        setFlag = Reflection.getMethod(entity, new String[]{"setFlag", "b"}, Integer.TYPE, Boolean.TYPE);
+        getID = Reflection.getMethod(entity, new String[]{"getId", "ae"});
 
         // new PacketPlayOutSpawnEntityLiving(EntityLiving)
         spawnEntity = Reflection.getConstructor(Reflection.getNmsClass("PacketPlayOutSpawnEntityLiving", "network.protocol.game"), Reflection.getNmsClass("EntityLiving", "world.entity"));
