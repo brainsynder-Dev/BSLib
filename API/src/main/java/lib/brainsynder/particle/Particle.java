@@ -6,6 +6,7 @@ import lib.brainsynder.ServerVersion;
 import java.lang.annotation.Annotation;
 
 // https://minecraft.fandom.com/wiki/Particles
+@Deprecated
 public enum Particle {
     UNKNOWN,
     // ---- START ---- //
@@ -107,23 +108,23 @@ public enum Particle {
     @EnumVersion(version = ServerVersion.v1_16_R1) SOUL_FIRE_FLAME,
     @EnumVersion(version = ServerVersion.v1_16_R1) WARPED_SPORE,
 
-    @EnumVersion(version = ServerVersion.v1_17_R1) LIGHT,
-    @EnumVersion(version = ServerVersion.v1_17_R1) DUST_COLOR_TRANSITION(true),
-    @EnumVersion(version = ServerVersion.v1_17_R1) VIBRATION,
-    @EnumVersion(version = ServerVersion.v1_17_R1) FALLING_SPORE_BLOSSOM,
-    @EnumVersion(version = ServerVersion.v1_17_R1) SPORE_BLOSSOM_AIR,
-    @EnumVersion(version = ServerVersion.v1_17_R1) SMALL_FLAME,
-    @EnumVersion(version = ServerVersion.v1_17_R1) SNOWFLAKE,
-    @EnumVersion(version = ServerVersion.v1_17_R1) DRIPPING_DRIPSTONE_LAVA,
-    @EnumVersion(version = ServerVersion.v1_17_R1) FALLING_DRIPSTONE_LAVA,
-    @EnumVersion(version = ServerVersion.v1_17_R1) DRIPPING_DRIPSTONE_WATER,
-    @EnumVersion(version = ServerVersion.v1_17_R1) FALLING_DRIPSTONE_WATER,
-    @EnumVersion(version = ServerVersion.v1_17_R1) GLOW_SQUID_INK,
-    @EnumVersion(version = ServerVersion.v1_17_R1) GLOW,
-    @EnumVersion(version = ServerVersion.v1_17_R1) WAX_ON,
-    @EnumVersion(version = ServerVersion.v1_17_R1) WAX_OFF,
-    @EnumVersion(version = ServerVersion.v1_17_R1) ELECTRIC_SPARK,
-    @EnumVersion(version = ServerVersion.v1_17_R1) SCRAPE
+    @EnumVersion(version = ServerVersion.v1_17) LIGHT,
+    @EnumVersion(version = ServerVersion.v1_17) DUST_COLOR_TRANSITION(true),
+    @EnumVersion(version = ServerVersion.v1_17) VIBRATION,
+    @EnumVersion(version = ServerVersion.v1_17) FALLING_SPORE_BLOSSOM,
+    @EnumVersion(version = ServerVersion.v1_17) SPORE_BLOSSOM_AIR,
+    @EnumVersion(version = ServerVersion.v1_17) SMALL_FLAME,
+    @EnumVersion(version = ServerVersion.v1_17) SNOWFLAKE,
+    @EnumVersion(version = ServerVersion.v1_17) DRIPPING_DRIPSTONE_LAVA,
+    @EnumVersion(version = ServerVersion.v1_17) FALLING_DRIPSTONE_LAVA,
+    @EnumVersion(version = ServerVersion.v1_17) DRIPPING_DRIPSTONE_WATER,
+    @EnumVersion(version = ServerVersion.v1_17) FALLING_DRIPSTONE_WATER,
+    @EnumVersion(version = ServerVersion.v1_17) GLOW_SQUID_INK,
+    @EnumVersion(version = ServerVersion.v1_17) GLOW,
+    @EnumVersion(version = ServerVersion.v1_17) WAX_ON,
+    @EnumVersion(version = ServerVersion.v1_17) WAX_OFF,
+    @EnumVersion(version = ServerVersion.v1_17) ELECTRIC_SPARK,
+    @EnumVersion(version = ServerVersion.v1_17) SCRAPE
     ; // ---- END ---- //
 
     private final String name;
@@ -181,9 +182,9 @@ public enum Particle {
             for (Annotation annotation : annotations) {
                 if (annotation instanceof EnumVersion) {
                     EnumVersion support = (EnumVersion) annotation;
-                    String versionName = support.version().name();
+                    String versionName = support.version().getNMS();
                     if (support.maxVersion() != ServerVersion.UNKNOWN)
-                        versionName += "-" + support.maxVersion().name();
+                        versionName += "-" + support.maxVersion().getNMS();
                     return versionName;
                 }
             }
