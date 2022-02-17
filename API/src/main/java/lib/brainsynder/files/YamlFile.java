@@ -61,6 +61,9 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
         try {
             createParentDirs(file);
             if (!file.exists()) file.createNewFile();
+            if (!file.canWrite()) file.setWritable(true, false);
+            if (!file.canRead()) file.setReadable(true, false);
+            if (!file.canExecute()) file.setExecutable(true, false);
             this.file = file;
         } catch (Throwable ignored) {
         }
@@ -69,6 +72,9 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
 
     public void reload() {
         if (file == null) return;
+        if (!file.canWrite()) file.setWritable(true, false);
+        if (!file.canRead()) file.setReadable(true, false);
+        if (!file.canExecute()) file.setExecutable(true, false);
         currentLines = new ArrayList<>();
 
         this.configuration = YamlConfiguration.loadConfiguration(file);
