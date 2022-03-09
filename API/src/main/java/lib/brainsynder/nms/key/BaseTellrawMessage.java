@@ -4,13 +4,10 @@ import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.google.common.collect.Lists;
 import com.google.gson.stream.JsonWriter;
-import lib.brainsynder.ServerVersion;
-import lib.brainsynder.apache.EnumUtils;
 import lib.brainsynder.nms.Tellraw;
-import lib.brainsynder.reflection.Reflection;
 import lib.brainsynder.utils.Colorize;
 import lib.brainsynder.utils.MessagePart;
-import org.bukkit.Bukkit;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
@@ -18,20 +15,15 @@ import org.bukkit.entity.Player;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class BaseTellrawMessage extends Tellraw {
     private List<MessagePart> messageParts = new ArrayList<>();
     private String jsonString = null;
     private boolean dirty = false;
-    private Constructor packet = null;
-    private Method serializerMethod = null;
-    private Object messagetype, uuid;
 
     /**
      * Will convert the string from "&cString" to the JSON equivalent used for the tellraw command
@@ -45,29 +37,6 @@ public class BaseTellrawMessage extends Tellraw {
         message.messageParts = split;
         message.jsonString = convertParts2Json(split).toString();
         return message;
-    }
-
-    public BaseTellrawMessage() {
-        try {
-            /**
-             * {@link net.minecraft.server.v1_15_R1.PacketPlayOutChat}
-             */
-            Class clazz = Reflection.getNmsClass("PacketPlayOutChat", "network.protocol.game");
-            Class component = Reflection.getNmsClass("IChatBaseComponent", "network.chat");
-            if (ServerVersion.isEqualNew(ServerVersion.v1_16_R1)) {
-                Class typeClass = Reflection.getNmsClass("ChatMessageType", "network.chat");
-                packet = Reflection.getConstructor(clazz, component, typeClass, UUID.class);
-
-                messagetype = EnumUtils.getEnum(typeClass, "SYSTEM");
-                uuid = Reflection.getFieldValue(Reflection.getField(Reflection.getNmsClass("SystemUtils", ""), "b"), null);
-            }else{
-                packet = clazz.getConstructor(component);
-            }
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        Class chatSerializer = Reflection.getNmsClass("IChatBaseComponent$ChatSerializer", "network.chat");
-        serializerMethod = Reflection.getMethod(chatSerializer, "a", String.class);
     }
 
     public BaseTellrawMessage color(Object obj) {
@@ -232,17 +201,7 @@ public class BaseTellrawMessage extends Tellraw {
 
     @Override
     public void send(Player player) {
-        if ((packet == null) || (serializerMethod == null)){
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + player.getName () + " " + toJSONString());
-            return;
-        }
-
-        Object serializer = Reflection.invoke(serializerMethod, null, toJSONString());
-        if (ServerVersion.isEqualNew(ServerVersion.v1_16_R1)) {
-            Reflection.sendPacket(player, Reflection.initiateClass(packet, serializer, messagetype, uuid));
-        }else{
-            Reflection.sendPacket(player, Reflection.initiateClass(packet, serializer));
-        }
+        player.spigot().sendMessage(ComponentSerializer.parse(toJSONString()));
     }
 
 
