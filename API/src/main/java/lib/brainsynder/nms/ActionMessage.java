@@ -16,7 +16,7 @@ public class ActionMessage {
     }
 
     public void sendMessage(Player player, String message) {
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, ComponentSerializer.parse(Colorize.translateBungeeHex(message)));
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, ComponentSerializer.parse("{\"text\": \"" + Colorize.translateBungeeHex(message) + "\"}"));
     }
 
     public static ActionMessage getInstance() {
