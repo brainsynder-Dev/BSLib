@@ -1,5 +1,6 @@
 package lib.brainsynder.utils;
 
+import lib.brainsynder.ServerVersion;
 import lib.brainsynder.reflection.FieldAccessor;
 import lib.brainsynder.reflection.Reflection;
 import org.bukkit.Bukkit;
@@ -340,7 +341,7 @@ public class Utilities {
         getID = Reflection.getMethod(entity, new String[]{"getId", "ae"});
 
         // new PacketPlayOutSpawnEntityLiving(EntityLiving)
-        spawnEntity = Reflection.getConstructor(Reflection.getNmsClass("PacketPlayOutSpawnEntityLiving", "network.protocol.game"), Reflection.getNmsClass("EntityLiving", "world.entity"));
+        spawnEntity = Reflection.getConstructor(Reflection.getNmsClass(((ServerVersion.isEqualNew(ServerVersion.v1_19) ? "PacketPlayOutSpawnEntity" : "PacketPlayOutSpawnEntityLiving")), "network.protocol.game"), Reflection.getNmsClass("EntityLiving", "world.entity"));
 
         // new PacketPlayOutEntityDestroy (int: Entity.getId())
         removeEntity = Reflection.getConstructor(Reflection.getNmsClass("PacketPlayOutEntityDestroy", "network.protocol.game"), Integer.TYPE);
