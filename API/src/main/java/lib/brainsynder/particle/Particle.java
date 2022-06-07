@@ -108,6 +108,8 @@ public enum Particle {
     @EnumVersion(version = ServerVersion.v1_16_R1) SOUL_FIRE_FLAME,
     @EnumVersion(version = ServerVersion.v1_16_R1) WARPED_SPORE,
 
+
+    // ---- Particles added in v1_17 ---- //
     @EnumVersion(version = ServerVersion.v1_17) LIGHT,
     @EnumVersion(version = ServerVersion.v1_17) DUST_COLOR_TRANSITION(true),
     @EnumVersion(version = ServerVersion.v1_17) VIBRATION,
