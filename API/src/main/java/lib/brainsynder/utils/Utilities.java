@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 
 public class Utilities {
     private static final int MILLI_PER_TICK = (1000 / 20);
@@ -76,20 +77,42 @@ public class Utilities {
     }
 
     public static List<Block> getBlocksInRadius(Location location, int radius, boolean hollow) {
+        return getBlocksInRadius(location, radius, hollow, false, block -> true);
+    }
+
+    public static List<Block> getBlocksInRadius(Location location, int radius, boolean hollow, boolean ignoreHeight) {
+        return getBlocksInRadius(location, radius, hollow, ignoreHeight, block -> true);
+    }
+
+    public static List<Block> getBlocksInRadius(Location location, int radius, boolean hollow, boolean ignoreHeight, Predicate<Block> blockPredicate) {
         List<Block> blocks = new ArrayList<>();
 
         int bX = location.getBlockX();
         int bY = location.getBlockY();
         int bZ = location.getBlockZ();
+
+        if (ignoreHeight) {
+            for (int x = bX - radius; x <= bX + radius; x++) {
+                for (int z = bZ - radius; z <= bZ + radius; z++) {
+                    double distance = (bX - x) * (bX - x) + (bZ - z) * (bZ - z);
+                    if ((distance < radius * radius) && ((!hollow) || (distance >= (radius - 1) * (radius - 1)))) {
+                        Location loc = new Location(location.getWorld(), x, bY, z);
+
+                        if (blockPredicate.test(loc.getBlock())) blocks.add(loc.getBlock());
+                    }
+                }
+            }
+            return blocks;
+        }
+
         for (int x = bX - radius; x <= bX + radius; x++) {
             for (int y = bY - radius; y <= bY + radius; y++) {
                 for (int z = bZ - radius; z <= bZ + radius; z++) {
                     double distance = (bX - x) * (bX - x) + (bY - y) * (bY - y) + (bZ - z) * (bZ - z);
                     if ((distance < radius * radius) && ((!hollow) || (distance >= (radius - 1) * (radius - 1)))) {
-                        Location l = new Location(location.getWorld(), x, y, z);
-                        if (l.getBlock().getType() != org.bukkit.Material.BARRIER) {
-                            blocks.add(l.getBlock());
-                        }
+                        Location loc = new Location(location.getWorld(), x, y, z);
+
+                        if (blockPredicate.test(loc.getBlock())) blocks.add(loc.getBlock());
                     }
                 }
             }
