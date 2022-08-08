@@ -129,6 +129,7 @@ public enum ServerVersion implements IVersion {
         return (T) (CURRENT_VERSION = new IVersion() {
             @Override
             public String name() {
+                if (triple.right == 0) return "v"+triple.left+"_"+triple.middle;
                 return "v"+triple.left+"_"+triple.middle+"_"+triple.right;
             }
 
