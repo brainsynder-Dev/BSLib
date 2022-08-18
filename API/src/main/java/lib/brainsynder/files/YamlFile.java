@@ -126,25 +126,16 @@ public abstract class YamlFile implements ConfigurationSection, Movable {
         tempConfig.set(fetchKey(key), configuration.get(key));
     }
 
-    @Override
+
     public List<String> getComments(String s) {
         return null;
     }
-
-    @Override
     public List<String> getInlineComments(String s) {
         return null;
     }
+    public void setComments(String s, List<String> list) {}
+    public void setInlineComments(String s, List<String> list) {}
 
-    @Override
-    public void setComments(String s, List<String> list) {
-
-    }
-
-    @Override
-    public void setInlineComments(String s, List<String> list) {
-
-    }
 
     public void addDefault(String key, Object value, String comment) {
         configuration.addDefault(fetchKey(key), value);
