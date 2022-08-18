@@ -53,8 +53,8 @@
 
     <repositories>
         <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+            <id>bs-nms</id>
+            <url>https://repo.pluginwiki.us/repository/nms/</url>
         </repository>
         <repository>
             <id>CodeMC</id>
@@ -74,11 +74,10 @@
             <version>1.5</version>
         </dependency>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit</artifactId>
-            <version>1.14.4-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../libs/craftbukkit-1.14.4-R0.1-SNAPSHOT.jar</systemPath>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>1.19.2-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
