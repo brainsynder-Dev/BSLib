@@ -13,6 +13,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
 
 public class WebConnector {
@@ -101,49 +102,65 @@ public class WebConnector {
     public static void uploadPaste(Plugin plugin, String text, Callback<String, String> callback) {
         CompletableFuture.runAsync(() -> {
             try {
-                String url = "https://www.pastelog.us/documents";
-                URL obj = new URL(url);
-                HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+                String urlBase = "https://www.pastelog.us";
 
-                con.setRequestMethod("POST");
-                con.setRequestProperty("User-Agent", "Mozilla/5.0");
-                con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+                URL url = new URL(urlBase+"/api/paste/create");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                // Setting the connection to be able to send and receive data.
+                connection.setDoOutput(true);
+                connection.setDoInput(true);
+                // Telling the connection to not follow redirects.
+                connection.setInstanceFollowRedirects(false);
+                // Setting the request method to POST.
+                connection.setRequestMethod("POST");
+                // Telling the connection to not use the cache.
+                connection.setUseCaches(false);
 
-                con.setDoOutput(true);
-                DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-                wr.writeBytes(text);
-                wr.flush();
-                wr.close();
+                // Writing the data to the output stream.
+                try (DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream())) {
+                    outputStream.write(("content=" + text).getBytes(StandardCharsets.UTF_8));
+                }
 
-                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                String inputLine;
-                StringBuilder response = new StringBuilder();
+                try (InputStream inputStream = connection.getInputStream()) {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder builder = new StringBuilder();
 
-                while ((inputLine = in.readLine()) != null) response.append(inputLine);
-                in.close();
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null) {
+                        builder.append(inputLine);
+                    }
 
-                try {
-                    JsonValue value = Json.parse(response.toString());
-                    if (value.isObject()) {
-                        JsonObject json = (JsonObject) value;
-                        String key = json.getString("key", null);
-                        if ((key != null) && !key.isEmpty()) {
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    callback.success("https://www.pastelog.us/"+key);
-                                }
-                            }.runTask(plugin);
-                            return;
+
+                    try {
+                        JsonValue value = Json.parse(builder.toString());
+                        if (value.isObject()) {
+                            JsonObject json = (JsonObject) value;
+                            String key = json.getString("paste_key", "");
+                            if (key != null && !key.isEmpty()) {
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        callback.success(urlBase + "/paste/"+json.getString("paste_key", ""));
+                                    }
+                                }.runTask(plugin);
+                                return;
+                            }
                         }
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                callback.fail(value.toString());
+                            }
+                        }.runTask(plugin);
+                    } catch (Exception e) {
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                callback.fail(builder.toString());
+                            }
+                        }.runTask(plugin);
                     }
-                }catch (Exception ignored) { }
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        callback.fail(response.toString());
-                    }
-                }.runTask(plugin);
+                }
             } catch (IOException ignored) {
 
             }
