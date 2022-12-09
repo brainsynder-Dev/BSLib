@@ -6,7 +6,6 @@ import com.eclipsesource.json.JsonValue;
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.nbt.other.IStorageList;
 import lib.brainsynder.nbt.other.NBTException;
-import lib.brainsynder.reflection.FieldAccessor;
 import lib.brainsynder.reflection.Reflection;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -19,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StorageTagTools {
-    private static Object registry = null;
     private static final Class<?> nbtTag;
     private static final Class<?> craftStack;
     private static final Class<?> stackClass;
@@ -30,7 +28,6 @@ public class StorageTagTools {
     private static final Method toString;
     private static final Method asCopy;
     private static final Method asBukkitCopy;
-    private static final Method getItem;
     private static final Method parseString;
 
     static {
@@ -44,19 +41,6 @@ public class StorageTagTools {
         nbtTag = Reflection.getNmsClass("NBTTagCompound", "nbt");
         stackClass = Reflection.getNmsClass("ItemStack", "world.item"); /** {@link net.minecraft.server.v1_13_R1.ItemStack} */
         newStack = Reflection.getConstructor(stackClass, nbtTag);
-
-        if (ServerVersion.isEqualNew(ServerVersion.v1_14_R1)) { // TODO: Find the correct version this changed in
-            FieldAccessor accessor;
-            try {
-                accessor = FieldAccessor.getField(Reflection.getNmsClass("IRegistry", "core"), "ITEM", Object.class);
-            } catch (IllegalArgumentException ex) {
-                accessor = FieldAccessor.getField(Reflection.getNmsClass("IRegistry", "core"), "Z", Object.class);
-            }
-            registry = accessor.get(null);
-            getItem = Reflection.getMethod(registry.getClass(), new String[]{"get", "a"}, keyClass);
-        }else{
-            getItem = Reflection.getMethod(Reflection.getNmsClass("Items", "world.item"), "get", String.class);
-        }
         if (ServerVersion.isEqualNew(ServerVersion.v1_13_R1))
             newItem = Reflection.getMethod(stackClass, "a", nbtTag);
         asBukkitCopy = Reflection.getMethod(craftStack, "asBukkitCopy", stackClass);
