@@ -8,6 +8,7 @@ import com.google.common.base.Charsets;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.List;
 
 public abstract class JsonFile implements Movable {
     private final Charset ENCODE = Charsets.UTF_8;
@@ -82,6 +83,10 @@ public abstract class JsonFile implements Movable {
         } catch (Exception ignored) {
             return false;
         }
+    }
+
+    public List<String> getKeys () {
+        return json.names();
     }
 
     public String getName() {
