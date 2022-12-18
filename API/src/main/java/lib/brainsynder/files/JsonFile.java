@@ -110,6 +110,11 @@ public abstract class JsonFile implements Movable {
         return value;
     }
 
+    public JsonValue getDefaultValue (String key) {
+        if (!hasDefaultKey(key)) return null;
+        return defaults.get(key);
+    }
+
     public String getString (String key) {
         return getString(key, "");
     }
