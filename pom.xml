@@ -8,10 +8,25 @@
     <artifactId>BSLib</artifactId>
     <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
+
     <modules>
         <module>API</module>
-        <module>API-NMS</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <id>build-number</id>
+            <activation>
+                <property>
+                    <name>env.BUILD_NUMBER</name>
+                </property>
+            </activation>
+            <properties>
+                <!-- Override only if necessary -->
+                <jenkins.buildNumber>${env.BUILD_NUMBER}</jenkins.buildNumber>
+            </properties>
+        </profile>
+    </profiles>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -19,7 +34,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <module.info>-parent</module.info>
         <!--suppress UnresolvedMavenProperty -->
-        <jenkins.buildNumber>${env.BUILD_NUMBER}</jenkins.buildNumber>
+        <jenkins.buildNumber>0</jenkins.buildNumber>
         <module.version>B${jenkins.buildNumber}</module.version>
     </properties>
 
