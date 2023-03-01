@@ -107,9 +107,10 @@ public class Tellraw {
      * Sets the font of the latest message.
      *
      * Example:
-     *      minecraft:default - Will result in the default minecraft texture
+     *      minecraft:default - Default minecraft font
      *      minecraft:illageralt - Language of the Illagers
      *      minecraft:alt - Enchantment language
+     *      minecraft:uniform - Similar to the default one
      *
      * @param font The font to use.
      * @return The Tellraw object
