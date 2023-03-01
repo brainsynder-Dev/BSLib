@@ -46,8 +46,8 @@
     </build>
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <module.info>-IGNORE</module.info>
     </properties>
@@ -80,6 +80,21 @@
             <version>1.17-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>lib.brainsynder</groupId>
+            <artifactId>nms_base</artifactId>
+            <version>${module.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- NMS Versions START -->
+        <dependency>
+            <groupId>lib.brainsynder</groupId>
+            <artifactId>nms-1.19.3</artifactId>
+            <version>${module.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- NMS Versions END -->
     </dependencies>
 
 
