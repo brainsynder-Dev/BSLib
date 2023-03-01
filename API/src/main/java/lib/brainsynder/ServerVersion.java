@@ -1,6 +1,6 @@
 package lib.brainsynder;
 
-import lib.brainsynder.utils.AdvString;
+import lib.brainsynder.strings.StringUtilities;
 import lib.brainsynder.utils.Triple;
 import org.bukkit.Bukkit;
 
@@ -87,7 +87,7 @@ public enum ServerVersion implements IVersion {
             return (T) CURRENT_VERSION;
         }
 
-        String mc = AdvString.between("MC: ", ")", Bukkit.getVersion());
+        String mc = StringUtilities.between("MC: ", ")", Bukkit.getVersion());
         String mcVersion = "v"+mc.replace(".", "_");
 
         String[] args = mc.split("\\.");
