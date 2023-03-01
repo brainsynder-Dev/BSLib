@@ -12,6 +12,14 @@
     <modules>
         <module>nms_base</module>
         <module>API</module>
+        <module>Version_1.17</module>
+        <module>Version_1.17.1</module>
+        <module>Version_1.18</module>
+        <module>Version_1.18.1</module>
+        <module>Version_1.18.2</module>
+        <module>Version_1.19</module>
+        <module>Version_1.19.1</module>
+        <module>Version_1.19.2</module>
         <module>Version_1.19.3</module>
     </modules>
 
