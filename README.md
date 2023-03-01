@@ -1,17 +1,31 @@
-# BSLib
-This is not a new plugin (Like SimpleAPI). Instead this aims to make the plugins that have SimpleAPI shaded into them smaller.
+<div align="center">
+<br><br>
+    <a href="http://ci.pluginwiki.us/job/BSLib/"><img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=FFFFFF" alt="Jenkins"></a> 
+    <a href="https://repo.pluginwiki.us/service/rest/repository/browse/maven-releases/lib/brainsynder/API/"><img src="https://img.shields.io/badge/Maven_Repo-C71A36?style=for-the-badge&logo=Apache+Maven&logoColor=FFFFFF" alt="Maven Repo"></a><br>
+    <a href="https://www.codefactor.io/repository/github/brainsynder-dev/bslib"><img src="https://www.codefactor.io/repository/github/brainsynder-dev/bslib/badge" alt="CodeFactor" /></a> 
+    <img src="https://img.shields.io/maven-metadata/v?color=red&label=Current%20Version&metadataUrl=https%3A%2F%2Frepo.pluginwiki.us%2Frepository%2Fmaven-releases%2Flib%2Fbrainsynder%2FAPI%2Fmaven-metadata.xml">
+</div>
 
-- [Jenkins](http://ci.pluginwiki.us/job/BSLib/)
-- [Maven](http://ci.pluginwiki.us/plugin/repository/everything/lib/brainsynder/API/)
+<h1>BSLib</h1>
+
+BSLib is a collection of useful classes, builders, helpers, and features such as:
+- Colorize `(A class to help with handling ChatColors from regular colors to HEX colors)`
+- Tellraw `(A simple class to help with creating Tellraw messages)`
+- AnvilGUI `(A class that will open the Anvil GUI for a player and fetch the result when completed)`
+- ServerVersion `(An enum for fetching what version the server is currently using)`
+
+<h1>How to add it to my project</h1>
+
 ```
 <repository>
-    <id>bs-repo</id>
-    <url>http://ci.pluginwiki.us/plugin/repository/everything/</url>
+    <id>bs-public</id>
+    <url>https://repo.pluginwiki.us/repository/maven-releases/</url>
 </repository>
+
 <dependency>
     <groupId>lib.brainsynder</groupId>
     <artifactId>API</artifactId>
-    <version>0.1-B(JENKINS BUILD)</version>
+    <version> {CURRENT_VERSION} </version>
 </dependency>
 
 
