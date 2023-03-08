@@ -7,6 +7,21 @@ import java.util.ListIterator;
 
 public class StringUtilities {
     /**
+     * Combines a String array into a single message
+     *
+     * @param args The array that needs to be merged.
+     * @param start The index of where the combined string starts.
+     * @return The Combined String
+     */
+    public static String mergeStringArray(String[] args, int start) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = start; i < args.length; i++) {
+            builder.append(args[i]).append(" ");
+        }
+        return builder.toString().trim();
+    }
+
+    /**
      * It takes a String, a character to pad with, the maximum padding, and the alignment of the text, and returns a padded
      * String
      *
