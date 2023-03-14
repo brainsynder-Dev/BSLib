@@ -136,7 +136,13 @@ public enum Particle {
     @EnumVersion(version = ServerVersion.v1_19) SCULK_CHARGE,
     @EnumVersion(version = ServerVersion.v1_19) SCULK_CHARGE_POP,
     @EnumVersion(version = ServerVersion.v1_19) SHRIEK,
-    @EnumVersion(version = ServerVersion.v1_19) BLOCK_MARKER(true)
+    @EnumVersion(version = ServerVersion.v1_19) BLOCK_MARKER(true),
+
+
+    // ---- Particles added in v1_19_4 ---- //
+    @EnumVersion(version = ServerVersion.v1_19_4) DRIPPING_CHERRY_LEAVES, 
+    @EnumVersion(version = ServerVersion.v1_19_4) FALLING_CHERRY_LEAVES, 
+    @EnumVersion(version = ServerVersion.v1_19_4) LANDING_CHERRY_LEAVES 
     ; // ---- END ---- //
 
     private final String name;
