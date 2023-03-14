@@ -29,6 +29,14 @@ BSLib is a collection of useful classes, builders, helpers, and features such as
 </dependency>
 
 
+<!--  Command API  ------  !!! OPTIONAL !!!  -->
+<dependency>
+    <groupId>lib.brainsynder</groupId>
+    <artifactId>command_api</artifactId>
+    <version> {CURRENT_VERSION} </version>
+</dependency>
+
+
 
 <plugin>
     <groupId>org.apache.maven.plugins</groupId>
