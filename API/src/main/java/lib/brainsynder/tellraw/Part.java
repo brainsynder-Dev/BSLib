@@ -2,7 +2,6 @@ package lib.brainsynder.tellraw;
 
 import com.eclipsesource.json.JsonObject;
 import com.google.gson.stream.JsonWriter;
-import lib.brainsynder.ServerVersion;
 import lib.brainsynder.strings.Colorize;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -39,7 +38,7 @@ public final class Part {
         if (this.color != null) {
             // Uses the ChatColor variable (Default MC colors)
             json.add("color", this.color.name().toLowerCase());
-        }else if ((customColor != null) && ServerVersion.isEqualNew(ServerVersion.v1_17)) {
+        }else if ((customColor != null)) {
             // Uses the Color (Allows RGB/HEX colors) [1.16+]
             // Since 1.16 added the ability to have RGB/HEX colored messages
             json.add("color", Colorize.toHex(customColor.getRed(), customColor.getGreen(), customColor.getBlue()));
@@ -80,7 +79,7 @@ public final class Part {
             if (this.color != null) {
                 // Uses the ChatColor variable (Default MC colors)
                 json.name("color").value(this.color.name().toLowerCase());
-            }else if ((customColor != null) && ServerVersion.isEqualNew(ServerVersion.v1_17)) {
+            }else if ((customColor != null)) {
                 // Uses the Color (Allows RGB/HEX colors) [1.16+]
                 // Since 1.16 added the ability to have RGB/HEX colored messages via TellRaw
                 json.name("color").value(Colorize.toHex(customColor.getRed(), customColor.getGreen(), customColor.getBlue()));
