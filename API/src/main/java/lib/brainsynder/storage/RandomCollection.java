@@ -1,4 +1,4 @@
-package lib.brainsynder.utils;
+package lib.brainsynder.storage;
 
 import java.util.*;
 
