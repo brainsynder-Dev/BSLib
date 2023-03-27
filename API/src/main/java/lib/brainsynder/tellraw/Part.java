@@ -33,35 +33,35 @@ public final class Part {
      */
     public JsonObject toJson () {
         JsonObject json = new JsonObject();
-        json.add("text", text);
+        json.set("text", text);
 
         if (this.color != null) {
             // Uses the ChatColor variable (Default MC colors)
-            json.add("color", this.color.name().toLowerCase());
+            json.set("color", this.color.name().toLowerCase());
         }else if ((customColor != null)) {
             // Uses the Color (Allows RGB/HEX colors) [1.16+]
             // Since 1.16 added the ability to have RGB/HEX colored messages
-            json.add("color", Colorize.toHex(customColor.getRed(), customColor.getGreen(), customColor.getBlue()));
+            json.set("color", Colorize.toHex(customColor.getRed(), customColor.getGreen(), customColor.getBlue()));
         }
 
-        if (this.font != null) json.add("font", font.toLowerCase());
+        if (this.font != null) json.set("font", font.toLowerCase());
 
         if (this.styles != null) {
-            for (ChatColor style : this.styles) json.add(style.name().toLowerCase(), true);
+            for (ChatColor style : this.styles) json.set(style.name().toLowerCase(), true);
         }
 
         if ((this.clickActionName != null) && (this.clickActionData != null)) {
             JsonObject action = new JsonObject();
-            action.add("action", clickActionName);
-            action.add("value", clickActionData);
-            json.add("clickEvent", action);
+            action.set("action", clickActionName);
+            action.set("value", clickActionData);
+            json.set("clickEvent", action);
         }
 
         if ((this.hoverActionName != null) && (this.hoverActionData != null)) {
             JsonObject action = new JsonObject();
-            action.add("action", hoverActionName);
-            action.add("value", hoverActionData);
-            json.add("hoverEvent", action);
+            action.set("action", hoverActionName);
+            action.set("value", hoverActionData);
+            json.set("hoverEvent", action);
         }
 
         return json;
