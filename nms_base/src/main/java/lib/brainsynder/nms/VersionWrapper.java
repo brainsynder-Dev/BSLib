@@ -1,9 +1,14 @@
 package lib.brainsynder.nms;
 
+import lib.brainsynder.nbt.StorageTagCompound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 public interface VersionWrapper {
+    ItemStack toItemStack (StorageTagCompound compound);
+
+    StorageTagCompound fromItemStack (ItemStack itemStack);
 
     /**
      * Gets the next available NMS container id for the player

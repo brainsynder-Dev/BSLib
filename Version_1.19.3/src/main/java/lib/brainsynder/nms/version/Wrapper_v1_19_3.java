@@ -1,7 +1,13 @@
 package lib.brainsynder.nms.version;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import lib.brainsynder.nbt.JsonToNBT;
+import lib.brainsynder.nbt.StorageTagCompound;
+import lib.brainsynder.nbt.other.NBTException;
 import lib.brainsynder.nms.VersionWrapper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
 import net.minecraft.network.protocol.game.ClientboundContainerClosePacket;
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -9,12 +15,15 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.MenuType;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_19_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_19_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_19_R2.event.CraftEventFactory;
+import org.bukkit.craftbukkit.v1_19_R2.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_19_R2.util.CraftChatMessage;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 public final class Wrapper_v1_19_3 implements VersionWrapper {
     private int getRealNextContainerId(Player player) {
@@ -29,6 +38,32 @@ public final class Wrapper_v1_19_3 implements VersionWrapper {
      */
     private ServerPlayer toNMS(Player player) {
         return ((CraftPlayer) player).getHandle();
+    }
+
+    @Override
+    public ItemStack toItemStack(StorageTagCompound compound) {
+        try {
+            CompoundTag nbt = TagParser.parseTag(compound.toString());
+            return CraftItemStack.asBukkitCopy(net.minecraft.world.item.ItemStack.of(nbt));
+        } catch (CommandSyntaxException e) {
+            e.printStackTrace();
+        }
+        return new ItemStack(Material.STONE);
+    }
+
+    @Override
+    public StorageTagCompound fromItemStack(ItemStack itemStack) {
+        CompoundTag nbt = new CompoundTag();
+        CraftItemStack.asNMSCopy(itemStack).save(nbt);
+        StorageTagCompound compound = new StorageTagCompound ();
+
+        try {
+            compound = JsonToNBT.getTagFromJson(nbt.toString());
+        } catch (NBTException e) {
+            e.printStackTrace();
+        }
+
+        return compound;
     }
 
     @Override

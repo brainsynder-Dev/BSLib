@@ -33,6 +33,11 @@
             <artifactId>nms_base</artifactId>
             <version>${module.version}</version>
         </dependency>
+        <dependency>
+            <groupId>lib.brainsynder</groupId>
+            <artifactId>nbt_api</artifactId>
+            <version>${module.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

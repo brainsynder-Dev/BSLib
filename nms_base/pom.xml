@@ -29,5 +29,12 @@
             <version>${spigot.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>lib.brainsynder</groupId>
+            <artifactId>nbt_api</artifactId>
+            <version>${module.version}</version>
+            <scope>compile</scope>
+            <optional>false</optional>
+        </dependency>
     </dependencies>
 </project>
