@@ -13,6 +13,7 @@
         <module>nms_base</module>
         <module>API</module>
         <module>command_api</module>
+        <module>nbt_api</module>
         <module>Version_1.17</module>
         <module>Version_1.17.1</module>
         <module>Version_1.18</module>
