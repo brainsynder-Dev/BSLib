@@ -21,29 +21,31 @@ public class Colorize {
      * @param hex The hex code of the color you want to fetch.
      * @return The color of the hex code.
      */
-    public static ChatColor fetchColor (String hex) {
+    public static ChatColor fetchColor(String hex) {
         return fetchColor(hex, ChatColor.WHITE);
     }
+
     /**
      * It takes a hex color code, and returns a ChatColor object
      *
-     * @param hex The hex code to fetch the color from.
+     * @param hex      The hex code to fetch the color from.
      * @param fallback The color to return if the hex code is invalid.
      * @return A ChatColor object.
      */
-    public static ChatColor fetchColor (String hex, ChatColor fallback) {
+    public static ChatColor fetchColor(String hex, ChatColor fallback) {
         if ((hex == null) || hex.isEmpty()) return fallback;
         if (hex.startsWith("&#")) hex = hex.replace("&", "");
-        if (!hex.startsWith("#")) hex = "#"+hex;
+        if (!hex.startsWith("#")) hex = "#" + hex;
         return ChatColor.of(hex);
     }
+
     /**
      * It takes a color and returns a ChatColor
      *
      * @param color The color you want to convert to a ChatColor.
      * @return The ChatColor that is closest to the color that is passed in.
      */
-    public static ChatColor fetchColor (Color color) {
+    public static ChatColor fetchColor(Color color) {
         if (color == null) return ChatColor.WHITE;
         return fetchColor(toHex(color.getRed(), color.getGreen(), color.getBlue()));
     }
@@ -143,13 +145,13 @@ public class Colorize {
 
     /**
      * It takes a list of parts and returns a json object that contains the parts
-     *
+     * <p>
      * Example: {"text":"","extra":[{"text","color"}]}
      *
      * @param parts The list of parts to convert to JSON.
      * @return A JsonObject
      */
-    public static JsonObject convertParts2Json (List<Part> parts) {
+    public static JsonObject convertParts2Json(List<Part> parts) {
         JsonObject json = new JsonObject();
         json.add("text", "");
 
@@ -211,6 +213,33 @@ public class Colorize {
     }
 
     /**
+     * It takes two hex colors and a string, and returns the string with each character colored with a color that fades
+     * from the first hex color to the second hex color
+     *
+     * @param firstHex The first hex color to start with.
+     * @param secondHex The hex color you want to end on.
+     * @param text The text to be colored
+     * @return A string with the text in it, with the colors fading from the first color to the second color.
+     */
+    public static String colorFadeText(String firstHex, String secondHex, String text) {
+        int[] start = hexToRGB(firstHex);
+        int[] last = hexToRGB(secondHex);
+
+        StringBuilder builder = new StringBuilder();
+
+        int dR = numberFade(start[0], last[0], text.length());
+        int dG = numberFade(start[1], last[1], text.length());
+        int dB = numberFade(start[2], last[2], text.length());
+
+        for (int i = 0; i < text.length(); i++) {
+            builder
+                    .append(ChatColor.of(new java.awt.Color(start[0] + dR * i, start[1] + dG * i, start[2] + dB * i)))
+                    .append(text.charAt(i));
+        }
+        return builder.toString();
+    }
+
+    /**
      * It takes a hexadecimal string, converts it to an integer, and then converts that integer to a color
      *
      * @param hex The hexadecimal color code.
@@ -223,7 +252,6 @@ public class Colorize {
                 Integer.valueOf(hex.substring(5, 7), 16)
         );
     }
-
 
 
     /**
@@ -250,5 +278,45 @@ public class Colorize {
             builder.append("0");
         }
         return builder.toString().toUpperCase();
+    }
+
+    /**
+     * It takes a string of 6 hexadecimal characters and returns an array of 3 integers
+     *
+     * @param hex The RGB value to convert to an int array.
+     * @return An array of integers.
+     */
+    public static int[] hexToRGB(String hex) {
+        int[] ret = new int[3];
+        for (int i = 0; i < 3; i++) {
+            ret[i] = hexToInt(hex.charAt(i * 2), hex.charAt(i * 2 + 1));
+        }
+        return ret;
+    }
+
+    /**
+     * It converts a hexadecimal character to an integer
+     *
+     * @param a The first character of the hexadecimal number.
+     * @param b The byte array to convert to hex
+     * @return The hexadecimal value of the two characters.
+     */
+    private static int hexToInt(char a, char b) {
+        int x = a < 65 ? a - 48 : a - 55;
+        int y = b < 65 ? b - 48 : b - 55;
+        return x * 16 + y;
+    }
+
+    /**
+     * Given an initial value, a final value, and a number of steps, return the amount to increment the value by for each
+     * step.
+     *
+     * @param i initial value
+     * @param f final value
+     * @param n The number of frames you want to fade between the two numbers.
+     * @return The difference between the final and initial values divided by the number of steps minus one.
+     */
+    private static Integer numberFade(int i, int f, int n) {
+        return (f - i) / (n - 1);
     }
 }
