@@ -20,12 +20,12 @@ public class MathUtils {
      * It trims the double to the specified degree.
      *
      * @param degree the number of decimal places you want to round to
-     * @param d The number to be trimmed
+     * @param value The number to be trimmed
      * @return A double value that is rounded to the specified degree.
      */
-    public static double trim(int degree, double d) {
+    public static double trim(int degree, double value) {
         DecimalFormat var5 = new DecimalFormat("#.#" + "#".repeat(Math.max(0, degree - 1)));
-        return Double.parseDouble(var5.format(d));
+        return Double.parseDouble(var5.format(value));
     }
 
     /**
