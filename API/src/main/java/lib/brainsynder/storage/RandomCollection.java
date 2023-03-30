@@ -1,18 +1,20 @@
 package lib.brainsynder.storage;
 
+import lib.brainsynder.math.MathUtils;
+
 import java.util.*;
 
 public class RandomCollection<E> {
-    private final NavigableMap<Double, E> map;
+    private final NavigableMap<Double, Element<E>> map;
     private final Random random;
     private double total;
 
-    public static <E> E randomize(Collection<E> list) {
+    public static <T> Element<T> randomize(Collection<T> list) {
         return randomize(list, 50);
     }
 
-    public static <E> E randomize(Collection<E> list, double percent) {
-        RandomCollection<E> collection = new RandomCollection<>();
+    public static <T> Element<T> randomize(Collection<T> list, double percent) {
+        RandomCollection<T> collection = new RandomCollection<>();
         list.forEach(e -> collection.add(percent, e));
         return collection.next();
     }
@@ -44,15 +46,15 @@ public class RandomCollection<E> {
     public void add(double percent, E value) {
         if (percent > 0.0D) {
             this.total += percent;
-            this.map.put(this.total, value);
+            this.map.put(this.total, new Element<>(value, percent));
         }
     }
 
-    public Collection<E> values() {
+    public Collection<Element<E>> values() {
         return map.values();
     }
 
-    public E next() {
+    public Element<E> next() {
         double var1 = this.random.nextDouble() * this.total;
         return this.map.ceilingEntry(var1).getValue();
     }
@@ -66,13 +68,53 @@ public class RandomCollection<E> {
     }
 
     // Will fetch the next random value, while also removing it from the selections
-    public E nextRemove() {
+    public Element<E> nextRemove() {
         if (map.isEmpty()) return null;
         double var1 = this.random.nextDouble() * this.total;
-        Map.Entry<Double, E> entry = this.map.ceilingEntry(var1);
-        E value = entry.getValue();
+        Map.Entry<Double, Element<E>> entry = this.map.ceilingEntry(var1);
+        Element<E> value = entry.getValue();
         this.total -= entry.getKey();
         map.remove(entry.getKey());
         return value;
+    }
+
+    public static final class Element<O> {
+        private final O value;
+        private final double percent;
+
+        private Element(O value, double percent) {
+            this.value = value;
+            this.percent = percent;
+        }
+
+        public double getPercent() {
+            return percent;
+        }
+
+        public O getValue() {
+            return value;
+        }
+
+        public double getProbableChance () {
+            return MathUtils.trim(3, ( (percent / 85) * 100 ) );
+        }
+
+        @Override
+        public String toString() {
+            return "Element{value=" + value +", percent=" + percent +'}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Element<?> element = (Element<?>) o;
+            return Double.compare(element.percent, percent) == 0 && Objects.equals(value, element.value);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(value, percent);
+        }
     }
 }
