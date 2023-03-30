@@ -4,11 +4,13 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import lib.brainsynder.nbt.JsonToNBT;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nbt.other.NBTException;
+import lib.brainsynder.nms.GameState;
 import lib.brainsynder.nms.VersionWrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.protocol.game.ClientboundContainerClosePacket;
+import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -38,6 +40,33 @@ public final class Wrapper_v1_19_3 implements VersionWrapper {
      */
     private ServerPlayer toNMS(Player player) {
         return ((CraftPlayer) player).getHandle();
+    }
+
+    @Override
+    public void sendGameState(Player player, GameState gameState, float state) {
+        ClientboundGameEventPacket.Type type = convertEnum(gameState);
+        if (type == null) return;
+
+        ClientboundGameEventPacket packet = new ClientboundGameEventPacket(type, state);
+        ((CraftPlayer) player).getHandle().connection.send(packet);
+    }
+
+    private ClientboundGameEventPacket.Type convertEnum (GameState gameState) {
+        return switch (gameState) {
+            case NO_RESPAWN_BLOCK_AVAILABLE -> ClientboundGameEventPacket.NO_RESPAWN_BLOCK_AVAILABLE;
+            case START_RAINING -> ClientboundGameEventPacket.START_RAINING;
+            case STOP_RAINING -> ClientboundGameEventPacket.STOP_RAINING;
+            case CHANGE_GAME_MODE -> ClientboundGameEventPacket.CHANGE_GAME_MODE;
+            case WIN_GAME -> ClientboundGameEventPacket.WIN_GAME;
+            case DEMO_EVENT -> ClientboundGameEventPacket.DEMO_EVENT;
+            case ARROW_HIT_PLAYER -> ClientboundGameEventPacket.ARROW_HIT_PLAYER;
+            case RAIN_LEVEL_CHANGE -> ClientboundGameEventPacket.RAIN_LEVEL_CHANGE;
+            case THUNDER_LEVEL_CHANGE -> ClientboundGameEventPacket.THUNDER_LEVEL_CHANGE;
+            case PUFFER_FISH_STING -> ClientboundGameEventPacket.PUFFER_FISH_STING;
+            case GUARDIAN_ELDER_EFFECT -> ClientboundGameEventPacket.GUARDIAN_ELDER_EFFECT;
+            case IMMEDIATE_RESPAWN -> ClientboundGameEventPacket.IMMEDIATE_RESPAWN;
+            default -> null;
+        };
     }
 
     @Override
