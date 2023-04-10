@@ -52,7 +52,7 @@
 
         <module.info>-parent</module.info>
         <!--suppress UnresolvedMavenProperty -->
-        <jenkins.buildNumber>0</jenkins.buildNumber>
+        <jenkins.buildNumber>00</jenkins.buildNumber>
         <module.version>B${jenkins.buildNumber}</module.version>
     </properties>
 

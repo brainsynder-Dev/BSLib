@@ -32,6 +32,10 @@
                             <pattern>org.bstats</pattern>
                             <shadedPattern>lib.brainsynder.metric</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>com.cryptomorin.xseries</pattern>
+                            <shadedPattern>lib.brainsynder.xseries</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>
@@ -69,11 +73,13 @@
             <groupId>com.eclipsesource.minimal-json</groupId>
             <artifactId>minimal-json</artifactId>
             <version>0.9.5</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
             <version>3.0.0</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -83,65 +89,62 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.cryptomorin</groupId>
+            <artifactId>XSeries</artifactId>
+            <version>9.3.1</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nms_base</artifactId>
             <version>${module.version}</version>
-            <scope>compile</scope>
         </dependency>
         <!-- NMS Versions START -->
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nms-1.17</artifactId>
             <version>${module.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nms-1.17.1</artifactId>
             <version>${module.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nms-1.18</artifactId>
             <version>${module.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nms-1.18.1</artifactId>
             <version>${module.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nms-1.18.2</artifactId>
             <version>${module.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nms-1.19</artifactId>
             <version>${module.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nms-1.19.1</artifactId>
             <version>${module.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nms-1.19.2</artifactId>
             <version>${module.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nms-1.19.3</artifactId>
             <version>${module.version}</version>
-            <scope>compile</scope>
         </dependency>
         <!-- NMS Versions END -->
     </dependencies>
