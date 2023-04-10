@@ -57,6 +57,10 @@ public abstract class InventoryGUI implements InventoryHandler {
         });
     }
 
+    public void clearButtons () {
+        this.buttonMap.clear();
+    }
+
     @Override
     public void onClick(InventoryClickEvent event) {
         event.setCancelled(true);
