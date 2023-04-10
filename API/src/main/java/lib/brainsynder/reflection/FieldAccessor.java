@@ -24,7 +24,7 @@ public abstract class FieldAccessor<T> {
                             try {
                                 return (T) field.get(instance);
                             } catch (IllegalAccessException e) {
-                                throw new RuntimeException("Cannot access reflection.", e);
+                                throw new ReflectionException("Cannot access reflection.", e);
                             }
                         }
 
@@ -32,7 +32,7 @@ public abstract class FieldAccessor<T> {
                             try {
                                 field.set(instance, value);
                             } catch (IllegalAccessException e) {
-                                throw new RuntimeException("Cannot access reflection.", e);
+                                throw new ReflectionException("Cannot access reflection.", e);
                             }
                         }
 
@@ -47,7 +47,7 @@ public abstract class FieldAccessor<T> {
                 targetClass = targetClass.getSuperclass();
                 continue;
             }
-            throw new IllegalArgumentException("Cannot find field with type " + fieldType);
+            throw new ReflectionException("Cannot find field with type " + fieldType);
         }
     }
 }
