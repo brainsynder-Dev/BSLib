@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>nms-${minecraft.version}</artifactId>
-    <version>${module.version}</version>
+    <version>${internal.version}</version>
 
     <properties>
         <minecraft.version>1.17.1</minecraft.version>
@@ -31,12 +31,12 @@
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nms_base</artifactId>
-            <version>${module.version}</version>
+            <version>${internal.version}</version>
         </dependency>
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nbt_api</artifactId>
-            <version>${module.version}</version>
+            <version>${internal.version}</version>
         </dependency>
     </dependencies>
 

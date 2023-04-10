@@ -98,53 +98,58 @@
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nms_base</artifactId>
-            <version>${module.version}</version>
+            <version>${internal.version}</version>
         </dependency>
         <!-- NMS Versions START -->
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nms-1.17</artifactId>
-            <version>${module.version}</version>
+            <version>${internal.version}</version>
         </dependency>
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nms-1.17.1</artifactId>
-            <version>${module.version}</version>
+            <version>${internal.version}</version>
         </dependency>
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nms-1.18</artifactId>
-            <version>${module.version}</version>
+            <version>${internal.version}</version>
         </dependency>
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nms-1.18.1</artifactId>
-            <version>${module.version}</version>
+            <version>${internal.version}</version>
         </dependency>
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nms-1.18.2</artifactId>
-            <version>${module.version}</version>
+            <version>${internal.version}</version>
         </dependency>
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nms-1.19</artifactId>
-            <version>${module.version}</version>
+            <version>${internal.version}</version>
         </dependency>
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nms-1.19.1</artifactId>
-            <version>${module.version}</version>
+            <version>${internal.version}</version>
         </dependency>
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nms-1.19.2</artifactId>
-            <version>${module.version}</version>
+            <version>${internal.version}</version>
         </dependency>
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>nms-1.19.3</artifactId>
-            <version>${module.version}</version>
+            <version>${internal.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>lib.brainsynder</groupId>
+            <artifactId>nms-1.19.4</artifactId>
+            <version>${internal.version}</version>
         </dependency>
         <!-- NMS Versions END -->
     </dependencies>

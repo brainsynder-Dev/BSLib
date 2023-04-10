@@ -52,8 +52,10 @@
 
         <module.info>-parent</module.info>
         <!--suppress UnresolvedMavenProperty -->
-        <jenkins.buildNumber>00</jenkins.buildNumber>
+        <jenkins.buildNumber>-2</jenkins.buildNumber>
         <module.version>B${jenkins.buildNumber}</module.version>
+
+        <internal.version>V2</internal.version>
     </properties>
 
     <distributionManagement>
@@ -90,6 +92,14 @@
                     <properties>
                         <property>
                             <name>module.version</name>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>lib.brainsynder</groupId>
+                                </dependency>
+                            </dependencies>
+                        </property>
+                        <property>
+                            <name>internal.version</name>
                             <dependencies>
                                 <dependency>
                                     <groupId>lib.brainsynder</groupId>

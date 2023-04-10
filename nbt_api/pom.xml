@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>nbt_api</artifactId>
-    <version>${module.version}</version>
+    <version>${internal.version}</version>
 
     <build>
         <sourceDirectory>${basedir}/src/main/java</sourceDirectory>

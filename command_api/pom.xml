@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>command_api</artifactId>
-    <version>${module.version}</version>
+    <version>${internal.version}</version>
 
     <build>
         <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
