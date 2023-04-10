@@ -19,68 +19,68 @@ import java.util.Map;
  */
 public abstract class InventoryGUI implements InventoryHandler {
 
-  private final Inventory inventory;
-  private final Map<Integer, InventoryButton> buttonMap = new HashMap<>();
+    private final Inventory inventory;
+    private final Map<Integer, InventoryButton> buttonMap = new HashMap<>();
 
-  public InventoryGUI() {
-    this.inventory = this.createInventory();
-  }
-
-  /**
-   * This function returns the inventory of the player.
-   *
-   * @return The inventory object.
-   */
-  public Inventory getInventory() {
-    return this.inventory;
-  }
-
-  /**
-   * It adds a button to the button map
-   *
-   * @param slot The slot in the inventory that the button will be placed in.
-   * @param button The button to add to the inventory
-   */
-  public void addButton(int slot, InventoryButton button) {
-    this.buttonMap.put(slot, button);
-  }
-
-  /**
-   * For each button in the button map, set the item in the inventory to the icon of the button.
-   *
-   * @param player The player who's inventory is being decorated.
-   */
-  public void decorate(Player player) {
-    this.buttonMap.forEach((slot, button) -> {
-      ItemStack icon = button.getIconCreator().apply(player);
-      this.inventory.setItem(slot, icon);
-    });
-  }
-
-  @Override
-  public void onClick(InventoryClickEvent event) {
-    event.setCancelled(true);
-    int slot = event.getSlot();
-    InventoryButton button = this.buttonMap.get(slot);
-    if (button != null) {
-      button.getEventConsumer().accept(event);
+    public InventoryGUI() {
+        this.inventory = this.createInventory();
     }
-  }
 
-  @Override
-  public void onOpen(InventoryOpenEvent event) {
-    this.decorate((Player) event.getPlayer());
-  }
+    /**
+     * This function returns the inventory of the player.
+     *
+     * @return The inventory object.
+     */
+    public Inventory getInventory() {
+        return this.inventory;
+    }
 
-  @Override
-  public void onClose(InventoryCloseEvent event) {
-  }
+    /**
+     * It adds a button to the button map
+     *
+     * @param slot   The slot in the inventory that the button will be placed in.
+     * @param button The button to add to the inventory
+     */
+    public void addButton(int slot, InventoryButton button) {
+        this.buttonMap.put(slot, button);
+    }
 
-  /**
-   * Create an inventory object for the current user.
-   *
-   * @return An Inventory object.
-   */
-  protected abstract Inventory createInventory();
+    /**
+     * For each button in the button map, set the item in the inventory to the icon of the button.
+     *
+     * @param player The player who's inventory is being decorated.
+     */
+    public void decorate(Player player) {
+        this.buttonMap.forEach((slot, button) -> {
+            ItemStack icon = button.getIconCreator().apply(player);
+            this.inventory.setItem(slot, icon);
+        });
+    }
+
+    @Override
+    public void onClick(InventoryClickEvent event) {
+        event.setCancelled(true);
+        int slot = event.getSlot();
+        InventoryButton button = this.buttonMap.get(slot);
+        if (button != null) {
+            button.getEventConsumer().accept(event);
+        }
+    }
+
+    @Override
+    public void onOpen(InventoryOpenEvent event) {
+        this.decorate((Player) event.getPlayer());
+    }
+
+    @Override
+    public void onClose(InventoryCloseEvent event) {
+    }
+
+    /**
+     * Create an inventory object for the current user.
+     *
+     * @return An Inventory object.
+     */
+    protected abstract Inventory createInventory();
 
 }
