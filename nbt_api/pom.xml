@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>lib.brainsynder.v2</groupId>
+        <groupId>lib.brainsynder</groupId>
         <artifactId>BSLib</artifactId>
-        <version>0.0.2-SNAPSHOT</version>
+        <version>0.2.0</version>
     </parent>
     <artifactId>nbt_api</artifactId>
     <version>${internal.version}</version>

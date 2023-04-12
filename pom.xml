@@ -4,10 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>lib.brainsynder.v2</groupId>
+    <groupId>lib.brainsynder</groupId>
     <artifactId>BSLib</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.2.0</version>
 
     <modules>
         <module>nms_base</module>
@@ -73,7 +73,7 @@
                             <name>module.version</name>
                             <dependencies>
                                 <dependency>
-                                    <groupId>lib.brainsynder.v2</groupId>
+                                    <groupId>lib.brainsynder</groupId>
                                 </dependency>
                             </dependencies>
                         </property>
@@ -81,7 +81,7 @@
                             <name>internal.version</name>
                             <dependencies>
                                 <dependency>
-                                    <groupId>lib.brainsynder.v2</groupId>
+                                    <groupId>lib.brainsynder</groupId>
                                 </dependency>
                             </dependencies>
                         </property>
@@ -89,7 +89,7 @@
                             <name>java.version</name>
                             <dependencies>
                                 <dependency>
-                                    <groupId>lib.brainsynder.v2</groupId>
+                                    <groupId>lib.brainsynder</groupId>
                                 </dependency>
                             </dependencies>
                         </property>
@@ -97,7 +97,7 @@
                             <name>spigot.version</name>
                             <dependencies>
                                 <dependency>
-                                    <groupId>lib.brainsynder.v2</groupId>
+                                    <groupId>lib.brainsynder</groupId>
                                 </dependency>
                             </dependencies>
                         </property>

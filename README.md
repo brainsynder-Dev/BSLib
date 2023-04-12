@@ -23,7 +23,7 @@ BSLib is a collection of useful classes, builders, helpers, and features such as
 </repository>
 
 <dependency>
-    <groupId>lib.brainsynder.v2</groupId>
+    <groupId>lib.brainsynder</groupId>
     <artifactId>API</artifactId>
     <version> {CURRENT_VERSION} </version>
 </dependency>
@@ -31,7 +31,7 @@ BSLib is a collection of useful classes, builders, helpers, and features such as
 
 <!--  Command API  ------  !!! OPTIONAL !!!  -->
 <dependency>
-    <groupId>lib.brainsynder.v2</groupId>
+    <groupId>lib.brainsynder</groupId>
     <artifactId>command_api</artifactId>
     <version> {CURRENT_VERSION} </version>
 </dependency>
