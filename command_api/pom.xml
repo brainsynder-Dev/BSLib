@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>lib.brainsynder</groupId>
+        <groupId>lib.brainsynder.v2</groupId>
         <artifactId>BSLib</artifactId>
         <version>0.0.2-SNAPSHOT</version>
     </parent>
@@ -62,7 +62,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>lib.brainsynder</groupId>
+            <groupId>lib.brainsynder.v2</groupId>
             <artifactId>API</artifactId>
             <version>${module.version}</version>
             <scope>compile</scope>
