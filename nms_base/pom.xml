@@ -34,7 +34,6 @@
             <artifactId>nbt_api</artifactId>
             <version>${internal.version}</version>
             <scope>compile</scope>
-            <optional>false</optional>
         </dependency>
     </dependencies>
 </project>
