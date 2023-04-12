@@ -15,6 +15,7 @@
 
     <properties>
         <minecraft.version>1.19.3</minecraft.version>
+        <module.info>-${minecraft.version}</module.info>
 
         <java.version>17</java.version>
         <spigot.version>${minecraft.version}-R0.1-SNAPSHOT</spigot.version>
