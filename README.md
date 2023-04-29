@@ -16,20 +16,39 @@ BSLib is a collection of useful classes, builders, helpers, and features such as
 
 <h1>How to add it to my project</h1>
 
-```
+```xml
 <repository>
     <id>bs-public</id>
     <url>https://repo.pluginwiki.us/repository/maven-releases/</url>
 </repository>
 
+
 <dependency>
     <groupId>lib.brainsynder</groupId>
     <artifactId>API</artifactId>
     <version> {CURRENT_VERSION} </version>
+    <scope>compile</scope>
+
+    <!--  This is required because Maven is being a pain  -->
+    <!--  and including the un-shaded dependencies as well  -->
+    <exclusions>
+        <exclusion>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+        </exclusion>
+        <exclusion>
+            <groupId>com.eclipsesource.minimal-json</groupId>
+            <artifactId>minimal-json</artifactId>
+        </exclusion>
+        <exclusion>
+            <groupId>com.github.cryptomorin</groupId>
+            <artifactId>XSeries</artifactId>
+        </exclusion>
+    </exclusions>
 </dependency>
 
 
-<!--  Command API  ------  !!! OPTIONAL !!!  -->
+<!--  Command API  -  !!! OPTIONAL !!!  -->
 <dependency>
     <groupId>lib.brainsynder</groupId>
     <artifactId>command_api</artifactId>
@@ -41,11 +60,12 @@ BSLib is a collection of useful classes, builders, helpers, and features such as
 <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-shade-plugin</artifactId>
-    <version>3.2.1</version>
+    <version>3.4.1</version>
     <configuration>
         <minimizeJar>true</minimizeJar>
         <createDependencyReducedPom>false</createDependencyReducedPom>
         <relocations>
+            <!--  Remember to relocate as to not cause issues  -->
             <relocation>
                 <pattern>lib.brainsynder</pattern>
                 <shadedPattern>YOUR.PACKAGE.shaded.bslib</shadedPattern>
