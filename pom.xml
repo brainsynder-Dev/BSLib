@@ -55,7 +55,7 @@
         <jenkins.buildNumber>-2</jenkins.buildNumber>
         <module.version>V2-B${jenkins.buildNumber}</module.version>
 
-        <internal.version>V2</internal.version>
+        <internal.version>V2.1</internal.version>
     </properties>
 
     <build>
