@@ -3,8 +3,8 @@ package lib.brainsynder.strings;
 public class WordUtils {
     /**
      * <p>Capitalizes all the whitespace separated words in a String.
-     * Only the first letter of each word is changed. To convert the 
-     * rest of each word to lowercase at the same time, 
+     * Only the first letter of each word is changed. To convert the
+     * rest of each word to lowercase at the same time,
      * use {@link #capitalizeFully(String)}.</p>
      *
      * <p>Whitespace is defined by {@link Character#isWhitespace(char)}.
@@ -17,8 +17,8 @@ public class WordUtils {
      * WordUtils.capitalize("")          = ""
      * WordUtils.capitalize("i am FINE") = "I Am FINE"
      * </pre>
-     * 
-     * @param input  the String to capitalize, may be null
+     *
+     * @param input the String to capitalize, may be null
      * @return capitalized String, <code>null</code> if null String input
      * @see #uncapitalize(String)
      * @see #capitalizeFully(String)
@@ -29,8 +29,8 @@ public class WordUtils {
 
     /**
      * <p>Capitalizes all the delimiter separated words in a String.
-     * Only the first letter of each word is changed. To convert the 
-     * rest of each word to lowercase at the same time, 
+     * Only the first letter of each word is changed. To convert the
+     * rest of each word to lowercase at the same time,
      * use {@link #capitalizeFully(String, char[])}.</p>
      *
      * <p>The delimiters represent a set of characters understood to separate words.
@@ -48,9 +48,9 @@ public class WordUtils {
      * WordUtils.capitalize("i am fine", null)  = "I Am Fine"
      * WordUtils.capitalize("i aM.fine", {'.'}) = "I aM.Fine"
      * </pre>
-     * 
-     * @param input  the String to capitalize, may be null
-     * @param delimiters  set of characters to determine capitalization, null means whitespace
+     *
+     * @param input      the String to capitalize, may be null
+     * @param delimiters set of characters to determine capitalization, null means whitespace
      * @return capitalized String, <code>null</code> if null String input
      * @see #uncapitalize(String)
      * @see #capitalizeFully(String)
@@ -82,8 +82,8 @@ public class WordUtils {
     }
 
     /**
-     * <p>Converts all the whitespace separated words in a String into capitalized words, 
-     * that is each word is made up of a titlecase character and then a series of 
+     * <p>Converts all the whitespace separated words in a String into capitalized words,
+     * that is each word is made up of a titlecase character and then a series of
      * lowercase characters.  </p>
      *
      * <p>Whitespace is defined by {@link Character#isWhitespace(char)}.
@@ -96,8 +96,8 @@ public class WordUtils {
      * WordUtils.capitalizeFully("")          = ""
      * WordUtils.capitalizeFully("i am FINE") = "I Am Fine"
      * </pre>
-     * 
-     * @param input  the String to capitalize, may be null
+     *
+     * @param input the String to capitalize, may be null
      * @return capitalized String, <code>null</code> if null String input
      */
     public static String capitalizeFully(String input) {
@@ -105,8 +105,8 @@ public class WordUtils {
     }
 
     /**
-     * <p>Converts all the delimiter separated words in a String into capitalized words, 
-     * that is each word is made up of a titlecase character and then a series of 
+     * <p>Converts all the delimiter separated words in a String into capitalized words,
+     * that is each word is made up of a titlecase character and then a series of
      * lowercase characters. </p>
      *
      * <p>The delimiters represent a set of characters understood to separate words.
@@ -124,9 +124,9 @@ public class WordUtils {
      * WordUtils.capitalizeFully(*, new char[0])     = *
      * WordUtils.capitalizeFully("i aM.fine", {'.'}) = "I am.Fine"
      * </pre>
-     * 
-     * @param input  the String to capitalize, may be null
-     * @param delimiters  set of characters to determine capitalization, null means whitespace
+     *
+     * @param input      the String to capitalize, may be null
+     * @param delimiters set of characters to determine capitalization, null means whitespace
      * @return capitalized String, <code>null</code> if null String input
      * @since 2.1
      */
@@ -151,8 +151,8 @@ public class WordUtils {
      * WordUtils.uncapitalize("")          = ""
      * WordUtils.uncapitalize("I Am FINE") = "i am fINE"
      * </pre>
-     * 
-     * @param input  the String to uncapitalize, may be null
+     *
+     * @param input the String to uncapitalize, may be null
      * @return uncapitalized String, <code>null</code> if null String input
      * @see #capitalize(String)
      */
@@ -178,9 +178,9 @@ public class WordUtils {
      * WordUtils.uncapitalize(*, new char[0])     = *
      * WordUtils.uncapitalize("I AM.FINE", {'.'}) = "i AM.fINE"
      * </pre>
-     * 
-     * @param input  the String to uncapitalize, may be null
-     * @param delimiters  set of characters to determine uncapitalization, null means whitespace
+     *
+     * @param input      the String to uncapitalize, may be null
+     * @param delimiters set of characters to determine uncapitalization, null means whitespace
      * @return uncapitalized String, <code>null</code> if null String input
      * @see #capitalize(String)
      * @since 2.1
@@ -211,24 +211,24 @@ public class WordUtils {
 
     /**
      * <p>Swaps the case of a String using a word based algorithm.</p>
-     * 
+     *
      * <ul>
      *  <li>Upper case character converts to Lower case</li>
      *  <li>Title case character converts to Lower case</li>
      *  <li>Lower case character after Whitespace or at start converts to Title case</li>
      *  <li>Other Lower case character converts to Upper case</li>
      * </ul>
-     * 
+     *
      * <p>Whitespace is defined by {@link Character#isWhitespace(char)}.
      * A <code>null</code> input String returns <code>null</code>.</p>
-     * 
+     *
      * <pre>
      * StringUtils.swapCase(null)                 = null
      * StringUtils.swapCase("")                   = ""
      * StringUtils.swapCase("The dog has a BONE") = "tHE DOG HAS A bone"
      * </pre>
-     * 
-     * @param input  the String to swap case, may be null
+     *
+     * @param input the String to swap case, may be null
      * @return the changed String, <code>null</code> if null String input
      */
     public static String swapCase(String input) {
@@ -264,7 +264,7 @@ public class WordUtils {
 
     /**
      * <p>Extracts the initial letters from each word in the String.</p>
-     * 
+     *
      * <p>The first letter of the string and all first letters after
      * whitespace are returned as a new string.
      * Their case is not changed.</p>
@@ -279,9 +279,9 @@ public class WordUtils {
      * WordUtils.initials("Ben J.Lee")      = "BJ"
      * </pre>
      *
-     * @param input  the String to get initials from, may be null
+     * @param input the String to get initials from, may be null
      * @return String of initial letters, <code>null</code> if null String input
-     * @see #initials(String,char[])
+     * @see #initials(String, char[])
      * @since 2.2
      */
     public static String initials(String input) {
@@ -290,7 +290,7 @@ public class WordUtils {
 
     /**
      * <p>Extracts the initial letters from each word in the String.</p>
-     * 
+     *
      * <p>The first letter of the string and all first letters after the
      * defined delimiters are returned as a new string.
      * Their case is not changed.</p>
@@ -308,9 +308,9 @@ public class WordUtils {
      * WordUtils.initials("Ben J.Lee", [' ','.']) = "BJL"
      * WordUtils.initials(*, new char[0])         = ""
      * </pre>
-     * 
-     * @param input  the String to get initials from, may be null
-     * @param delimiters  set of characters to determine words, null means whitespace
+     *
+     * @param input      the String to get initials from, may be null
+     * @param delimiters set of characters to determine words, null means whitespace
      * @return String of initial letters, <code>null</code> if null String input
      * @see #initials(String)
      * @since 2.2
@@ -342,7 +342,7 @@ public class WordUtils {
      * Is the character a delimiter.
      *
      * @param character  the character to check
-     * @param delimiters  the delimiters
+     * @param delimiters the delimiters
      * @return true if it is a delimiter
      */
     private static boolean isDelimiter(char character, char[] delimiters) {

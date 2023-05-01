@@ -216,9 +216,9 @@ public class Colorize {
      * It takes two hex colors and a string, and returns the string with each character colored with a color that fades
      * from the first hex color to the second hex color
      *
-     * @param firstHex The first hex color to start with.
+     * @param firstHex  The first hex color to start with.
      * @param secondHex The hex color you want to end on.
-     * @param text The text to be colored
+     * @param text      The text to be colored
      * @return A string with the text in it, with the colors fading from the first color to the second color.
      */
     public static String colorFadeText(String firstHex, String secondHex, String text) {
