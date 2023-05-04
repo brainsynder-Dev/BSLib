@@ -12,7 +12,8 @@ public class StorageTagDouble extends StoragePrimitive {
      */
     private double data;
 
-    StorageTagDouble() {}
+    StorageTagDouble() {
+    }
 
     public StorageTagDouble(double data) {
         this.data = data;

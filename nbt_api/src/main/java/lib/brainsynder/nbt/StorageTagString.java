@@ -54,7 +54,7 @@ public class StorageTagString extends StorageBase {
     void read(DataInput input, int depth, NBTSizeTracker sizeTracker) throws IOException {
         sizeTracker.read(288L);
         this.data = input.readUTF();
-        sizeTracker.read(16 * this.data.length());
+        sizeTracker.read(16L * this.data.length());
     }
 
     /**
@@ -123,7 +123,7 @@ public class StorageTagString extends StorageBase {
     public long getLong() {
         try {
             return Long.parseLong(data);
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             e.printStackTrace();
             return 0;
         }
@@ -132,7 +132,7 @@ public class StorageTagString extends StorageBase {
     public int getInt() {
         try {
             return Integer.parseInt(data);
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             e.printStackTrace();
             return 0;
         }
@@ -141,7 +141,7 @@ public class StorageTagString extends StorageBase {
     public short getShort() {
         try {
             return Short.parseShort(data);
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             e.printStackTrace();
             return 0;
         }
@@ -150,7 +150,7 @@ public class StorageTagString extends StorageBase {
     public byte getByte() {
         try {
             return Byte.parseByte(data);
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             e.printStackTrace();
             return 0;
         }
@@ -159,7 +159,7 @@ public class StorageTagString extends StorageBase {
     public double getDouble() {
         try {
             return Double.parseDouble(data);
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             e.printStackTrace();
             return 0;
         }
@@ -169,7 +169,7 @@ public class StorageTagString extends StorageBase {
     public float getFloat() {
         try {
             return Float.parseFloat(data);
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             e.printStackTrace();
             return 0;
         }

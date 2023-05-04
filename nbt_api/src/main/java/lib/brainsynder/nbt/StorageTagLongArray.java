@@ -11,7 +11,8 @@ import java.util.List;
 public class StorageTagLongArray extends StorageBase {
     private long[] longArray;
 
-    StorageTagLongArray() {}
+    StorageTagLongArray() {
+    }
 
     public StorageTagLongArray(long[] longs) {
         this.longArray = longs;
@@ -50,7 +51,7 @@ public class StorageTagLongArray extends StorageBase {
     void read(DataInput input, int depth, NBTSizeTracker sizeTracker) throws IOException {
         sizeTracker.read(192L);
         int i = input.readInt();
-        sizeTracker.read(64 * i);
+        sizeTracker.read(64L * i);
         this.longArray = new long[i];
 
         for (int j = 0; j < i; ++j) {

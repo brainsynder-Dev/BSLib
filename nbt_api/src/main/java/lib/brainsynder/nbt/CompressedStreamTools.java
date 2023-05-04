@@ -22,6 +22,7 @@ public class CompressedStreamTools {
 
         return base;
     }
+
     public static StorageTagCompound readCompressed(InputStream is) throws IOException {
         StorageBase nbtbase = readCompressedBase(is);
 

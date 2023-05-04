@@ -12,7 +12,8 @@ public class StorageTagShort extends StoragePrimitive {
      */
     private short data;
 
-    public StorageTagShort() {}
+    public StorageTagShort() {
+    }
 
     public StorageTagShort(short data) {
         this.data = data;

@@ -2,7 +2,7 @@ package lib.brainsynder.nbt;
 
 import lib.brainsynder.nbt.other.NBTException;
 
-public class StringReader  {
+public class StringReader {
     private static final char SYNTAX_ESCAPE = '\\';
     private static final char SYNTAX_DOUBLE_QUOTE = '"';
     private static final char SYNTAX_SINGLE_QUOTE = '\'';
@@ -19,7 +19,7 @@ public class StringReader  {
         this.string = string;
     }
 
-    
+
     public String getString() {
         return string;
     }
@@ -32,7 +32,7 @@ public class StringReader  {
         return string.length() - cursor;
     }
 
-    
+
     public int getTotalLength() {
         return string.length();
     }
@@ -42,32 +42,32 @@ public class StringReader  {
         return cursor;
     }
 
-    
+
     public String getRead() {
         return string.substring(0, cursor);
     }
 
-    
+
     public String getRemaining() {
         return string.substring(cursor);
     }
 
-    
+
     public boolean canRead(final int length) {
         return cursor + length <= string.length();
     }
 
-    
+
     public boolean canRead() {
         return canRead(1);
     }
 
-    
+
     public char peek() {
         return string.charAt(cursor);
     }
 
-    
+
     public char peek(final int offset) {
         return string.charAt(cursor + offset);
     }
@@ -96,7 +96,7 @@ public class StringReader  {
 
     public void expect(final char c) throws NBTException {
         if (!canRead() || peek() != c) {
-            throw new NBTException ("Expected '" + c + "'", getString(), getCursor());
+            throw new NBTException("Expected '" + c + "'", getString(), getCursor());
         }
         skip();
     }

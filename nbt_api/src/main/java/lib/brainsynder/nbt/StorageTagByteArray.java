@@ -14,7 +14,8 @@ public class StorageTagByteArray extends StorageBase {
      */
     private byte[] data;
 
-    StorageTagByteArray() {}
+    StorageTagByteArray() {
+    }
 
     public StorageTagByteArray(byte[] data) {
         this.data = data;
@@ -50,7 +51,7 @@ public class StorageTagByteArray extends StorageBase {
     void read(DataInput input, int depth, NBTSizeTracker sizeTracker) throws IOException {
         sizeTracker.read(192L);
         int i = input.readInt();
-        sizeTracker.read(8 * i);
+        sizeTracker.read(8L * i);
         this.data = new byte[i];
         input.readFully(this.data);
     }

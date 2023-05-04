@@ -12,7 +12,8 @@ public class StorageTagInt extends StoragePrimitive {
      */
     private int data;
 
-    StorageTagInt() {}
+    StorageTagInt() {
+    }
 
     public StorageTagInt(int data) {
         this.data = data;

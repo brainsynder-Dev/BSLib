@@ -121,7 +121,7 @@ public class StorageTagCompound extends StorageBase {
 
             while ((b0 = readType(input, sizeTracker)) != 0) {
                 String s = readKey(input, sizeTracker);
-                sizeTracker.read(224 + 16 * s.length());
+                sizeTracker.read(224 + 16L * s.length());
                 StorageBase nbtbase = readNBT(b0, s, input, depth + 1, sizeTracker);
 
                 if (this.tagMap.put(s, nbtbase) != null) {
@@ -146,34 +146,34 @@ public class StorageTagCompound extends StorageBase {
         return this.tagMap.size();
     }
 
-    public StorageTagCompound set (String key, Object object) {
-        if (object instanceof Boolean){
+    public StorageTagCompound set(String key, Object object) {
+        if (object instanceof Boolean) {
             setBoolean(key, (Boolean) object);
-        }else if (object instanceof Integer){
+        } else if (object instanceof Integer) {
             setInteger(key, (Integer) object);
-        }else if (object instanceof Byte){
+        } else if (object instanceof Byte) {
             setByte(key, (Byte) object);
-        }else if (object instanceof Float){
+        } else if (object instanceof Float) {
             setFloat(key, (Float) object);
-        }else if (object instanceof Double){
+        } else if (object instanceof Double) {
             setDouble(key, (Double) object);
-        }else if (object instanceof Long){
+        } else if (object instanceof Long) {
             setLong(key, (Long) object);
-        }else if (object instanceof Short){
+        } else if (object instanceof Short) {
             setShort(key, (Short) object);
-        }else if (object instanceof Location){
+        } else if (object instanceof Location) {
             setLocation(key, (Location) object);
-        }else if (object instanceof Enum){
+        } else if (object instanceof Enum) {
             setEnum(key, (Enum) object);
-        }else if (object instanceof Color){
+        } else if (object instanceof Color) {
             setColor(key, (Color) object);
-        }else if (object instanceof byte[]){
+        } else if (object instanceof byte[]) {
             setByteArray(key, (byte[]) object);
-        }else if (object instanceof int[]){
+        } else if (object instanceof int[]) {
             setIntArray(key, (int[]) object);
-        }else if (object instanceof String){
+        } else if (object instanceof String) {
             setString(key, (String) object);
-        }else if (object instanceof UUID){
+        } else if (object instanceof UUID) {
             setUniqueId(key, (UUID) object);
         }
         return this;
@@ -231,7 +231,8 @@ public class StorageTagCompound extends StorageBase {
             String raw = getString(key);
             try {
                 return UUID.fromString(raw);
-            }catch (IllegalArgumentException ignored) {}
+            } catch (IllegalArgumentException ignored) {
+            }
         }
 
         return UUID.randomUUID();
@@ -411,8 +412,7 @@ public class StorageTagCompound extends StorageBase {
         // Was saved as an int
         if (base instanceof StorageTagInt) return Color.fromRGB(((StorageTagInt) base).getInt());
 
-        if (base instanceof StorageTagString) {
-            StorageTagString tagString = (StorageTagString) base;
+        if (base instanceof StorageTagString tagString) {
             String string = tagString.getString();
 
             // String is a HEX code
@@ -576,8 +576,7 @@ public class StorageTagCompound extends StorageBase {
             return String.valueOf(((StorageTagShort) base).getShort());
         if (base instanceof StorageTagString)
             return String.valueOf(base.getString());
-        if (base instanceof StorageTagList) {
-            StorageTagList list = (StorageTagList) base;
+        if (base instanceof StorageTagList list) {
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < list.tagCount(); i++) {
                 builder.append(fetchValue(list.get(i)));
@@ -746,7 +745,6 @@ public class StorageTagCompound extends StorageBase {
         }
         return this;
     }
-
 
 
     /**

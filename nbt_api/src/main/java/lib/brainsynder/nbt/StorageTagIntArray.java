@@ -14,7 +14,8 @@ public class StorageTagIntArray extends StorageBase {
      */
     private int[] intArray;
 
-    StorageTagIntArray() {}
+    StorageTagIntArray() {
+    }
 
     public StorageTagIntArray(int[] ints) {
         this.intArray = ints;
@@ -53,7 +54,7 @@ public class StorageTagIntArray extends StorageBase {
     void read(DataInput input, int depth, NBTSizeTracker sizeTracker) throws IOException {
         sizeTracker.read(192L);
         int i = input.readInt();
-        sizeTracker.read(32 * i);
+        sizeTracker.read(32L * i);
         this.intArray = new int[i];
 
         for (int j = 0; j < i; ++j) {

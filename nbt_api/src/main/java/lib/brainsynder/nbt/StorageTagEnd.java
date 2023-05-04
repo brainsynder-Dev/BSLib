@@ -13,7 +13,8 @@ public class StorageTagEnd extends StorageBase {
     /**
      * Write the actual data contents of the tag, implemented in NBT extension classes
      */
-    void write(DataOutput output) {}
+    void write(DataOutput output) {
+    }
 
     /**
      * Gets the type byte for the tag.

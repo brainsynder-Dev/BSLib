@@ -12,7 +12,8 @@ public class StorageTagByte extends StoragePrimitive {
      */
     private byte data;
 
-    StorageTagByte() {}
+    StorageTagByte() {
+    }
 
     public StorageTagByte(byte data) {
         this.data = data;

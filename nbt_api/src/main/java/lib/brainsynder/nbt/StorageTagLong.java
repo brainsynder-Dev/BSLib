@@ -12,7 +12,8 @@ public class StorageTagLong extends StoragePrimitive {
      */
     private long data;
 
-    StorageTagLong() {}
+    StorageTagLong() {
+    }
 
     public StorageTagLong(long data) {
         this.data = data;

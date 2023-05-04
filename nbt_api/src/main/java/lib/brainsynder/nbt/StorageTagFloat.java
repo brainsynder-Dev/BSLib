@@ -12,7 +12,8 @@ public class StorageTagFloat extends StoragePrimitive {
      */
     private float data;
 
-    StorageTagFloat() {}
+    StorageTagFloat() {
+    }
 
     public StorageTagFloat(float data) {
         this.data = data;

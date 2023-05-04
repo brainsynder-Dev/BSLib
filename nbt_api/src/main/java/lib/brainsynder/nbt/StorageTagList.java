@@ -102,7 +102,7 @@ public class StorageTagList extends StorageBase {
             if (this.tagType == 0) {
                 this.tagType = nbt.getId();
             } else if (this.tagType != nbt.getId()) {
-                LOGGER.warn("Mismatching tag types to tag list ("+nbt.getClass().getSimpleName()+" != "+StorageBase.createNewByType(tagType).getClass().getSimpleName()+")");
+                LOGGER.warn("Mismatching tag types to tag list (" + nbt.getClass().getSimpleName() + " != " + StorageBase.createNewByType(tagType).getClass().getSimpleName() + ")");
                 return this;
             }
 
@@ -121,7 +121,7 @@ public class StorageTagList extends StorageBase {
             if (this.tagType == 0) {
                 this.tagType = nbt.getId();
             } else if (this.tagType != nbt.getId()) {
-                LOGGER.warn("Mismatching tag types to tag list ("+nbt.getClass().getSimpleName()+" != "+StorageBase.createNewByType(tagType).getClass().getSimpleName()+")");
+                LOGGER.warn("Mismatching tag types to tag list (" + nbt.getClass().getSimpleName() + " != " + StorageBase.createNewByType(tagType).getClass().getSimpleName() + ")");
                 return;
             }
 

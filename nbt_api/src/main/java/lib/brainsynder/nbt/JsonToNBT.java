@@ -20,7 +20,7 @@ public class JsonToNBT {
         this.reader = reader;
     }
 
-    public static JsonToNBT parse (String string) {
+    public static JsonToNBT parse(String string) {
         return new JsonToNBT(new StringReader(string));
     }
 
@@ -76,7 +76,7 @@ public class JsonToNBT {
     private StorageBase parsePrimitive(String value) {
         try {
             if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
-                return new StorageTagByte((byte)(Boolean.getBoolean(value) ? 1 : 0));
+                return new StorageTagByte((byte) (Boolean.getBoolean(value) ? 1 : 0));
             }
 
             if (FLOAT_PATTERN.matcher(value).matches()) {
@@ -106,7 +106,8 @@ public class JsonToNBT {
             if (DOUBLE_PATTERN2.matcher(value).matches()) { //Without the d (EG: 1.0d -> 1.0)
                 return new StorageTagDouble(Double.parseDouble(value));
             }
-        } catch (NumberFormatException ignored) {}
+        } catch (NumberFormatException ignored) {
+        }
 
         return new StorageTagString(value);
     }
@@ -134,7 +135,7 @@ public class JsonToNBT {
         StorageTagCompound compoundTag = new StorageTagCompound();
         this.reader.skipWhitespace();
 
-        while(this.reader.canRead() && this.reader.peek() != '}') {
+        while (this.reader.canRead() && this.reader.peek() != '}') {
             int i = this.reader.getCursor();
             String string = this.readString();
             if (string.isEmpty()) {
@@ -166,7 +167,7 @@ public class JsonToNBT {
             StorageTagList listTag = new StorageTagList();
             int reader = -1;
 
-            while(this.reader.peek() != ']') {
+            while (this.reader.peek() != ']') {
                 int i = this.reader.getCursor();
                 StorageBase tag = this.parseTag();
                 int reader2 = tag.getId();
@@ -215,7 +216,7 @@ public class JsonToNBT {
     private <T extends Number> List<T> readArray(byte b, byte b1) throws NBTException {
         List<T> list = Lists.newArrayList();
 
-        while(true) {
+        while (true) {
             if (this.reader.peek() != ']') {
                 int i = this.reader.getCursor();
                 StorageBase tag = this.parseTag();
