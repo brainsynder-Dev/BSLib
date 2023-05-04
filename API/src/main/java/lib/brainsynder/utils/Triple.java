@@ -19,10 +19,12 @@ public final class Triple<L, M, R> {
         this.left = left;
         return this;
     }
+
     public Triple setMiddle(M middle) {
         this.middle = middle;
         return this;
     }
+
     public Triple setRight(R right) {
         this.right = right;
         return this;
@@ -31,9 +33,11 @@ public final class Triple<L, M, R> {
     public L getLeft() {
         return this.left;
     }
+
     public M getMiddle() {
         return this.middle;
     }
+
     public R getRight() {
         return this.right;
     }

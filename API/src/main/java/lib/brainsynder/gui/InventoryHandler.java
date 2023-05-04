@@ -13,24 +13,24 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
  */
 public interface InventoryHandler {
 
-  /**
-   * > This function is called when a player clicks on an item in the inventory
-   *
-   * @param event The InventoryClickEvent that was fired.
-   */
-  void onClick(InventoryClickEvent event);
+    /**
+     * > This function is called when a player clicks on an item in the inventory
+     *
+     * @param event The InventoryClickEvent that was fired.
+     */
+    void onClick(InventoryClickEvent event);
 
-  /**
-   * This function is called when a player opens an inventory.
-   *
-   * @param event The event that was called.
-   */
-  void onOpen(InventoryOpenEvent event);
+    /**
+     * This function is called when a player opens an inventory.
+     *
+     * @param event The event that was called.
+     */
+    void onOpen(InventoryOpenEvent event);
 
-  /**
-   * This function is called when a player closes an inventory.
-   *
-   * @param event The event that was called.
-   */
-  void onClose(InventoryCloseEvent event);
+    /**
+     * This function is called when a player closes an inventory.
+     *
+     * @param event The event that was called.
+     */
+    void onClose(InventoryCloseEvent event);
 }

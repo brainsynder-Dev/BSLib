@@ -51,7 +51,8 @@ public class SimpleWebhook {
 
                 connection.getInputStream().close();
                 connection.disconnect();
-            }catch(IOException ignored) {}
+            } catch (IOException ignored) {
+            }
         });
     }
 }

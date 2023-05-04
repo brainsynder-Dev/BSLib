@@ -16,7 +16,7 @@ public class PagedList<T> extends ArrayList<T> {
 
     /**
      * @param contentLimit - Number of items can be in each page
-     * @param objects - Collection of items to be added to the list
+     * @param objects      - Collection of items to be added to the list
      */
     public PagedList(int contentLimit, T... objects) {
         this(contentLimit, Arrays.asList(objects));
@@ -24,7 +24,7 @@ public class PagedList<T> extends ArrayList<T> {
 
     /**
      * @param contentLimit - Number of items can be in each page
-     * @param objects - Collection of items to be added to the list
+     * @param objects      - Collection of items to be added to the list
      */
     public PagedList(int contentLimit, List<T> objects) {
         this.contentLimit = contentLimit;
@@ -63,7 +63,8 @@ public class PagedList<T> extends ArrayList<T> {
      */
     public List<T> getPage(int page) {
         page = (page - 1);
-        if (page < 0 || page >= totalPages()) throw new IndexOutOfBoundsException("Index: " + page + ", Size: " + totalPages());
+        if (page < 0 || page >= totalPages())
+            throw new IndexOutOfBoundsException("Index: " + page + ", Size: " + totalPages());
         List<T> objects = new ArrayList<>();
         int min = page * contentLimit;
         int max = ((page * contentLimit) + contentLimit);

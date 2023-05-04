@@ -6,7 +6,7 @@ public interface VersionRestricted {
      *
      * @return boolean
      */
-    default boolean isSupported () {
+    default boolean isSupported() {
         SupportedVersion support = getSupportedVersion();
         if (support == null) return true;
         if (support.maxVersion() != ServerVersion.UNKNOWN)
@@ -14,17 +14,17 @@ public interface VersionRestricted {
         return ServerVersion.isEqualNew(support.version());
     }
 
-    default String toSupportString () {
+    default String toSupportString() {
         SupportedVersion support = getSupportedVersion();
         if (support == null) return "UNKNOWN";
         if (support.maxVersion() != ServerVersion.UNKNOWN)
-            return support.version().name()+" -> "+support.maxVersion().name();
-        return support.version().name()+" -> LATEST";
+            return support.version().name() + " -> " + support.maxVersion().name();
+        return support.version().name() + " -> LATEST";
     }
 
     /**
      * Will return a {@link lib.brainsynder.SupportedVersion}
-     *   If class does not have it will return `null`
+     * If class does not have it will return `null`
      *
      * @return {@link lib.brainsynder.SupportedVersion}
      */

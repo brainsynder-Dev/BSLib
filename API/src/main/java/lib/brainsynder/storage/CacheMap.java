@@ -33,14 +33,13 @@ public class CacheMap<K, V> {
     }
 
     /**
-     *
      * @param key The Key you are searching for
      * @return
      */
     public V get(K key) {
         this.evict();
         CacheMap.ExpireEntry entry = this.keyLookup.get(key);
-        return entry != null? (V) entry.value :null;
+        return entry != null ? (V) entry.value : null;
     }
 
     public V put(K key, V value, long expireDelay, TimeUnit expireUnit) {
@@ -50,7 +49,7 @@ public class CacheMap<K, V> {
         CacheMap.ExpireEntry entry = new CacheMap.ExpireEntry(this.ticker.read() + TimeUnit.NANOSECONDS.convert(expireDelay, expireUnit), key, value);
         CacheMap.ExpireEntry previous = this.keyLookup.put(key, entry);
         this.expireQueue.add(entry);
-        return previous != null?(V)previous.value :null;
+        return previous != null ? (V) previous.value : null;
     }
 
     public boolean containsKey(K key) {
@@ -64,12 +63,12 @@ public class CacheMap<K, V> {
 
         CacheMap.ExpireEntry entry;
         do {
-            if(!var2.hasNext()) {
+            if (!var2.hasNext()) {
                 return false;
             }
 
-            entry = (CacheMap.ExpireEntry)var2.next();
-        } while(!Objects.equal(value, entry.value));
+            entry = (CacheMap.ExpireEntry) var2.next();
+        } while (!Objects.equal(value, entry.value));
 
         return true;
     }
@@ -77,7 +76,7 @@ public class CacheMap<K, V> {
     public V removeKey(K key) {
         this.evict();
         CacheMap.ExpireEntry entry = this.keyLookup.remove(key);
-        return entry != null?(V)entry.value :null;
+        return entry != null ? (V) entry.value : null;
     }
 
     public int size() {
@@ -119,9 +118,9 @@ public class CacheMap<K, V> {
     protected void evict() {
         long current = this.ticker.read();
 
-        while(this.expireQueue.size() > 0 && this.expireQueue.peek().time <= current) {
+        while (this.expireQueue.size() > 0 && this.expireQueue.peek().time <= current) {
             CacheMap.ExpireEntry entry = this.expireQueue.poll();
-            if(entry == this.keyLookup.get(entry.key)) {
+            if (entry == this.keyLookup.get(entry.key)) {
                 this.keyLookup.remove(entry.key);
             }
         }

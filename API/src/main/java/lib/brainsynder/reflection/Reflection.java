@@ -79,8 +79,8 @@ public class Reflection {
      * This function returns a Java class object for a given Minecraft class name.
      *
      * @param className The parameter `className` is a `String` representing the name of a class in the Minecraft game's
-     * codebase. The method `getMinecraftClass` takes this parameter and returns the corresponding `Class` object for that
-     * class. The method achieves this by appending the `className` parameter to the
+     *                  codebase. The method `getMinecraftClass` takes this parameter and returns the corresponding `Class` object for that
+     *                  class. The method achieves this by appending the `className` parameter to the
      * @return The method `getMinecraftClass` returns a `Class` object for the class with the specified name in the
      * `net.minecraft` package. The name of the class is passed as a parameter to the method.
      */
@@ -94,8 +94,8 @@ public class Reflection {
      * This function returns a Minecraft class based on the class name and sub-location provided.
      *
      * @param className The name of the class that you want to retrieve.
-     * @param subLoc The subLoc parameter is a String that represents the sub-package location within the "net.minecraft"
-     * package where the desired class is located.
+     * @param subLoc    The subLoc parameter is a String that represents the sub-package location within the "net.minecraft"
+     *                  package where the desired class is located.
      * @return The method is returning a Class object for the specified Minecraft class with the given className and
      * subLoc.
      */

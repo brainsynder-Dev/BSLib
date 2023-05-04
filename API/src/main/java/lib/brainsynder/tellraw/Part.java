@@ -21,7 +21,9 @@ public final class Part {
     public String hoverActionName = null;
     public String hoverActionData = null;
 
-    public Part (){}
+    public Part() {
+    }
+
     public Part(String text) {
         this.text = text;
     }
@@ -31,14 +33,14 @@ public final class Part {
      *
      * @return A JsonObject
      */
-    public JsonObject toJson () {
+    public JsonObject toJson() {
         JsonObject json = new JsonObject();
         json.set("text", text);
 
         if (this.color != null) {
             // Uses the ChatColor variable (Default MC colors)
             json.set("color", this.color.name().toLowerCase());
-        }else if ((customColor != null)) {
+        } else if ((customColor != null)) {
             // Uses the Color (Allows RGB/HEX colors) [1.16+]
             // Since 1.16 added the ability to have RGB/HEX colored messages
             json.set("color", Colorize.toHex(customColor.getRed(), customColor.getGreen(), customColor.getBlue()));
@@ -79,7 +81,7 @@ public final class Part {
             if (this.color != null) {
                 // Uses the ChatColor variable (Default MC colors)
                 json.name("color").value(this.color.name().toLowerCase());
-            }else if ((customColor != null)) {
+            } else if ((customColor != null)) {
                 // Uses the Color (Allows RGB/HEX colors) [1.16+]
                 // Since 1.16 added the ability to have RGB/HEX colored messages via TellRaw
                 json.name("color").value(Colorize.toHex(customColor.getRed(), customColor.getGreen(), customColor.getBlue()));

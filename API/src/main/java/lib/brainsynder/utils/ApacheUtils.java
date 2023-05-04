@@ -16,10 +16,10 @@ public class ApacheUtils {
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
      *
-     * @param input  the <code>InputStream</code> to read from
+     * @param input the <code>InputStream</code> to read from
      * @return the requested String
      * @throws NullPointerException if the input is null
-     * @throws IOException if an I/O error occurs
+     * @throws IOException          if an I/O error occurs
      */
     public static String toString(InputStream input) throws IOException {
         StringBuilderWriter sw = new StringBuilderWriter();
@@ -37,9 +37,9 @@ public class ApacheUtils {
      * This method uses {@link InputStreamReader}.
      *
      * @param input  the <code>InputStream</code> to read from
-     * @param output  the <code>Writer</code> to write to
+     * @param output the <code>Writer</code> to write to
      * @throws NullPointerException if the input or output is null
-     * @throws IOException if an I/O error occurs
+     * @throws IOException          if an I/O error occurs
      * @since Commons IO 1.1
      */
     public static void copy(InputStream input, Writer output)
@@ -60,10 +60,10 @@ public class ApacheUtils {
      * use the <code>copyLarge(Reader, Writer)</code> method.
      *
      * @param input  the <code>Reader</code> to read from
-     * @param output  the <code>Writer</code> to write to
+     * @param output the <code>Writer</code> to write to
      * @return the number of characters copied, or -1 if &gt; Integer.MAX_VALUE
      * @throws NullPointerException if the input or output is null
-     * @throws IOException if an I/O error occurs
+     * @throws IOException          if an I/O error occurs
      * @since Commons IO 1.1
      */
     public static int copy(Reader input, Writer output) throws IOException {
@@ -81,10 +81,10 @@ public class ApacheUtils {
      * <code>BufferedReader</code>.
      *
      * @param input  the <code>Reader</code> to read from
-     * @param output  the <code>Writer</code> to write to
+     * @param output the <code>Writer</code> to write to
      * @return the number of characters copied
      * @throws NullPointerException if the input or output is null
-     * @throws IOException if an I/O error occurs
+     * @throws IOException          if an I/O error occurs
      * @since Commons IO 1.3
      */
     public static long copyLarge(Reader input, Writer output) throws IOException {

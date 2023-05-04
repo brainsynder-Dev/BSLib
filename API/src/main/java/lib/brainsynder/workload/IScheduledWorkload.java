@@ -8,7 +8,7 @@ package lib.brainsynder.workload;
  * @author brainsynder
  */
 public interface IScheduledWorkload extends IWorkload {
-    default boolean shouldBeRescheduled () {
+    default boolean shouldBeRescheduled() {
         return false;
     }
 }

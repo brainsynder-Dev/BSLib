@@ -95,13 +95,13 @@ public class RandomCollection<E> {
             return value;
         }
 
-        public double getProbableChance () {
-            return MathUtils.trim(3, ( (percent / 85) * 100 ) );
+        public double getProbableChance() {
+            return MathUtils.trim(3, ((percent / 85) * 100));
         }
 
         @Override
         public String toString() {
-            return "Element{value=" + value +", percent=" + percent +'}';
+            return "Element{value=" + value + ", percent=" + percent + '}';
         }
 
         @Override

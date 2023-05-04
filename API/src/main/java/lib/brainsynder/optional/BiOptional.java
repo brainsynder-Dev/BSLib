@@ -8,21 +8,23 @@ import java.util.function.Supplier;
 
 public class BiOptional<T, U> {
 
-    @Nullable private final T left;
-    @Nullable private final U right;
+    @Nullable
+    private final T left;
+    @Nullable
+    private final U right;
 
     public BiOptional(@Nullable T left, @Nullable U right) {
         this.left = left;
         this.right = right;
     }
 
-    public static <T, U> BiOptional<T, U> of (T left) {
+    public static <T, U> BiOptional<T, U> of(T left) {
         Optional<T> LeftOption = Optional.empty();
         if (left != null) LeftOption = Optional.of(left);
         return from(LeftOption, Optional.empty());
     }
 
-    public static <T, U> BiOptional<T, U> of (T left, U right) {
+    public static <T, U> BiOptional<T, U> of(T left, U right) {
         Optional<T> LeftOption = Optional.empty();
         Optional<U> rightOption = Optional.empty();
         if (left != null) LeftOption = Optional.of(left);
@@ -30,7 +32,7 @@ public class BiOptional<T, U> {
         return from(LeftOption, rightOption);
     }
 
-    public static <T, U> BiOptional<T, U> empty () {
+    public static <T, U> BiOptional<T, U> empty() {
         return from(Optional.empty(), Optional.empty());
     }
 

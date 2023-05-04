@@ -43,7 +43,7 @@ public class BukkitUtils {
     /**
      * For each block in the cube, if it's on the edge of the cube, add it to the list.
      *
-     * @param loc The center of the cube
+     * @param loc      The center of the cube
      * @param distance The distance between each block.
      * @return A list of locations that are on the outside of a cube.
      */
@@ -76,14 +76,14 @@ public class BukkitUtils {
     /**
      * "Get all the blocks in a radius around a location, optionally hollow, optionally ignore air, optionally filter by
      * block type."
-     *
+     * <p>
      * The first parameter is the location to get the blocks around. The second parameter is the radius. The third
      * parameter is whether or not to ignore the blocks in the center. The fourth parameter is whether or not to ignore air
      * blocks. The fifth parameter is a predicate that determines whether or not to include a block
      *
      * @param location The location to get the blocks around.
-     * @param radius The radius of the sphere.
-     * @param hollow If true, the blocks on the edge of the radius will not be included.
+     * @param radius   The radius of the sphere.
+     * @param hollow   If true, the blocks on the edge of the radius will not be included.
      * @return A list of blocks in a radius.
      */
     public static List<Block> getBlocksInRadius(Location location, int radius, boolean hollow) {
@@ -93,14 +93,14 @@ public class BukkitUtils {
     /**
      * "Returns a list of blocks in a radius around a location, optionally ignoring height, optionally hollow, and
      * optionally filtering the blocks."
-     *
+     * <p>
      * The first parameter is the location to get the blocks around. The second parameter is the radius. The third
      * parameter is whether or not to ignore height. The fourth parameter is whether or not to make the radius hollow. The
      * fifth parameter is a predicate that filters the blocks
      *
-     * @param location The location to get the blocks around.
-     * @param radius The radius of the sphere.
-     * @param hollow If true, the blocks on the outer edge of the radius will not be included.
+     * @param location     The location to get the blocks around.
+     * @param radius       The radius of the sphere.
+     * @param hollow       If true, the blocks on the outer edge of the radius will not be included.
      * @param ignoreHeight If true, the height of the location will be ignored.
      * @return A list of blocks in a radius.
      */
@@ -111,15 +111,15 @@ public class BukkitUtils {
     /**
      * "Get all blocks in a radius around a location, optionally ignoring height, optionally hollow, and optionally only
      * including blocks that match a predicate."
-     *
+     * <p>
      * The first parameter is the location to get the blocks around. The second parameter is the radius to get the blocks
      * in. The third parameter is whether or not to ignore height. The fourth parameter is whether or not to make the
      * radius hollow. The fifth parameter is a predicate that the block must match in order to be included in the list
      *
-     * @param location The center of the sphere
-     * @param radius The radius of the sphere.
-     * @param hollow If true, the blocks in the middle of the sphere will be ignored.
-     * @param ignoreHeight If true, the y-axis will be ignored.
+     * @param location       The center of the sphere
+     * @param radius         The radius of the sphere.
+     * @param hollow         If true, the blocks in the middle of the sphere will be ignored.
+     * @param ignoreHeight   If true, the y-axis will be ignored.
      * @param blockPredicate A predicate that returns true if the block should be added to the list.
      * @return A list of blocks
      */
@@ -163,7 +163,7 @@ public class BukkitUtils {
      * It takes a location and a location to look at, and returns a new location with the same X, Y, and Z, but with the
      * Yaw and Pitch set to look at the second location
      *
-     * @param loc The location you want to look at.
+     * @param loc    The location you want to look at.
      * @param lookat The location you want to look at.
      * @return A Location object.
      */
@@ -313,8 +313,8 @@ public class BukkitUtils {
         TreeSet sortedSet = new TreeSet();
         Iterator i$ = toSort.iterator();
 
-        while(i$.hasNext()) {
-            String cur = (String)i$.next();
+        while (i$.hasNext()) {
+            String cur = (String) i$.next();
             sortedSet.add(cur);
         }
 
@@ -351,28 +351,28 @@ public class BukkitUtils {
         double z = vec.getZ();
         double xz = Math.sqrt(x * x + z * z);
         double pitch = Math.toDegrees(Math.atan(xz / y));
-        if(y <= 0.0D) {
+        if (y <= 0.0D) {
             pitch += 90.0D;
         } else {
             pitch -= 90.0D;
         }
 
-        return (float)pitch;
+        return (float) pitch;
     }
 
     public static float getYaw(Vector vec) {
         double x = vec.getX();
         double z = vec.getZ();
         double yaw = Math.toDegrees(Math.atan(-x / z));
-        if(z < 0.0D) {
+        if (z < 0.0D) {
             yaw += 180.0D;
         }
 
-        return (float)yaw;
+        return (float) yaw;
     }
 
     public static Vector normalize(Vector vec) {
-        if(vec.length() > 0.0D) {
+        if (vec.length() > 0.0D) {
             vec.normalize();
         }
 
@@ -406,7 +406,7 @@ public class BukkitUtils {
     /**
      * Moves a Location into the yaw and pitch of the Location in the offset specified
      *
-     * @param loc to move
+     * @param loc    to move
      * @param offset vector
      * @return Translated Location
      */
@@ -418,9 +418,9 @@ public class BukkitUtils {
      * Moves a Location into the yaw and pitch of the Location in the offset specified
      *
      * @param loc to move
-     * @param dx offset
-     * @param dy offset
-     * @param dz offset
+     * @param dx  offset
+     * @param dy  offset
+     * @param dz  offset
      * @return Translated Location
      */
     public static Location move(Location loc, double dx, double dy, double dz) {
@@ -434,8 +434,8 @@ public class BukkitUtils {
     /**
      * Rotates a 3D-vector using yaw and pitch
      *
-     * @param yaw angle in degrees
-     * @param pitch angle in degrees
+     * @param yaw    angle in degrees
+     * @param pitch  angle in degrees
      * @param vector to rotate
      * @return Vector rotated by the angle (new instance)
      */
@@ -446,11 +446,11 @@ public class BukkitUtils {
     /**
      * Rotates a 3D-vector using yaw and pitch
      *
-     * @param yaw angle in degrees
+     * @param yaw   angle in degrees
      * @param pitch angle in degrees
-     * @param x axis of the vector
-     * @param y axis of the vector
-     * @param z axis of the vector
+     * @param x     axis of the vector
+     * @param y     axis of the vector
+     * @param z     axis of the vector
      * @return Vector rotated by the angle
      */
     public static Vector rotate(float yaw, float pitch, double x, double y, double z) {
@@ -492,7 +492,7 @@ public class BukkitUtils {
     /**
      * Gets the direction of yaw and pitch angles
      *
-     * @param yaw angle in degrees
+     * @param yaw   angle in degrees
      * @param pitch angle in degrees
      * @return Direction Vector
      */
@@ -554,7 +554,7 @@ public class BukkitUtils {
     }
 
     public static void applyVelocity(final Entity ent, Vector v) {
-        if(!ent.hasMetadata("NPC")) {
+        if (!ent.hasMetadata("NPC")) {
             ent.setVelocity(v);
         }
     }

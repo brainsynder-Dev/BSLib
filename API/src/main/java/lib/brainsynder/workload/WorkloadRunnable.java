@@ -10,17 +10,17 @@ import java.util.Deque;
  * @author 7smile7
  * @author brainsynder
  */
-public class WorkloadRunnable implements Runnable{
+public class WorkloadRunnable implements Runnable {
     private double MAX_MILLIS_PER_TICK = 2.5;
 
     private final int MAX_NANOS_PER_TICK = (int) (MAX_MILLIS_PER_TICK * 1E6);
     private final Deque<IWorkload> workloadDeque = new ArrayDeque<>();
 
-    public void addWorkload (IWorkload workload) {
+    public void addWorkload(IWorkload workload) {
         this.workloadDeque.add(workload);
     }
 
-    public void updateMillisPerTick (double millisPerTick) {
+    public void updateMillisPerTick(double millisPerTick) {
         MAX_MILLIS_PER_TICK = millisPerTick;
     }
 

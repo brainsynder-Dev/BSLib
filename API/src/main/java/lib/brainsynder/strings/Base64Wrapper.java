@@ -37,9 +37,8 @@ public class Base64Wrapper {
      * This method will check if the {@link String} is Base64 Encoded
      *
      * @param string - {@link String} to check
-     * @return
-     *      true - Is Base64 Encoded
-     *      false - Isn't Base64 Encoded
+     * @return true - Is Base64 Encoded
+     * false - Isn't Base64 Encoded
      */
     public static boolean isEncoded(String string) {
         String pattern = "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$";
@@ -47,7 +46,7 @@ public class Base64Wrapper {
         Matcher m = r.matcher(string);
         return m.find();
     }
-    
+
     private static char[] encode(byte[] in, int iOff, int iLen) {
         int oDataLen = (iLen * 4 + 2) / 3;
         int oLen = (iLen + 2) / 3 * 4;
@@ -55,29 +54,29 @@ public class Base64Wrapper {
         int ip = iOff;
         int iEnd = iOff + iLen;
 
-        for(int op = 0; ip < iEnd; ++op) {
+        for (int op = 0; ip < iEnd; ++op) {
             int i0 = in[ip++] & 255;
-            int i1 = ip < iEnd?in[ip++] & 255:0;
-            int i2 = ip < iEnd?in[ip++] & 255:0;
+            int i1 = ip < iEnd ? in[ip++] & 255 : 0;
+            int i2 = ip < iEnd ? in[ip++] & 255 : 0;
             int o0 = i0 >>> 2;
             int o1 = (i0 & 3) << 4 | i1 >>> 4;
             int o2 = (i1 & 15) << 2 | i2 >>> 6;
             int o3 = i2 & 63;
             out[op++] = map1[o0];
             out[op++] = map1[o1];
-            out[op] = op < oDataLen?map1[o2]:61;
+            out[op] = op < oDataLen ? map1[o2] : 61;
             ++op;
-            out[op] = op < oDataLen?map1[o3]:61;
+            out[op] = op < oDataLen ? map1[o3] : 61;
         }
 
         return out;
     }
 
     private static byte[] decode(char[] in, int iOff, int iLen) {
-        if(iLen % 4 != 0) {
+        if (iLen % 4 != 0) {
             throw new IllegalArgumentException("Length of Base64 encoded input string is not a multiple of 4.");
         } else {
-            while(iLen > 0 && in[iOff + iLen - 1] == 61) {
+            while (iLen > 0 && in[iOff + iLen - 1] == 61) {
                 --iLen;
             }
 
@@ -87,27 +86,27 @@ public class Base64Wrapper {
             int iEnd = iOff + iLen;
             int op = 0;
 
-            while(ip < iEnd) {
+            while (ip < iEnd) {
                 char i0 = in[ip++];
                 char i1 = in[ip++];
-                char i2 = ip < iEnd?in[ip++]:65;
-                char i3 = ip < iEnd?in[ip++]:65;
-                if(i0 <= 127 && i1 <= 127 && i2 <= 127 && i3 <= 127) {
+                char i2 = ip < iEnd ? in[ip++] : 65;
+                char i3 = ip < iEnd ? in[ip++] : 65;
+                if (i0 <= 127 && i1 <= 127 && i2 <= 127 && i3 <= 127) {
                     byte b0 = map2[i0];
                     byte b1 = map2[i1];
                     byte b2 = map2[i2];
                     byte b3 = map2[i3];
-                    if(b0 >= 0 && b1 >= 0 && b2 >= 0 && b3 >= 0) {
+                    if (b0 >= 0 && b1 >= 0 && b2 >= 0 && b3 >= 0) {
                         int o0 = b0 << 2 | b1 >>> 4;
                         int o1 = (b1 & 15) << 4 | b2 >>> 2;
                         int o2 = (b2 & 3) << 6 | b3;
-                        out[op++] = (byte)o0;
-                        if(op < oLen) {
-                            out[op++] = (byte)o1;
+                        out[op++] = (byte) o0;
+                        if (op < oLen) {
+                            out[op++] = (byte) o1;
                         }
 
-                        if(op < oLen) {
-                            out[op++] = (byte)o2;
+                        if (op < oLen) {
+                            out[op++] = (byte) o2;
                         }
                         continue;
                     }
@@ -140,12 +139,12 @@ public class Base64Wrapper {
         map1[i++] = 47;
         map2 = new byte[128];
 
-        for(i = 0; i < map2.length; ++i) {
+        for (i = 0; i < map2.length; ++i) {
             map2[i] = -1;
         }
 
-        for(i = 0; i < 64; ++i) {
-            map2[map1[i]] = (byte)i;
+        for (i = 0; i < 64; ++i) {
+            map2[map1[i]] = (byte) i;
         }
 
     }

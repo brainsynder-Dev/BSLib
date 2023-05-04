@@ -12,11 +12,11 @@ public class Cache<E> {
     /**
      * "Set the item to be cached, and set the time at which it will expire."
      *
-     * @param item The item to be cached.
+     * @param item        The item to be cached.
      * @param expireDelay The amount of time to wait before the item expires.
-     * @param expireUnit The time unit of the expireDelay parameter.
+     * @param expireUnit  The time unit of the expireDelay parameter.
      */
-    public void setCacheItem (E item, long expireDelay, TimeUnit expireUnit) {
+    public void setCacheItem(E item, long expireDelay, TimeUnit expireUnit) {
         targetTime = this.ticker.read() + TimeUnit.NANOSECONDS.convert(expireDelay, expireUnit);
         this.item = item;
     }
@@ -27,7 +27,7 @@ public class Cache<E> {
      *
      * @return The boolean value of whether or not the item is null.
      */
-    public boolean hasCacheItem () {
+    public boolean hasCacheItem() {
         long current = this.ticker.read();
         if (targetTime <= current) {
             item = null;

@@ -25,21 +25,21 @@ public class GUIManager {
     private final GUIListener GUI_LISTENER;
     private final Map<Inventory, InventoryHandler> activeInventories = new HashMap<>();
 
-    public GUIManager (Plugin plugin) {
+    public GUIManager(Plugin plugin) {
         Bukkit.getServer().getPluginManager().registerEvents(GUI_LISTENER = new GUIListener(), plugin);
     }
 
     /**
      * Unregister all listeners that are registered to the GUI_LISTENER object.
      */
-    public void cleanup () {
+    public void cleanup() {
         HandlerList.unregisterAll(GUI_LISTENER);
     }
 
     /**
      * It registers the inventory with the plugin, and then opens it for the player
      *
-     * @param gui The InventoryGUI object you want to open.
+     * @param gui    The InventoryGUI object you want to open.
      * @param player The player who will be opening the inventory.
      */
     public void openGUI(InventoryGUI gui, Player player) {
@@ -51,7 +51,7 @@ public class GUIManager {
      * It adds an inventory to the list of active inventories
      *
      * @param inventory The inventory you want to register.
-     * @param handler The InventoryHandler that will handle the inventory.
+     * @param handler   The InventoryHandler that will handle the inventory.
      */
     public void registerHandledInventory(Inventory inventory, InventoryHandler handler) {
         this.activeInventories.put(inventory, handler);

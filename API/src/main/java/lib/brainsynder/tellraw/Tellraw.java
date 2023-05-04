@@ -23,7 +23,6 @@ public class Tellraw {
     private boolean dirty = false;
 
 
-
     /**
      * This function returns a new Tellraw object with the text set to the text parameter.
      *
@@ -49,7 +48,7 @@ public class Tellraw {
      *
      * @param text - string used for the conversion
      */
-    private Tellraw fromLegacy0 (String text) {
+    private Tellraw fromLegacy0(String text) {
         if ((text == null) || text.isEmpty()) throw new NullPointerException("Missing text input");
         Tellraw message = new Tellraw();
         List<Part> split = Colorize.splitMessageToParts(text);
@@ -60,11 +59,11 @@ public class Tellraw {
 
     /**
      * Adds color to the latest message, It cant be in 5 different ways:
-     *  -   String - This will be in the hex color format (#FFFFFF)
-     *  -   java.awt.Color
-     *  -   org.bukkit.Color
-     *  -   net.md_5.bungee.api.ChatColor
-     *  -   org.bukkit.ChatColor
+     * -   String - This will be in the hex color format (#FFFFFF)
+     * -   java.awt.Color
+     * -   org.bukkit.Color
+     * -   net.md_5.bungee.api.ChatColor
+     * -   org.bukkit.ChatColor
      *
      * @param obj The object to be converted to a color.
      * @return The Tellraw object.
@@ -75,29 +74,29 @@ public class Tellraw {
 
         if (obj instanceof String) {
             latest().customColor = Colorize.hex2Color((String) obj);
-        }else if (obj instanceof java.awt.Color) {
+        } else if (obj instanceof java.awt.Color) {
             java.awt.Color color = (java.awt.Color) obj;
             latest().customColor = Colorize.hex2Color(Colorize.toHex(color.getRed(), color.getGreen(), color.getBlue()));
 
-        }else if (obj instanceof Color) {
+        } else if (obj instanceof Color) {
             latest().customColor = (Color) obj;
 
-        }else if (obj instanceof net.md_5.bungee.api.ChatColor) {
+        } else if (obj instanceof net.md_5.bungee.api.ChatColor) {
             net.md_5.bungee.api.ChatColor color = (net.md_5.bungee.api.ChatColor) obj;
             try {
                 Method method = obj.getClass().getMethod("getColor");
-                return color (method.invoke(color));
+                return color(method.invoke(color));
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                 return color(ChatColor.valueOf(color.name()));
             }
 
-        }else if (obj instanceof ChatColor) {
+        } else if (obj instanceof ChatColor) {
             ChatColor color = (ChatColor) obj;
             if (!color.isColor()) throw new IllegalArgumentException(color.name() + " is not a color");
 
             latest().color = color;
-        }else{
-            throw new IllegalArgumentException(obj.getClass().getSimpleName()+" is not a valid input.");
+        } else {
+            throw new IllegalArgumentException(obj.getClass().getSimpleName() + " is not a valid input.");
         }
         this.dirty = true;
         return this;
@@ -105,12 +104,12 @@ public class Tellraw {
 
     /**
      * Sets the font of the latest message.
-     *
+     * <p>
      * Example:
-     *      minecraft:default - Default minecraft font
-     *      minecraft:illageralt - Language of the Illagers
-     *      minecraft:alt - Enchantment language
-     *      minecraft:uniform - Similar to the default one
+     * minecraft:default - Default minecraft font
+     * minecraft:illageralt - Language of the Illagers
+     * minecraft:alt - Enchantment language
+     * minecraft:uniform - Similar to the default one
      *
      * @param font The font to use.
      * @return The Tellraw object
@@ -137,6 +136,7 @@ public class Tellraw {
         this.dirty = true;
         return this;
     }
+
     /**
      * When the player clicks on this text, open the file at the given path.
      *
@@ -147,6 +147,7 @@ public class Tellraw {
         onClick("open_file", path);
         return this;
     }
+
     /**
      * Adds a click event to the tellraw message that opens the specified URL in the player's browser.
      *
@@ -157,6 +158,7 @@ public class Tellraw {
         onClick("open_url", url);
         return this;
     }
+
     /**
      * When the player clicks on this text, the client will suggest the given command to the player.
      *
@@ -167,6 +169,7 @@ public class Tellraw {
         onClick("suggest_command", command);
         return this;
     }
+
     /**
      * Adds a command to the click event of the tellraw message.
      *
@@ -177,6 +180,7 @@ public class Tellraw {
         onClick("run_command", command);
         return this;
     }
+
     /**
      * When the player hovers over this text, show them the achievement with the given name.
      *
@@ -187,6 +191,7 @@ public class Tellraw {
         onHover("show_achievement", "achievement." + name);
         return this;
     }
+
     /**
      * Sets the hover event to show the item tooltip of the item specified by the given JSON string.
      *
@@ -197,6 +202,7 @@ public class Tellraw {
         onHover("show_item", itemJSON);
         return this;
     }
+
     /**
      * Returns a Tellraw object with the given lines as the tooltip.
      *
@@ -206,6 +212,7 @@ public class Tellraw {
     public Tellraw tooltip(List<String> lines) {
         return tooltip(lines.toArray(new String[lines.size()]));
     }
+
     /**
      * Adds a tooltip to the tellraw message.
      *
@@ -215,6 +222,7 @@ public class Tellraw {
         onHover("show_text", combineArray(0, "\n", lines));
         return this;
     }
+
     /**
      * If the object is a Part, add it to the messageParts list, otherwise, add a new Part with the object's toString() as
      * the text
@@ -240,7 +248,7 @@ public class Tellraw {
      */
     public Tellraw removeLastPart() {
         if (messageParts.isEmpty()) return this;
-        messageParts.remove( (messageParts.size() - 1) );
+        messageParts.remove((messageParts.size() - 1));
         return this;
     }
 
@@ -265,7 +273,8 @@ public class Tellraw {
                 json.endArray().endObject();
                 json.close();
             }
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
         this.jsonString = string.toString();
         this.dirty = false;
         return this.jsonString;
@@ -278,7 +287,7 @@ public class Tellraw {
      */
     public void send(CommandSender sender) {
         if (sender instanceof Player) {
-            send((Player)sender);
+            send((Player) sender);
             return;
         }
 
@@ -310,8 +319,9 @@ public class Tellraw {
      */
     public void send(Iterable<Player> players) {
         for (Player player : players)
-            send (player);
+            send(player);
     }
+
     /**
      * Send this message to all players in the given collection.
      *
@@ -319,22 +329,23 @@ public class Tellraw {
      */
     public void send(Collection<? extends Player> players) {
         for (Player player : players)
-            send (player);
+            send(player);
     }
-
 
 
     private Part latest() {
         return this.messageParts.get(this.messageParts.size() - 1);
     }
+
     private String combineArray(int startIndex, String separator, String... stringArray) {
         return combineArray(startIndex, stringArray.length, separator, stringArray);
     }
+
     private String combineArray(int startIndex, int endIndex, String separator, String... stringArray) {
-        if(stringArray != null && startIndex < endIndex) {
+        if (stringArray != null && startIndex < endIndex) {
             StringBuilder builder = new StringBuilder();
 
-            for(int i = startIndex; i < endIndex; ++i) {
+            for (int i = startIndex; i < endIndex; ++i) {
                 builder.append(Colorize.translateBungeeHex(stringArray[i]));
                 builder.append(separator);
             }

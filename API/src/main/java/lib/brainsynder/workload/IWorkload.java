@@ -8,5 +8,5 @@ package lib.brainsynder.workload;
  * @author brainsynder
  */
 public interface IWorkload {
-    void compute ();
+    void compute();
 }

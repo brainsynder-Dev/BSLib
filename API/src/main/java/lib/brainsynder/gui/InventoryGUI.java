@@ -57,7 +57,7 @@ public abstract class InventoryGUI implements InventoryHandler {
         });
     }
 
-    public void clearButtons () {
+    public void clearButtons() {
         this.buttonMap.clear();
     }
 

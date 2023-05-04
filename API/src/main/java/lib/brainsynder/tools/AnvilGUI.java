@@ -94,7 +94,7 @@ public class AnvilGUI {
      *
      * @param plugin     A {@link org.bukkit.plugin.java.JavaPlugin} instance
      * @param holder     The {@link Player} to open the inventory for
-     * @param insert  What to have the text already set to
+     * @param insert     What to have the text already set to
      * @param biFunction A {@link BiFunction} that is called when the player clicks the {@link Slot#OUTPUT} slot
      * @throws NullPointerException If the server version isn't supported
      * @deprecated As of version 1.2.3, use {@link AnvilGUI.Builder}
@@ -194,6 +194,7 @@ public class AnvilGUI {
 
     /**
      * Closes the inventory if it's open, only sending the close inventory packets if the arg is true
+     *
      * @param sendClosePacket Whether to send the close inventory event, packet, etc
      */
     private void closeInventory(boolean sendClosePacket) {
@@ -234,7 +235,7 @@ public class AnvilGUI {
         public void onInventoryClick(InventoryClickEvent event) {
             if (
                     event.getInventory().equals(inventory) &&
-					(event.getRawSlot() < 3 || event.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY))
+                            (event.getRawSlot() < 3 || event.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY))
             ) {
                 event.setCancelled(true);
                 final Player clicker = (Player) event.getWhoClicked();
@@ -589,7 +590,6 @@ public class AnvilGUI {
             return values;
         }
     }
-
 
 
     /**

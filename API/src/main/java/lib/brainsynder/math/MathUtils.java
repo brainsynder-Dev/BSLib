@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 import java.util.Random;
 
 public class MathUtils {
-    static final int ATAN2_DIM = (int)Math.sqrt(16384.0D);
+    static final int ATAN2_DIM = (int) Math.sqrt(16384.0D);
     private static final float INV_ATAN2_DIM_MINUS_1;
     private static final int CHUNK_BITS = 4;
     private static final int CHUNK_VALUES = 16;
@@ -20,7 +20,7 @@ public class MathUtils {
      * It trims the double to the specified degree.
      *
      * @param degree the number of decimal places you want to round to
-     * @param value The number to be trimmed
+     * @param value  The number to be trimmed
      * @return A double value that is rounded to the specified degree.
      */
     public static double trim(int degree, double value) {
@@ -77,8 +77,8 @@ public class MathUtils {
      * Normalizes a 2D-vector to be the length of another 2D-vector<br>
      * Calculates the normalization factor to multiply the input vector with, to get the requested length
      *
-     * @param x axis of the vector
-     * @param z axis of the vector
+     * @param x    axis of the vector
+     * @param z    axis of the vector
      * @param reqx axis of the length vector
      * @param reqz axis of the length vector
      * @return the normalization factor
@@ -125,7 +125,7 @@ public class MathUtils {
     /**
      * Gets the pitch angle in degrees to look into the direction specified
      *
-     * @param dY axis of the direction
+     * @param dY  axis of the direction
      * @param dXZ axis of the direction (length of x and z)
      * @return look-at angle in degrees
      */
@@ -178,7 +178,7 @@ public class MathUtils {
     /**
      * Rounds the specified value to the amount of decimals specified
      *
-     * @param value to round
+     * @param value    to round
      * @param decimals count
      * @return value round to the decimal count specified
      */
@@ -201,7 +201,7 @@ public class MathUtils {
      * Returns the default if the value is not-a-number
      *
      * @param value to check
-     * @param def value
+     * @param def   value
      * @return The value, or the default if it is NaN
      */
     public static double fixNaN(double value, double def) {
@@ -266,6 +266,7 @@ public class MathUtils {
 
     /**
      * Clamps the value between the min and max values
+     *
      * @param value to clamp
      * @param min
      * @param max
@@ -300,7 +301,7 @@ public class MathUtils {
     /**
      * Turns a value negative or keeps it positive based on a boolean input
      *
-     * @param value to work with
+     * @param value    to work with
      * @param negative - True to invert, False to keep the old value
      * @return the value or inverted (-value)
      */
@@ -311,7 +312,7 @@ public class MathUtils {
     /**
      * Turns a value negative or keeps it positive based on a boolean input
      *
-     * @param value to work with
+     * @param value    to work with
      * @param negative - True to invert, False to keep the old value
      * @return the value or inverted (-value)
      */
@@ -322,7 +323,7 @@ public class MathUtils {
     /**
      * Turns a value negative or keeps it positive based on a boolean input
      *
-     * @param value to work with
+     * @param value    to work with
      * @param negative - True to invert, False to keep the old value
      * @return the value or inverted (-value)
      */
@@ -346,19 +347,19 @@ public class MathUtils {
     }
 
     public static float sin(float radians) {
-        return MathUtils.Sin.table[(int)(radians * 2607.5945F) & 16383];
+        return MathUtils.Sin.table[(int) (radians * 2607.5945F) & 16383];
     }
 
     public static float cos(float radians) {
-        return MathUtils.Sin.table[(int)((radians + 1.5707964F) * 2607.5945F) & 16383];
+        return MathUtils.Sin.table[(int) ((radians + 1.5707964F) * 2607.5945F) & 16383];
     }
 
     public static float sinDeg(float degrees) {
-        return MathUtils.Sin.table[(int)(degrees * 45.511112F) & 16383];
+        return MathUtils.Sin.table[(int) (degrees * 45.511112F) & 16383];
     }
 
     public static float cosDeg(float degrees) {
-        return MathUtils.Sin.table[(int)((degrees + 90.0F) * 45.511112F) & 16383];
+        return MathUtils.Sin.table[(int) ((degrees + 90.0F) * 45.511112F) & 16383];
     }
 
     public static boolean isInteger(Object object) {
@@ -382,8 +383,8 @@ public class MathUtils {
     public static float atan2(float y, float x) {
         float add;
         float mul;
-        if(x < 0.0F) {
-            if(y < 0.0F) {
+        if (x < 0.0F) {
+            if (y < 0.0F) {
                 y = -y;
                 mul = 1.0F;
             } else {
@@ -393,7 +394,7 @@ public class MathUtils {
             x = -x;
             add = -3.1415927F;
         } else {
-            if(y < 0.0F) {
+            if (y < 0.0F) {
                 y = -y;
                 mul = -1.0F;
             } else {
@@ -403,12 +404,12 @@ public class MathUtils {
             add = 0.0F;
         }
 
-        float invDiv = 1.0F / ((x < y?y:x) * INV_ATAN2_DIM_MINUS_1);
-        if(invDiv == 1.0F / 0.0) {
-            return ((float)Math.atan2(y, x) + add) * mul;
+        float invDiv = 1.0F / ((x < y ? y : x) * INV_ATAN2_DIM_MINUS_1);
+        if (invDiv == 1.0F / 0.0) {
+            return ((float) Math.atan2(y, x) + add) * mul;
         } else {
-            int xi = (int)(x * invDiv);
-            int yi = (int)(y * invDiv);
+            int xi = (int) (x * invDiv);
+            int yi = (int) (y * invDiv);
             return (MathUtils.Atan2.table[yi * ATAN2_DIM + xi] + add) * mul;
         }
     }
@@ -442,7 +443,7 @@ public class MathUtils {
     }
 
     public static int nextPowerOfTwo(int value) {
-        if(value == 0) {
+        if (value == 0) {
             return 1;
         } else {
             --value;
@@ -460,39 +461,39 @@ public class MathUtils {
     }
 
     public static int clamp(int value, int min, int max) {
-        return value < min?min:(value > max?max:value);
+        return value < min ? min : (value > max ? max : value);
     }
 
     public static short clamp(short value, short min, short max) {
-        return value < min?min:(value > max?max:value);
+        return value < min ? min : (value > max ? max : value);
     }
 
     public static float clamp(float value, float min, float max) {
-        return value < min?min:(value > max?max:value);
+        return value < min ? min : (value > max ? max : value);
     }
 
     public static int floor(float x) {
-        return (int)((double)x + 16384.0D) - 16384;
+        return (int) ((double) x + 16384.0D) - 16384;
     }
 
     public static int floorPositive(float x) {
-        return (int)x;
+        return (int) x;
     }
 
     public static int ceil(float x) {
-        return (int)((double)x + 16384.999999999996D) - 16384;
+        return (int) ((double) x + 16384.999999999996D) - 16384;
     }
 
     public static int ceilPositive(float x) {
-        return (int)((double)x + 0.9999999D);
+        return (int) ((double) x + 0.9999999D);
     }
 
     public static int round(float x) {
-        return (int)((double)x + 16384.5D) - 16384;
+        return (int) ((double) x + 16384.5D) - 16384;
     }
 
     public static int roundPositive(float x) {
-        return (int)(x + 0.5F);
+        return (int) (x + 0.5F);
     }
 
     public static boolean isZero(float value) {
@@ -516,23 +517,23 @@ public class MathUtils {
     }
 
     public static double randomDouble(double min, double max) {
-        return Math.random() < 0.5D?(1.0D - Math.random()) * (max - min) + min:Math.random() * (max - min) + min;
+        return Math.random() < 0.5D ? (1.0D - Math.random()) * (max - min) + min : Math.random() * (max - min) + min;
     }
 
     public static float randomRangeFloat(float min, float max) {
-        return (float)(Math.random() < 0.5D?(1.0D - Math.random()) * (double)(max - min) + (double)min:Math.random() * (double)(max - min) + (double)min);
+        return (float) (Math.random() < 0.5D ? (1.0D - Math.random()) * (double) (max - min) + (double) min : Math.random() * (double) (max - min) + (double) min);
     }
 
     public static byte randomByte(int max) {
-        return (byte)random.nextInt(max + 1);
+        return (byte) random.nextInt(max + 1);
     }
 
     public static int randomRangeInt(int min, int max) {
-        return (int)(Math.random() < 0.5D?(1.0D - Math.random()) * (double)(max - min) + (double)min:Math.random() * (double)(max - min) + (double)min);
+        return (int) (Math.random() < 0.5D ? (1.0D - Math.random()) * (double) (max - min) + (double) min : Math.random() * (double) (max - min) + (double) min);
     }
 
     static {
-        INV_ATAN2_DIM_MINUS_1 = 1.0F / (float)(ATAN2_DIM - 1);
+        INV_ATAN2_DIM_MINUS_1 = 1.0F / (float) (ATAN2_DIM - 1);
         random = new Random();
     }
 
@@ -543,16 +544,17 @@ public class MathUtils {
         }
 
         static {
-            for(int i = 0; i < MathUtils.ATAN2_DIM; ++i) {
-                for(int j = 0; j < MathUtils.ATAN2_DIM; ++j) {
-                    float x0 = (float)i / (float) MathUtils.ATAN2_DIM;
-                    float y0 = (float)j / (float) MathUtils.ATAN2_DIM;
-                    table[j * MathUtils.ATAN2_DIM + i] = (float)Math.atan2(y0, x0);
+            for (int i = 0; i < MathUtils.ATAN2_DIM; ++i) {
+                for (int j = 0; j < MathUtils.ATAN2_DIM; ++j) {
+                    float x0 = (float) i / (float) MathUtils.ATAN2_DIM;
+                    float y0 = (float) j / (float) MathUtils.ATAN2_DIM;
+                    table[j * MathUtils.ATAN2_DIM + i] = (float) Math.atan2(y0, x0);
                 }
             }
 
         }
     }
+
     private static class Sin {
         static final float[] table = new float[16384];
 
@@ -561,12 +563,12 @@ public class MathUtils {
 
         static {
             int i;
-            for(i = 0; i < 16384; ++i) {
-                table[i] = (float)Math.sin(((float)i + 0.5F) / 16384.0F * 6.2831855F);
+            for (i = 0; i < 16384; ++i) {
+                table[i] = (float) Math.sin(((float) i + 0.5F) / 16384.0F * 6.2831855F);
             }
 
-            for(i = 0; i < 360; i += 90) {
-                table[(int)((float)i * 45.511112F) & 16383] = (float)Math.sin((float)i * 0.017453292F);
+            for (i = 0; i < 360; i += 90) {
+                table[(int) ((float) i * 45.511112F) & 16383] = (float) Math.sin((float) i * 0.017453292F);
             }
 
         }
