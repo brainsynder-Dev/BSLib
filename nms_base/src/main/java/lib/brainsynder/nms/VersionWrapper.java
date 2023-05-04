@@ -8,13 +8,13 @@ import org.bukkit.inventory.ItemStack;
 public interface VersionWrapper {
     /**
      * "Send the game state to the player."
-     *
+     * <p>
      * The first parameter is the player to send the game state to. The second parameter is the game state to send. The
      * third parameter is the state of the game state
      *
-     * @param player The player to send the game state to.
+     * @param player    The player to send the game state to.
      * @param gameState The game state to send to the player.
-     * @param state The state of the game.
+     * @param state     The state of the game.
      */
     void sendGameState(Player player, GameState gameState, float state);
 
@@ -24,7 +24,7 @@ public interface VersionWrapper {
      * @param compound The StorageTagCompound to convert to an ItemStack
      * @return An ItemStack
      */
-    ItemStack toItemStack (StorageTagCompound compound);
+    ItemStack toItemStack(StorageTagCompound compound);
 
     /**
      * It takes an ItemStack and returns a StorageTagCompound
@@ -32,7 +32,7 @@ public interface VersionWrapper {
      * @param itemStack The ItemStack to get the NBT from.
      * @return A NBTTagCompound
      */
-    StorageTagCompound fromItemStack (ItemStack itemStack);
+    StorageTagCompound fromItemStack(ItemStack itemStack);
 
     /**
      * Gets the next available NMS container id for the player

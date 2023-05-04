@@ -51,7 +51,7 @@ public final class Wrapper_v1_18 implements VersionWrapper {
         ((CraftPlayer) player).getHandle().connection.send(packet);
     }
 
-    private ClientboundGameEventPacket.Type convertEnum (GameState gameState) {
+    private ClientboundGameEventPacket.Type convertEnum(GameState gameState) {
         return switch (gameState) {
             case NO_RESPAWN_BLOCK_AVAILABLE -> ClientboundGameEventPacket.NO_RESPAWN_BLOCK_AVAILABLE;
             case START_RAINING -> ClientboundGameEventPacket.START_RAINING;
@@ -84,7 +84,7 @@ public final class Wrapper_v1_18 implements VersionWrapper {
     public StorageTagCompound fromItemStack(ItemStack itemStack) {
         CompoundTag nbt = new CompoundTag();
         CraftItemStack.asNMSCopy(itemStack).save(nbt);
-        StorageTagCompound compound = new StorageTagCompound ();
+        StorageTagCompound compound = new StorageTagCompound();
 
         try {
             compound = JsonToNBT.getTagFromJson(nbt.toString());
@@ -160,10 +160,12 @@ public final class Wrapper_v1_18 implements VersionWrapper {
         }
 
         @Override
-        public void removed(net.minecraft.world.entity.player.Player player) {}
+        public void removed(net.minecraft.world.entity.player.Player player) {
+        }
 
         @Override
-        protected void clearContainer(net.minecraft.world.entity.player.Player player, net.minecraft.world.Container container) {}
+        protected void clearContainer(net.minecraft.world.entity.player.Player player, net.minecraft.world.Container container) {
+        }
 
         public int getContainerId() {
             return this.containerId;
