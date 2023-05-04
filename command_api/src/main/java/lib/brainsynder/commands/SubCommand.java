@@ -80,7 +80,7 @@ public class SubCommand implements CommandExecutor, TabCompleter {
         }
 
         String string = "";
-        if (args.length != 0) string = args[index-1];
+        if (args.length != 0) string = args[index - 1];
 
         for (String keyword : tabKeyWords) {
             if (keyword.startsWith(string)) {

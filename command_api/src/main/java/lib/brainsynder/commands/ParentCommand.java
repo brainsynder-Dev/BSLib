@@ -17,11 +17,12 @@ public class ParentCommand<T extends SubCommand> extends SubCommand {
     protected boolean overrideTab = false;
     private final List<T> subCommands = new ArrayList<>();
 
-    public void sendHelp (CommandSender sender, boolean parent) {
+    public void sendHelp(CommandSender sender, boolean parent) {
         if (parent) sendUsage(sender);
         if (!subCommands.isEmpty())
             subCommands.forEach(subCommand -> {
-                if (!subCommand.getMasterFormat().equals(getMasterFormat())) subCommand.setMasterFormat(getMasterFormat());
+                if (!subCommand.getMasterFormat().equals(getMasterFormat()))
+                    subCommand.setMasterFormat(getMasterFormat());
                 subCommand.sendUsage(sender);
             });
     }
@@ -32,15 +33,15 @@ public class ParentCommand<T extends SubCommand> extends SubCommand {
         if (command == null) return;
         String usage = Colorize.translateBungeeHex(command.usage());
         String description = "";
-        Tellraw raw = Tellraw.getInstance("/"+command.name()+ " " +usage);
+        Tellraw raw = Tellraw.getInstance("/" + command.name() + " " + usage);
 
         if (!command.description().isEmpty()) {
             description = Colorize.translateBungeeHex(command.description());
-            raw.tooltip(ChatColor.GRAY+description);
+            raw.tooltip(ChatColor.GRAY + description);
         }
 
         if (!(sender instanceof Player)) {
-            if (!description.isEmpty()) raw.then(" "+description);
+            if (!description.isEmpty()) raw.then(" " + description);
         }
         raw.send(sender);
 
@@ -74,7 +75,7 @@ public class ParentCommand<T extends SubCommand> extends SubCommand {
         super.tabComplete(completions, sender, args);
     }
 
-    public PluginCommand getBukkitCommand () {
+    public PluginCommand getBukkitCommand() {
         ICommand command = getCommand(getClass());
         return Bukkit.getPluginCommand(command.name());
     }
@@ -87,7 +88,7 @@ public class ParentCommand<T extends SubCommand> extends SubCommand {
         return subCommands;
     }
 
-    private T parse (String name) {
+    private T parse(String name) {
         T sub = null;
         for (T command : subCommands) {
             if (!command.getClass().isAnnotationPresent(ICommand.class)) continue;

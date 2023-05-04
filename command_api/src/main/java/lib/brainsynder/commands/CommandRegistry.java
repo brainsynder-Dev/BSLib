@@ -18,6 +18,7 @@ public class CommandRegistry<P extends JavaPlugin> {
 
     /**
      * Will register the targeted command
+     *
      * @param commandCore - targeted {@link ParentCommand} that you wish to register
      * @throws Exception - If the method fails {EG: No {@link ICommand} Annotation or there is no command name}
      */

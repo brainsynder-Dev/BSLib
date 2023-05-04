@@ -9,10 +9,13 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 public @interface ICommand {
     String name() default "";
+
     String usage() default "";
+
     String description() default "";
 
     String style() default "/{name} {usage}";
+
     String consoleStyle() default "/{name} {usage} - {description}";
 
     String[] alias() default {""};
