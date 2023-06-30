@@ -1,7 +1,8 @@
 package lib.brainsynder.tellraw;
 
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
 import com.google.common.collect.Lists;
-import com.google.gson.stream.JsonWriter;
 import lib.brainsynder.strings.Colorize;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.ChatColor;
@@ -9,8 +10,6 @@ import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.io.IOException;
-import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -260,22 +259,18 @@ public class Tellraw {
     public String toJSONString() {
         if ((!this.dirty) && (this.jsonString != null)) return this.jsonString;
 
-        StringWriter string = new StringWriter();
-        JsonWriter json = new JsonWriter(string);
-        try {
-            if (this.messageParts.size() == 1) {
-                latest().writeJson(json);
-            } else {
-                json.beginObject().name("text").value("").name("extra").beginArray();
-                for (Part part : this.messageParts) {
-                    part.writeJson(json);
-                }
-                json.endArray().endObject();
-                json.close();
+        JsonObject jsonObject = new JsonObject();
+        if (this.messageParts.size() == 1) {
+            jsonObject = latest().toJson();
+        } else {
+            jsonObject.set("text", "");
+            JsonArray extras = new JsonArray();
+            for (Part part : this.messageParts) {
+                extras.add(part.toJson());
             }
-        } catch (IOException e) {
+            jsonObject.set("extra", extras);
         }
-        this.jsonString = string.toString();
+        this.jsonString = jsonObject.toString();
         this.dirty = false;
         return this.jsonString;
     }

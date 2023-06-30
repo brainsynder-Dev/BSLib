@@ -1,7 +1,6 @@
 package lib.brainsynder.tellraw;
 
 import com.eclipsesource.json.JsonObject;
-import com.google.gson.stream.JsonWriter;
 import lib.brainsynder.strings.Colorize;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -66,47 +65,6 @@ public final class Part {
             json.set("hoverEvent", action);
         }
 
-        return json;
-    }
-
-    /**
-     * It writes the JSON data to the JsonWriter object
-     *
-     * @param json The JsonWriter object
-     * @return The JsonWriter object
-     */
-    public JsonWriter writeJson(JsonWriter json) {
-        try {
-            json.beginObject().name("text").value(this.text);
-            if (this.color != null) {
-                // Uses the ChatColor variable (Default MC colors)
-                json.name("color").value(this.color.name().toLowerCase());
-            } else if ((customColor != null)) {
-                // Uses the Color (Allows RGB/HEX colors) [1.16+]
-                // Since 1.16 added the ability to have RGB/HEX colored messages via TellRaw
-                json.name("color").value(Colorize.toHex(customColor.getRed(), customColor.getGreen(), customColor.getBlue()));
-            }
-            if (this.font != null) {
-                json.name("font").value(font.toLowerCase());
-            }
-            if (this.styles != null) {
-                for (ChatColor style : this.styles) {
-                    json.name(style.name().toLowerCase()).value(true);
-                }
-            }
-
-            if ((this.clickActionName != null) && (this.clickActionData != null)) {
-                json.name("clickEvent").beginObject().name("action").value(this.clickActionName).name("value").value(this.clickActionData).endObject();
-            }
-
-            if ((this.hoverActionName != null) && (this.hoverActionData != null)) {
-                json.name("hoverEvent").beginObject().name("action").value(this.hoverActionName).name("value").value(this.hoverActionData).endObject();
-            }
-
-            return json.endObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return json;
     }
 }

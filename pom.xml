@@ -24,6 +24,8 @@
         <module>Version_1.19.2</module>
         <module>Version_1.19.3</module>
         <module>Version_1.19.4</module>
+        <module>Version_1.20</module>
+        <module>Version_1.20.1</module>
     </modules>
 
     <profiles>
@@ -48,7 +50,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <spigot.version>1.17-R0.1-SNAPSHOT</spigot.version>
+        <spigot.version>1.20.1-R0.1-SNAPSHOT</spigot.version>
 
         <module.info>-parent</module.info>
         <!--suppress UnresolvedMavenProperty -->
@@ -63,14 +65,6 @@
         <finalName>BSLib${module.info}</finalName>
 
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
