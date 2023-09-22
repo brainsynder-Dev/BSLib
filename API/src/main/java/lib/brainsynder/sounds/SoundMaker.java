@@ -1652,7 +1652,44 @@ public enum SoundMaker {
     @EnumVersion(version = ServerVersion.v1_19_4) INTENTIONALLY_EMPTY, 
     @EnumVersion(version = ServerVersion.v1_19_4) ITEM_BRUSH_BRUSHING, 
     @EnumVersion(version = ServerVersion.v1_19_4) ITEM_BRUSH_BRUSH_SAND_COMPLETED, 
-    @EnumVersion(version = ServerVersion.v1_19_4) MUSIC_OVERWORLD_CHERRY_GROVE 
+    @EnumVersion(version = ServerVersion.v1_19_4) MUSIC_OVERWORLD_CHERRY_GROVE ,
+
+
+    // ---- Sounds added in v1_20_2 ---- //
+    @EnumVersion(version = ServerVersion.v1_20_2) BLOCK_AMETHYST_BLOCK_RESONATE, 
+    @EnumVersion(version = ServerVersion.v1_20_2) BLOCK_SIGN_WAXED_INTERACT_FAIL, 
+    @EnumVersion(version = ServerVersion.v1_20_2) BLOCK_SNIFFER_EGG_CRACK, 
+    @EnumVersion(version = ServerVersion.v1_20_2) BLOCK_SNIFFER_EGG_HATCH, 
+    @EnumVersion(version = ServerVersion.v1_20_2) BLOCK_SNIFFER_EGG_PLOP, 
+    @EnumVersion(version = ServerVersion.v1_20_2) BLOCK_SPONGE_ABSORB, 
+    @EnumVersion(version = ServerVersion.v1_20_2) BLOCK_SPONGE_BREAK, 
+    @EnumVersion(version = ServerVersion.v1_20_2) BLOCK_SPONGE_FALL, 
+    @EnumVersion(version = ServerVersion.v1_20_2) BLOCK_SPONGE_HIT, 
+    @EnumVersion(version = ServerVersion.v1_20_2) BLOCK_SPONGE_PLACE, 
+    @EnumVersion(version = ServerVersion.v1_20_2) BLOCK_SPONGE_STEP, 
+    @EnumVersion(version = ServerVersion.v1_20_2) BLOCK_SUSPICIOUS_GRAVEL_BREAK, 
+    @EnumVersion(version = ServerVersion.v1_20_2) BLOCK_SUSPICIOUS_GRAVEL_FALL, 
+    @EnumVersion(version = ServerVersion.v1_20_2) BLOCK_SUSPICIOUS_GRAVEL_HIT, 
+    @EnumVersion(version = ServerVersion.v1_20_2) BLOCK_SUSPICIOUS_GRAVEL_PLACE, 
+    @EnumVersion(version = ServerVersion.v1_20_2) BLOCK_SUSPICIOUS_GRAVEL_STEP, 
+    @EnumVersion(version = ServerVersion.v1_20_2) BLOCK_WET_SPONGE_BREAK, 
+    @EnumVersion(version = ServerVersion.v1_20_2) BLOCK_WET_SPONGE_FALL, 
+    @EnumVersion(version = ServerVersion.v1_20_2) BLOCK_WET_SPONGE_HIT, 
+    @EnumVersion(version = ServerVersion.v1_20_2) BLOCK_WET_SPONGE_PLACE, 
+    @EnumVersion(version = ServerVersion.v1_20_2) BLOCK_WET_SPONGE_STEP, 
+    @EnumVersion(version = ServerVersion.v1_20_2) ITEM_BRUSH_BRUSHING_GENERIC, 
+    @EnumVersion(version = ServerVersion.v1_20_2) ITEM_BRUSH_BRUSHING_GRAVEL, 
+    @EnumVersion(version = ServerVersion.v1_20_2) ITEM_BRUSH_BRUSHING_GRAVEL_COMPLETE, 
+    @EnumVersion(version = ServerVersion.v1_20_2) ITEM_BRUSH_BRUSHING_SAND, 
+    @EnumVersion(version = ServerVersion.v1_20_2) ITEM_BRUSH_BRUSHING_SAND_COMPLETE, 
+    @EnumVersion(version = ServerVersion.v1_20_2) MUSIC_DISC_RELIC, 
+    @EnumVersion(version = ServerVersion.v1_20_2) MUSIC_OVERWORLD_BADLANDS, 
+    @EnumVersion(version = ServerVersion.v1_20_2) MUSIC_OVERWORLD_BAMBOO_JUNGLE, 
+    @EnumVersion(version = ServerVersion.v1_20_2) MUSIC_OVERWORLD_DESERT, 
+    @EnumVersion(version = ServerVersion.v1_20_2) MUSIC_OVERWORLD_FLOWER_FOREST, 
+    @EnumVersion(version = ServerVersion.v1_20_2) MUSIC_OVERWORLD_FOREST, 
+    @EnumVersion(version = ServerVersion.v1_20_2) MUSIC_OVERWORLD_JUNGLE, 
+    @EnumVersion(version = ServerVersion.v1_20_2) MUSIC_OVERWORLD_SPARSE_JUNGLE 
     ; // ---- END ---- //
 
     private String soundname = name();

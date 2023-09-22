@@ -142,7 +142,12 @@ public enum Particle {
     // ---- Particles added in v1_19_4 ---- //
     @EnumVersion(version = ServerVersion.v1_19_4) DRIPPING_CHERRY_LEAVES, 
     @EnumVersion(version = ServerVersion.v1_19_4) FALLING_CHERRY_LEAVES, 
-    @EnumVersion(version = ServerVersion.v1_19_4) LANDING_CHERRY_LEAVES 
+    @EnumVersion(version = ServerVersion.v1_19_4) LANDING_CHERRY_LEAVES ,
+
+
+    // ---- Particles added in v1_20_2 ---- //
+    @EnumVersion(version = ServerVersion.v1_20_2) CHERRY_LEAVES, 
+    @EnumVersion(version = ServerVersion.v1_20_2) EGG_CRACK 
     ; // ---- END ---- //
 
     private final String name;
