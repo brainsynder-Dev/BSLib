@@ -1,5 +1,6 @@
 package lib.brainsynder.item.meta;
 
+import com.eclipsesource.json.Json;
 import com.mojang.authlib.GameProfile;
 import lib.brainsynder.item.MetaHandler;
 import lib.brainsynder.nbt.StorageTagCompound;
@@ -19,9 +20,8 @@ public class SkullMetaHandler extends MetaHandler<SkullMeta> {
         SkullMeta skullMeta = (SkullMeta) meta;
         StorageTagCompound compound = new StorageTagCompound();
         if (skullMeta.hasOwner() && (!skullMeta.getOwner().equals("Steve"))) compound.setString("owner", skullMeta.getOwner());
-        GameProfile profile = getGameProfile(skullMeta);
-        if (profile != null) {
-            String texture = getTexture(profile);
+        if (skullMeta.getOwnerProfile() != null) {
+            String texture = getTexture(skullMeta.getOwnerProfile());
             if ((texture != null) && (!texture.isEmpty())) compound.setString("texture", texture);
         }
         updateCompound(compound);
@@ -36,9 +36,12 @@ public class SkullMetaHandler extends MetaHandler<SkullMeta> {
                 String texture = compound.getString("texture");
                 if (texture == null) return value;
                 if (texture.isEmpty()) return value;
-                if (texture.startsWith("http")) texture = Base64Wrapper.encodeString("{\"textures\":{\"SKIN\":{\"url\":\"" + texture + "\"}}}");
+                if ((!texture.startsWith("http")) && Base64Wrapper.isEncoded(texture)) {
+                    texture = Base64Wrapper.decodeString(texture);
+                    texture = Json.parse(texture).asObject().get("textures").asObject().get("SKIN").asObject().get("url").asString();
+                }
                 String finalTexture = texture;
-                return applyTextureToMeta(value, createProfile(finalTexture));
+                value.setOwnerProfile(createProfile(finalTexture));
             }
             return value;
         });

@@ -1,8 +1,10 @@
 package lib.brainsynder.item;
 
+import com.eclipsesource.json.Json;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nbt.StorageTagList;
 import lib.brainsynder.nbt.StorageTagString;
+import lib.brainsynder.utils.AdvString;
 import lib.brainsynder.utils.Base64Wrapper;
 import lib.brainsynder.utils.Colorize;
 import org.apache.commons.lang.WordUtils;
@@ -287,22 +289,20 @@ public class ItemBuilder {
     public ItemBuilder setTexture (String texture) {
         if (texture == null) return this;
         if (texture.isEmpty()) return this;
-        if (texture.startsWith("http")) texture = Base64Wrapper.encodeString("{\"textures\":{\"SKIN\":{\"url\":\"" + texture + "\"}}}");
+        if ((!texture.startsWith("http")) && Base64Wrapper.isEncoded(texture)) {
+            texture = Base64Wrapper.decodeString(texture);
+            texture = Json.parse(texture).asObject().get("textures").asObject().get("SKIN").asObject().get("url").asString();
+        }
         String finalTexture = texture;
         handleMeta(SkullMeta.class, value -> {
-            if (finalTexture.length() > 17) {
-                return ItemTools.applyTextureToMeta(value, ItemTools.createProfile(finalTexture));
-            }else{
-                value.setOwner(finalTexture);
-            }
+            value.setOwnerProfile(ItemTools.createProfile(finalTexture));
             return value;
         });
         return this;
     }
 
     /**
-     * If the Item is a player_skull it will return the Base64 Encoded texture url
-     * This is here due to {@link SkullMeta} not having a method to do this
+     * If the Item is a player_skull it will return the texture url
      */
     public String getTexture() {
         return getMetaValue(SkullMeta.class, value -> ItemTools.getTexture(ItemTools.getGameProfile(value)));

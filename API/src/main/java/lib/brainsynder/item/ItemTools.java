@@ -7,8 +7,13 @@ import lib.brainsynder.item.meta.*;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.reflection.FieldAccessor;
 import lib.brainsynder.reflection.Reflection;
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.meta.*;
+import org.bukkit.profile.PlayerProfile;
+import org.bukkit.profile.PlayerTextures;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -26,45 +31,23 @@ class ItemTools {
     at cskulls.brainsynder.Inventory.Menu.onClick(Menu.java:78) ~[?:?]
     at cskulls.brainsynder.Listeners.MenuClick.onClick(MenuClick.java:57) ~[?:?]
      */
-    protected static GameProfile createProfile(String data) {
+    protected static PlayerProfile createProfile(String data) {
         return createProfile("", data);
     }
-    protected static GameProfile createProfile(String owner, String data) {
+    protected static PlayerProfile createProfile(String owner, String data) {
+        PlayerProfile profile = Bukkit.createPlayerProfile(UUID.randomUUID(), (owner.isEmpty() ? "Steve" : owner));
+        PlayerTextures textures = profile.getTextures();
         try {
-            GameProfile profile = new GameProfile(UUID.randomUUID(), (owner.isEmpty() ? "Steve" : owner));
-            PropertyMap propertyMap = profile.getProperties();
-            Property property = new Property("textures", data);
-            propertyMap.put("textures", property);
-            return profile;
-        } catch (Exception var5) {
-            var5.printStackTrace();
-            return null;
-        }
+            textures.setSkin(new URL(data));
+        } catch (MalformedURLException ignored) {}
+        profile.setTextures(textures);
+        return profile;
     }
-    protected static SkullMeta applyTextureToMeta(SkullMeta meta, GameProfile profile) {
-        Class craftMetaSkull = Reflection.getCBCClass("inventory.CraftMetaSkull");
-        Class c = craftMetaSkull.cast(meta).getClass();
-        FieldAccessor field = FieldAccessor.getField(c, "profile", GameProfile.class);
-        field.set(meta, profile);
-        return meta;
+    protected static PlayerProfile getGameProfile(SkullMeta meta) {
+        return meta.getOwnerProfile();
     }
-    protected static GameProfile getGameProfile(SkullMeta meta) {
-        Class craftMetaSkull = Reflection.getCBCClass("inventory.CraftMetaSkull");
-        FieldAccessor<GameProfile> field = FieldAccessor.getField(craftMetaSkull, "profile", GameProfile.class);
-        return field.get(meta);
-    }
-    protected static String getTexture (GameProfile profile) {
-        PropertyMap propertyMap = profile.getProperties();
-        Collection<Property> properties = propertyMap.get("textures");
-        String text = "";
-
-        for (Property property : properties) {
-            if (property.getName().equals("textures")) {
-                text = property.getValue();
-                break;
-            }
-        }
-        return text;
+    protected static String getTexture (PlayerProfile profile) {
+        return profile.getTextures().getSkin().toString();
     }
 
     // This method might change in the future to better handle the other ItemMetas
