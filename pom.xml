@@ -10,7 +10,6 @@
     <version>0.0.1-SNAPSHOT</version>
     <modules>
         <module>API</module>
-        <module>API-NMS</module>
     </modules>
 
     <properties>
@@ -25,13 +24,9 @@
 
     <distributionManagement>
         <repository>
-            <id>maven-releases</id>
-            <url>https://repo.pluginwiki.us/repository/maven-releases/</url>
+            <id>bs-repository</id>
+            <url>https://repo.bsdevelopment.org/releases</url>
         </repository>
-        <snapshotRepository>
-            <id>maven-snapshots</id>
-            <url>https://repo.pluginwiki.us/repository/maven-snapshots/</url>
-        </snapshotRepository>
     </distributionManagement>
 
     <build>
