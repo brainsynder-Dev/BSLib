@@ -148,9 +148,17 @@ public class StorageTagTools {
                     if (jsonValue.isString()) {
                         String string = jsonValue.asString();
                         if (string.endsWith("l")) {
-                            longs.add(Long.parseLong(string.replace("l", "")));
+                            try {
+                                longs.add(Long.parseLong(string.replace("l", "")));
+                            }catch (NumberFormatException e) {
+                                list.appendTag(new StorageTagString(string));
+                            }
                         }else if (string.endsWith("b")) {
-                            bytes.add(Byte.parseByte(string.replace("b", "")));
+                            try {
+                                bytes.add(Byte.parseByte(string.replace("b", "")));
+                            }catch (NumberFormatException e) {
+                                list.appendTag(new StorageTagString(string));
+                            }
                         }else {
                             try {
                                 ints.add(Integer.parseInt(string));
