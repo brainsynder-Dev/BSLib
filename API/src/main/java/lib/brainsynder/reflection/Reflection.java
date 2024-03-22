@@ -1,5 +1,6 @@
 package lib.brainsynder.reflection;
 
+import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -155,7 +156,10 @@ public class Reflection {
     }
 
     public static <T> T invokeBukkitMethod(String method, Object invoker, Class<?>[] parameterClasses, Object... params) {
-        return invokeBukkitMethod(invoker.getClass().getName().replace("org.bukkit.craftbukkit." + getVersion() + ".", ""), method, invoker, parameterClasses, params);
+        String version = getBukkitPackageVersion()+".";
+        if (PaperLib.isPaper() && version.equals(".")) version = "";
+
+        return invokeBukkitMethod(invoker.getClass().getName().replace("org.bukkit.craftbukkit." + version, ""), method, invoker, parameterClasses, params);
     }
 
     public static <T> T invokeBukkitMethod(String method, Object invoker) {
@@ -179,7 +183,10 @@ public class Reflection {
     }
 
     public static <T> T getBukkitField(Object owner, String fieldName) {
-        return getBukkitField(owner.getClass().getName().replace("org.bukkit.craftbukkit." + getVersion() + ".", ""), owner, fieldName);
+        String version = getBukkitPackageVersion()+".";
+        if (PaperLib.isPaper() && version.equals(".")) version = "";
+
+        return getBukkitField(owner.getClass().getName().replace("org.bukkit.craftbukkit." + version, ""), owner, fieldName);
     }
 
     public static <T> T getBukkitField(String className, Object owner, String fieldName) {
@@ -236,9 +243,12 @@ public class Reflection {
     }
 
     public static Class<?> getNmsClass(String name) {
+        String version = getBukkitPackageVersion()+".";
+        if (PaperLib.isPaper() && version.equals(".")) version = "";
+
         Class<?> clazz = null;
         try {
-            clazz = Class.forName("net.minecraft.server." + getVersion() + "." + name);
+            clazz = Class.forName("net.minecraft.server." + version + name);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -259,8 +269,12 @@ public class Reflection {
         return clazz;
     }
 
-    private static String getVersion() {
-        return Bukkit.getServer().getClass().getPackage().getName().substring(23);
+    public static String getBukkitPackageVersion() {
+        try {
+            return Bukkit.getServer().getClass().getPackage().getName().substring(23);
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     public static Object getFieldValue(Field field, Object instance) {
@@ -353,8 +367,11 @@ public class Reflection {
 
 
     public static Class getCBCClass(String className) {
+        String version = getBukkitPackageVersion()+".";
+        if (PaperLib.isPaper() && version.equals(".")) version = "";
+
         try {
-            return Class.forName("org.bukkit.craftbukkit." + getVersion() + "." + className);
+            return Class.forName("org.bukkit.craftbukkit." + version + className);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

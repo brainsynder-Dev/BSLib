@@ -1,5 +1,6 @@
 package lib.brainsynder;
 
+import lib.brainsynder.reflection.Reflection;
 import lib.brainsynder.utils.AdvString;
 import lib.brainsynder.utils.Triple;
 import org.bukkit.Bukkit;
@@ -118,17 +119,18 @@ public enum ServerVersion implements IVersion {
         Triple<Integer, Integer, Integer> triple = Triple.of(ints[0], ints[1], ints[2]);
 
         for (ServerVersion version : values()) {
-            if (version.name().equals(mcVersion+"_R1")) {
+            if (version.name().equalsIgnoreCase(mcVersion+"_R1")) {
                 CURRENT_VERSION = version;
                 if (parent) return (T) version.getParent();
                 return (T) version;
             }
-            if (version.name().equals(mcVersion)) {
+            if (version.name().equalsIgnoreCase(mcVersion)) {
                 CURRENT_VERSION = version;
                 if (parent) return (T) version.getParent();
                 return (T) version;
             }
-            if (version.name().equals(Bukkit.getServer().getClass().getPackage().getName().substring(23))) {
+
+            if ((!Reflection.getBukkitPackageVersion().isEmpty()) && version.name().equals(Reflection.getBukkitPackageVersion())) {
                 CURRENT_VERSION = version;
                 return (T) version;
             }
@@ -143,7 +145,7 @@ public enum ServerVersion implements IVersion {
 
             @Override
             public String getNMS() {
-                return Bukkit.getServer().getClass().getPackage().getName().substring(23);
+                return Reflection.getBukkitPackageVersion();
             }
 
             @Override
