@@ -1,21 +1,13 @@
 package lib.brainsynder.utils;
 
-import lib.brainsynder.ServerVersion;
-import lib.brainsynder.reflection.FieldAccessor;
-import lib.brainsynder.reflection.Reflection;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,32 +16,8 @@ import java.util.function.Predicate;
 
 public class Utilities {
     private static final int MILLI_PER_TICK = (1000 / 20);
-    private static final Class<?> typeClass;
-
-    private static final Constructor entityConstructor;
-    private static final Constructor spawnEntity;
-    private static final Constructor removeEntity;
-
-    private static final Method teleportSyncMethod;
-    private static final Method a;
-    private static final Method setSize;
-    private static final Method setLoc;
-    private static final Method setFlag;
-    private static final Method getID;
-
 
     private static final List<Block> solidBlocks = new ArrayList<>();
-
-    public static void nmsTP(Player player, Location location) {
-        if (!location.getWorld().equals(player.getWorld())) {
-            player.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
-            return;
-        }
-
-        Object handle = Reflection.getHandle(player);
-
-        Reflection.invoke(teleportSyncMethod, handle, location.getX(), location.getY(), location.getZ());
-    }
 
     public List<Location> getHollowCube(Location loc, double particleDistance) {
         List<Location> result = new ArrayList<>();
@@ -263,38 +231,6 @@ public class Utilities {
         return new Vector(x, y, z);
     }
 
-    public static void highlight(Plugin plugin, Player player, Location loc, long lifetime) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-            Object world = Reflection.getWorldHandle(loc.getWorld());
-            try {
-                FieldAccessor accessor = FieldAccessor.getField(typeClass, "MAGMA_CUBE", typeClass);
-                Object entityTypes = accessor.get(null);
-                try {
-                    // Entity Handling
-                    Object entity = entityConstructor.newInstance(entityTypes, world);
-                    Reflection.invoke(setLoc, entity, loc.getX() + 0.5, loc.getY(), loc.getZ() + 0.5, 0, 0);
-                    Reflection.invoke(setSize, entity, 1, false);
-                    Reflection.invoke(setFlag, entity, 6, true); //Glow
-                    Reflection.invoke(setFlag, entity, 5, true); //Invisibility
-
-
-                    // Spawn entity
-                    Reflection.sendPacket(player, Reflection.initiateClass(spawnEntity, entity));
-
-                    // Removes entity
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> Reflection.sendPacket(player, Reflection.initiateClass(removeEntity, Reflection.invoke(getID, entity))), lifetime);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }, 40);
-    }
-
     public static boolean isValid(Entity entity) {
         if (entity == null) return false;
         if (entity.isValid() || (!entity.isDead())) return true;
@@ -319,31 +255,5 @@ public class Utilities {
         }
 
         return ticks;
-    }
-
-
-
-
-    static {
-        /**
-         * {@link net.minecraft.server.v1_16_R2.EntityTypes}
-         */
-        typeClass = Reflection.getNmsClass("EntityTypes", "world.entity");
-        Class<?> entity = Reflection.getNmsClass("Entity", "world.entity");
-        Class<?> entityClass = Reflection.getNmsClass("EntityMagmaCube", "world.entity.monster");
-        entityConstructor = Reflection.getConstructor(entityClass, typeClass, Reflection.getNmsClass("World", "world.level"));
-        teleportSyncMethod = Reflection.getMethod(Reflection.getNmsClass("Entity", "world.entity"), new String[]{"teleportAndSync", "moveTo", "a"}, Double.TYPE, Double.TYPE, Double.TYPE);
-        a = Reflection.getMethod(typeClass, "a", String.class);
-
-        setSize = Reflection.getMethod(entityClass, new String[]{"setSize", "a"}, Integer.TYPE, Boolean.TYPE);
-        setLoc = Reflection.getMethod(entity, new String[]{"setLocation", "absMoveTo", "a"}, Double.TYPE, Double.TYPE, Double.TYPE, Float.TYPE, Float.TYPE);
-        setFlag = Reflection.getMethod(entity, new String[]{"setFlag", "b"}, Integer.TYPE, Boolean.TYPE);
-        getID = Reflection.getMethod(entity, new String[]{"getId", "ae"});
-
-        // new PacketPlayOutSpawnEntityLiving(EntityLiving)
-        spawnEntity = Reflection.getConstructor(Reflection.getNmsClass(((ServerVersion.isEqualNew(ServerVersion.v1_19) ? "PacketPlayOutSpawnEntity" : "PacketPlayOutSpawnEntityLiving")), "network.protocol.game"), Reflection.getNmsClass("EntityLiving", "world.entity"));
-
-        // new PacketPlayOutEntityDestroy (int: Entity.getId())
-        removeEntity = Reflection.getConstructor(Reflection.getNmsClass("PacketPlayOutEntityDestroy", "network.protocol.game"), Integer.TYPE);
     }
 }
