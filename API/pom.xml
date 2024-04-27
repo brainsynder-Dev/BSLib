@@ -30,6 +30,10 @@
                             <pattern>org.bstats</pattern>
                             <shadedPattern>lib.brainsynder.metric</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>de.tr7zw</pattern>
+                            <shadedPattern>${groupId}.internal.nbtapi</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>
@@ -53,8 +57,12 @@
 
     <repositories>
         <repository>
-            <id>bs-nms</id>
-            <url>https://repo.pluginwiki.us/repository/nms/</url>
+            <id>bs-repo-nms</id>
+            <url>https://repo.bsdevelopment.org/nms</url>
+        </repository>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
             <id>CodeMC</id>
@@ -79,8 +87,8 @@
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.19-R0.1-SNAPSHOT</version>
+            <artifactId>spigot-api</artifactId>
+            <version>1.20.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -88,6 +96,13 @@
             <groupId>io.papermc</groupId>
             <artifactId>paperlib</artifactId>
             <version>1.0.8</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>de.tr7zw</groupId>
+            <artifactId>item-nbt-api-plugin</artifactId>
+            <version>2.12.3</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

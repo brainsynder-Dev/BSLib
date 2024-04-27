@@ -3,7 +3,8 @@ package lib.brainsynder.nbt;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
-import lib.brainsynder.ServerVersion;
+import de.tr7zw.nbtapi.NBTContainer;
+import de.tr7zw.nbtapi.NBTItem;
 import lib.brainsynder.nbt.other.IStorageList;
 import lib.brainsynder.nbt.other.NBTException;
 import lib.brainsynder.reflection.Reflection;
@@ -21,13 +22,13 @@ public class StorageTagTools {
     private static final Class<?> nbtTag;
     private static final Class<?> craftStack;
     private static final Class<?> stackClass;
-    private static final Constructor newStack;
+//    private static final Constructor newStack;
     private static final Constructor newKey;
-    private static final Method save;
-    private static Method newItem;
-    private static final Method toString;
+//    private static final Method save;
+//    private static Method newItem;
+//    private static final Method toString;
     private static final Method asCopy;
-    private static final Method asBukkitCopy;
+//    private static final Method asBukkitCopy;
     private static final Method parseString;
 
     static {
@@ -40,33 +41,32 @@ public class StorageTagTools {
         newKey = Reflection.getConstructor(keyClass, String.class);
         nbtTag = Reflection.getNmsClass("NBTTagCompound", "nbt");
         stackClass = Reflection.getNmsClass("ItemStack", "world.item"); /** {@link net.minecraft.server.v1_13_R1.ItemStack} */
-        newStack = Reflection.getConstructor(stackClass, nbtTag);
-        if (ServerVersion.isEqualNew(ServerVersion.v1_13_R1))
-            newItem = Reflection.getMethod(stackClass, "a", nbtTag);
-        asBukkitCopy = Reflection.getMethod(craftStack, "asBukkitCopy", stackClass);
-
-        save = Reflection.getMethod(stackClass, new String[]{"save", "b"}, nbtTag);
-        toString = Reflection.getMethod(nbtTag, "toString");
+//        newStack = Reflection.getConstructor(stackClass, nbtTag);
+//        if (ServerVersion.isEqualNew(ServerVersion.v1_13_R1))
+//            newItem = Reflection.getMethod(stackClass, "a", nbtTag);
+//        asBukkitCopy = Reflection.getMethod(craftStack, "asBukkitCopy", stackClass);
+//
+//        save = Reflection.getMethod(stackClass, new String[]{"save", "b"}, nbtTag);
+//        toString = Reflection.getMethod(nbtTag, "toString");
         asCopy = Reflection.getMethod(craftStack, "asNMSCopy", ItemStack.class);
     }
 
     public static ItemStack toItemStack (StorageTagCompound compound) {
         if (!compound.hasKey("id")) return new ItemStack(Material.AIR); // Checks if it is an ItemStacks NBT/STC
-
-        Object nbt = Reflection.invoke(parseString, null, compound.toString());
-        Object nmsStack;
-        if (ServerVersion.isEqualOld(ServerVersion.v1_12_R1)) {
-            nmsStack = Reflection.initiateClass(newStack, nbt); // Will make it an NMS ItemStack
-        }else{
-            nmsStack = Reflection.invoke(newItem, null, nbt); // Will make it an NMS ItemStack
-        }
-
-        return (ItemStack) Reflection.invoke(asBukkitCopy, null, nmsStack);
+        return NBTItem.convertNBTtoItem(new NBTContainer(compound.toString()));
+//        Object nbt = Reflection.invoke(parseString, null, compound.toString());
+//        Object nmsStack;
+//        if (ServerVersion.isEqualOld(ServerVersion.v1_12_R1)) {
+//            nmsStack = Reflection.initiateClass(newStack, nbt); // Will make it an NMS ItemStack
+//        }else{
+//            nmsStack = Reflection.invoke(newItem, null, nbt); // Will make it an NMS ItemStack
+//        }
+//
+//        return (ItemStack) Reflection.invoke(asBukkitCopy, null, nmsStack);
     }
 
     public static StorageTagCompound fromItemStack(ItemStack item) {
-        Object nbt = Reflection.invoke(save, asNMSCopy(item), newNBTTag(nbtTag));
-        String json = (String) Reflection.invoke(toString, nbt);
+        String json = NBTItem.convertItemtoNBT(item).toString();
 
         // Removes the extra formatting that Spigot adds
         //if (json.contains("{\"text\":\"")) json = json.replace("'{\"text\":\"", "\"").replace("\"}'", "\"");
