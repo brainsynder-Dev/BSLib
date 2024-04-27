@@ -3,8 +3,6 @@ package lib.brainsynder.nbt;
 import com.google.common.collect.Lists;
 import lib.brainsynder.nbt.other.IStorageList;
 import lib.brainsynder.nbt.other.NBTSizeTracker;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -13,7 +11,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class StorageTagList extends StorageBase implements IStorageList<List<StorageBase>> {
-    private static final Logger LOGGER = LogManager.getLogger(StorageTagList.class);
     private List<StorageBase> tagList = Lists.newArrayList();
 
     /**
@@ -99,13 +96,12 @@ public class StorageTagList extends StorageBase implements IStorageList<List<Sto
      */
     public StorageTagList appendTag(StorageBase nbt) {
         if (nbt.getId() == 0) {
-            LOGGER.warn("Invalid TagEnd added to ListTag");
+            throw new RuntimeException("Invalid TagEnd added to ListTag");
         } else {
             if (this.tagType == 0) {
                 this.tagType = nbt.getId();
             } else if (this.tagType != nbt.getId()) {
-                LOGGER.warn("Mismatching tag types to tag list ("+nbt.getClass().getSimpleName()+" != "+StorageBase.createNewByType(tagType).getClass().getSimpleName()+")");
-                return this;
+                throw new RuntimeException("Mismatching tag types to tag list ("+nbt.getClass().getSimpleName()+" != "+StorageBase.createNewByType(tagType).getClass().getSimpleName()+")");
             }
 
             this.tagList.add(nbt);
@@ -118,18 +114,17 @@ public class StorageTagList extends StorageBase implements IStorageList<List<Sto
      */
     public void set(int idx, StorageBase nbt) {
         if (nbt.getId() == 0) {
-            LOGGER.warn("Invalid TagEnd added to ListTag");
+            throw new RuntimeException("Invalid TagEnd added to ListTag");
         } else if (idx >= 0 && idx < this.tagList.size()) {
             if (this.tagType == 0) {
                 this.tagType = nbt.getId();
             } else if (this.tagType != nbt.getId()) {
-                LOGGER.warn("Mismatching tag types to tag list ("+nbt.getClass().getSimpleName()+" != "+StorageBase.createNewByType(tagType).getClass().getSimpleName()+")");
-                return;
+                throw new RuntimeException("Mismatching tag types to tag list ("+nbt.getClass().getSimpleName()+" != "+StorageBase.createNewByType(tagType).getClass().getSimpleName()+")");
             }
 
             this.tagList.set(idx, nbt);
         } else {
-            LOGGER.warn("index out of bounds to set tag in tag list");
+            throw new RuntimeException("index out of bounds to set tag in tag list");
         }
     }
 

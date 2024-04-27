@@ -1,13 +1,10 @@
 package lib.brainsynder.nbt;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lib.brainsynder.nbt.other.IStorageList;
 import lib.brainsynder.nbt.other.NBTSizeTracker;
 import lib.brainsynder.nbt.other.StorageColorType;
 import lib.brainsynder.utils.Colorize;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.bukkit.*;
 import org.bukkit.inventory.ItemStack;
 
@@ -18,7 +15,6 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class StorageTagCompound extends StorageBase {
-    private static final Logger LOGGER = LogManager.getLogger(StorageTagCompound.class);
     private static final Pattern PATTERN = Pattern.compile("[A-Za-z0-9._+-]+");
     private final Map<String, StorageBase> tagMap = Maps.newHashMap();
     private final List<String> booleans = new ArrayList<>();
@@ -121,7 +117,7 @@ public class StorageTagCompound extends StorageBase {
 
             while ((b0 = readType(input, sizeTracker)) != 0) {
                 String s = readKey(input, sizeTracker);
-                sizeTracker.read(224 + 16 * s.length());
+                sizeTracker.read(224 + 16L * s.length());
                 StorageBase nbtbase = readNBT(b0, s, input, depth + 1, sizeTracker);
 
                 if (this.tagMap.put(s, nbtbase) != null) {
@@ -413,8 +409,7 @@ public class StorageTagCompound extends StorageBase {
         // Was saved as an int
         if (base instanceof StorageTagInt) return Color.fromRGB(((StorageTagInt) base).getInt());
 
-        if (base instanceof StorageTagString) {
-            StorageTagString tagString = (StorageTagString) base;
+        if (base instanceof StorageTagString tagString) {
             String string = tagString.getString();
 
             // String is a HEX code
@@ -578,8 +573,7 @@ public class StorageTagCompound extends StorageBase {
             return String.valueOf(((StorageTagShort) base).getShort());
         if (base instanceof StorageTagString)
             return String.valueOf(base.getString());
-        if (base instanceof StorageTagList) {
-            StorageTagList list = (StorageTagList) base;
+        if (base instanceof StorageTagList list) {
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < list.tagCount(); i++) {
                 builder.append(fetchValue(list.get(i)));
@@ -686,12 +680,6 @@ public class StorageTagCompound extends StorageBase {
     public String toString() {
         StringBuilder stringbuilder = new StringBuilder("{");
         Collection<String> collection = this.tagMap.keySet();
-
-        if (LOGGER.isDebugEnabled()) {
-            List<String> list = Lists.newArrayList(this.tagMap.keySet());
-            Collections.sort(list);
-            collection = list;
-        }
 
         for (String s : collection) {
             if (stringbuilder.length() != 1) {
