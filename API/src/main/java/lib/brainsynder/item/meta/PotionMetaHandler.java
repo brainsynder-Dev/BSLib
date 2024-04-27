@@ -5,10 +5,8 @@ import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nbt.StorageTagList;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
 
 public class PotionMetaHandler extends MetaHandler<PotionMeta> {
 
@@ -18,8 +16,7 @@ public class PotionMetaHandler extends MetaHandler<PotionMeta> {
 
     @Override
     public void fromItemMeta(ItemMeta meta) {
-        if (!(meta instanceof PotionMeta)) return;
-        PotionMeta potionMeta = (PotionMeta) meta;
+        if (!(meta instanceof PotionMeta potionMeta)) return;
 
         StorageTagCompound compound = new StorageTagCompound();
 
@@ -40,12 +37,6 @@ public class PotionMetaHandler extends MetaHandler<PotionMeta> {
             compound.setTag("effects", list);
         }
 
-        StorageTagCompound data = new StorageTagCompound();
-        data.setString("type", potionMeta.getBasePotionData().getType().name());
-        data.setBoolean("extended", potionMeta.getBasePotionData().isExtended());
-        data.setBoolean("upgraded", potionMeta.getBasePotionData().isUpgraded());
-        compound.setTag("base", data);
-
         updateCompound(compound);
     }
 
@@ -54,10 +45,6 @@ public class PotionMetaHandler extends MetaHandler<PotionMeta> {
         super.fromCompound(compound);
         modifyMeta(value -> {
             if (compound.hasKey("color")) value.setColor(compound.getColor("color"));
-            if (compound.hasKey("base")) {
-                PotionData data = new PotionData(PotionType.valueOf(compound.getString("type", "WATER")), compound.getBoolean("extended", false), compound.getBoolean("upgraded", false));
-                value.setBasePotionData(data);
-            }
 
             if (compound.hasKey("effects")) {
                 StorageTagList list = (StorageTagList) compound.getTag("effects");

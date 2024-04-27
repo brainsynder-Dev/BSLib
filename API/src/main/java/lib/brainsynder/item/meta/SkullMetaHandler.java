@@ -1,7 +1,6 @@
 package lib.brainsynder.item.meta;
 
 import com.eclipsesource.json.Json;
-import com.mojang.authlib.GameProfile;
 import lib.brainsynder.item.MetaHandler;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.utils.Base64Wrapper;
@@ -16,8 +15,7 @@ public class SkullMetaHandler extends MetaHandler<SkullMeta> {
 
     @Override
     public void fromItemMeta(ItemMeta meta) {
-        if (!(meta instanceof SkullMeta)) return;
-        SkullMeta skullMeta = (SkullMeta) meta;
+        if (!(meta instanceof SkullMeta skullMeta)) return;
         StorageTagCompound compound = new StorageTagCompound();
         if (skullMeta.hasOwner() && (!skullMeta.getOwner().equals("Steve"))) compound.setString("owner", skullMeta.getOwner());
         if (skullMeta.getOwnerProfile() != null) {

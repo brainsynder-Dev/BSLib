@@ -1,12 +1,7 @@
 package lib.brainsynder.item;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
-import com.mojang.authlib.properties.PropertyMap;
 import lib.brainsynder.item.meta.*;
 import lib.brainsynder.nbt.StorageTagCompound;
-import lib.brainsynder.reflection.FieldAccessor;
-import lib.brainsynder.reflection.Reflection;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.profile.PlayerProfile;
@@ -14,7 +9,6 @@ import org.bukkit.profile.PlayerTextures;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
 import java.util.UUID;
 
 class ItemTools {

@@ -1,13 +1,12 @@
 package lib.brainsynder.item;
 
 import com.eclipsesource.json.Json;
+import lib.brainsynder.apache.WordUtils;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nbt.StorageTagList;
 import lib.brainsynder.nbt.StorageTagString;
-import lib.brainsynder.utils.AdvString;
 import lib.brainsynder.utils.Base64Wrapper;
 import lib.brainsynder.utils.Colorize;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -15,7 +14,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.*;
 
