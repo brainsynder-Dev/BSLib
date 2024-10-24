@@ -11,7 +11,7 @@
     </parent>
     <description>Contains the BSLib code (Without NMS)</description>
     <artifactId>API</artifactId>
-    <version>${module.version}</version>
+    <version>B132</version>
 
     <build>
         <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
