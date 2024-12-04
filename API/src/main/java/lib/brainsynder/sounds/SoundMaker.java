@@ -1587,7 +1587,7 @@ public enum SoundMaker {
     @EnumVersion(version = ServerVersion.v1_19_3) ENTITY_CAMEL_SIT, 
     @EnumVersion(version = ServerVersion.v1_19_3) ENTITY_CAMEL_STAND, 
     @EnumVersion(version = ServerVersion.v1_19_3) ENTITY_CAMEL_STEP, 
-    @EnumVersion(version = ServerVersion.v1_19_3) ENTITY_CAMEL_STEP_SAND ,
+    @EnumVersion(version = ServerVersion.v1_19_3) ENTITY_CAMEL_STEP_SAND,
 
 
     // ---- Sounds added in v1_19_4 ---- //
@@ -1652,7 +1652,7 @@ public enum SoundMaker {
     @EnumVersion(version = ServerVersion.v1_19_4) INTENTIONALLY_EMPTY, 
     @EnumVersion(version = ServerVersion.v1_19_4) ITEM_BRUSH_BRUSHING, 
     @EnumVersion(version = ServerVersion.v1_19_4) ITEM_BRUSH_BRUSH_SAND_COMPLETED, 
-    @EnumVersion(version = ServerVersion.v1_19_4) MUSIC_OVERWORLD_CHERRY_GROVE ,
+    @EnumVersion(version = ServerVersion.v1_19_4) MUSIC_OVERWORLD_CHERRY_GROVE,
 
 
     // ---- Sounds added in v1_20_2 ---- //
@@ -1689,7 +1689,7 @@ public enum SoundMaker {
     @EnumVersion(version = ServerVersion.v1_20_2) MUSIC_OVERWORLD_FLOWER_FOREST, 
     @EnumVersion(version = ServerVersion.v1_20_2) MUSIC_OVERWORLD_FOREST, 
     @EnumVersion(version = ServerVersion.v1_20_2) MUSIC_OVERWORLD_JUNGLE, 
-    @EnumVersion(version = ServerVersion.v1_20_2) MUSIC_OVERWORLD_SPARSE_JUNGLE ,
+    @EnumVersion(version = ServerVersion.v1_20_2) MUSIC_OVERWORLD_SPARSE_JUNGLE,
 
 
     // ---- Sounds added in v1_20_3 ---- //
@@ -1746,7 +1746,7 @@ public enum SoundMaker {
     @EnumVersion(version = ServerVersion.v1_20_3) ENTITY_BREEZE_SLIDE, 
     @EnumVersion(version = ServerVersion.v1_20_3) ENTITY_GENERIC_WIND_BURST, 
     @EnumVersion(version = ServerVersion.v1_20_3) ENTITY_PARROT_IMITATE_BREEZE, 
-    @EnumVersion(version = ServerVersion.v1_20_3) ENTITY_PLAYER_TELEPORT ,
+    @EnumVersion(version = ServerVersion.v1_20_3) ENTITY_PLAYER_TELEPORT,
 
 
     // ---- Sounds added in v1_20_5 ---- //
@@ -1853,7 +1853,6 @@ public enum SoundMaker {
     @EnumVersion(version = ServerVersion.v1_21_4) BLOCK_TRIAL_SPAWNER_AMBIENT_OMINOUS,
     @EnumVersion(version = ServerVersion.v1_21_4) BLOCK_TRIAL_SPAWNER_OMINOUS_ACTIVATE,
     @EnumVersion(version = ServerVersion.v1_21_4) BLOCK_VAULT_REJECT_REWARDED_PLAYER,
-    @EnumVersion(version = ServerVersion.v1_21_4) ENTITY_CAMEL_STEP_SAND,
     @EnumVersion(version = ServerVersion.v1_21_4) ENTITY_CREAKING_ACTIVATE,
     @EnumVersion(version = ServerVersion.v1_21_4) ENTITY_CREAKING_AMBIENT,
     @EnumVersion(version = ServerVersion.v1_21_4) ENTITY_CREAKING_ATTACK,
@@ -1866,13 +1865,10 @@ public enum SoundMaker {
     @EnumVersion(version = ServerVersion.v1_21_4) ENTITY_CREAKING_TWITCH,
     @EnumVersion(version = ServerVersion.v1_21_4) ENTITY_CREAKING_UNFREEZE,
     @EnumVersion(version = ServerVersion.v1_21_4) ENTITY_PARROT_IMITATE_CREAKING,
-    @EnumVersion(version = ServerVersion.v1_21_4) ENTITY_PLAYER_TELEPORT,
     @EnumVersion(version = ServerVersion.v1_21_4) ITEM_BUNDLE_INSERT_FAIL,
     @EnumVersion(version = ServerVersion.v1_21_4) MUSIC_DISC_CREATOR,
     @EnumVersion(version = ServerVersion.v1_21_4) MUSIC_DISC_CREATOR_MUSIC_BOX,
     @EnumVersion(version = ServerVersion.v1_21_4) MUSIC_DISC_PRECIPICE,
-    @EnumVersion(version = ServerVersion.v1_21_4) MUSIC_OVERWORLD_CHERRY_GROVE,
-    @EnumVersion(version = ServerVersion.v1_21_4) MUSIC_OVERWORLD_SPARSE_JUNGLE,
     @EnumVersion(version = ServerVersion.v1_21_4) UI_HUD_BUBBLE_POP
     ; // ---- END ---- //
 
