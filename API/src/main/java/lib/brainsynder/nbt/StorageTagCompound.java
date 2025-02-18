@@ -1,22 +1,33 @@
 package lib.brainsynder.nbt;
 
-import com.google.common.collect.Maps;
 import lib.brainsynder.nbt.other.IStorageList;
 import lib.brainsynder.nbt.other.NBTSizeTracker;
 import lib.brainsynder.nbt.other.StorageColorType;
 import lib.brainsynder.utils.Colorize;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class StorageTagCompound extends StorageBase {
     private static final Pattern PATTERN = Pattern.compile("[A-Za-z0-9._+-]+");
-    private final Map<String, StorageBase> tagMap = Maps.newHashMap();
+    private final Map<String, StorageBase> tagMap = new HashMap<>();
     private final List<String> booleans = new ArrayList<>();
 
     private static void writeEntry(String name, StorageBase data, DataOutput output) throws IOException {

@@ -1,17 +1,17 @@
 package lib.brainsynder.nbt;
 
-import com.google.common.collect.Lists;
 import lib.brainsynder.nbt.other.IStorageList;
 import lib.brainsynder.nbt.other.NBTSizeTracker;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class StorageTagList extends StorageBase implements IStorageList<List<StorageBase>> {
-    private List<StorageBase> tagList = Lists.newArrayList();
+    private List<StorageBase> tagList = new ArrayList<>();
 
     /**
      * The type byte for the tags in the list - they must all be of the same type.
@@ -54,7 +54,7 @@ public class StorageTagList extends StorageBase implements IStorageList<List<Sto
                 throw new RuntimeException("Missing type on ListTag");
             } else {
                 sizeTracker.read(32L * (long) i);
-                this.tagList = Lists.newArrayListWithCapacity(i);
+                this.tagList = new ArrayList<>(i);
 
                 for (int j = 0; j < i; ++j) {
                     StorageBase nbtbase = createNewByType(this.tagType);
