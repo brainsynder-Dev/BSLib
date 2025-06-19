@@ -44,7 +44,8 @@ public enum ServerVersion implements IVersion {
     v1_21_1 (v1_21),
     v1_21_3 ("v1_21_R2"),
     v1_21_4 ("v1_21_R3"),
-    v1_21_5 ("v1_21_R4")
+    v1_21_5 ("v1_21_R4"),
+    v1_21_6 ("v1_21_R5")
     ; // ---- END ---- //
 
     private final String nms;
