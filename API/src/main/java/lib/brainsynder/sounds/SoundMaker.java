@@ -1924,7 +1924,39 @@ public enum SoundMaker {
     @EnumVersion(version = ServerVersion.v1_21_5) ENTITY_WOLF_SAD_GROWL,
     @EnumVersion(version = ServerVersion.v1_21_5) ENTITY_WOLF_SAD_HURT,
     @EnumVersion(version = ServerVersion.v1_21_5) ENTITY_WOLF_SAD_PANT,
-    @EnumVersion(version = ServerVersion.v1_21_5) ENTITY_WOLF_SAD_WHINE
+    @EnumVersion(version = ServerVersion.v1_21_5) ENTITY_WOLF_SAD_WHINE,
+
+
+    // ---- Sounds added in version: v1_21_6 ----
+    @EnumVersion(version = ServerVersion.v1_21_6) BLOCK_DRIED_GHAST_AMBIENT,
+    @EnumVersion(version = ServerVersion.v1_21_6) BLOCK_DRIED_GHAST_AMBIENT_WATER,
+    @EnumVersion(version = ServerVersion.v1_21_6) BLOCK_DRIED_GHAST_BREAK,
+    @EnumVersion(version = ServerVersion.v1_21_6) BLOCK_DRIED_GHAST_FALL,
+    @EnumVersion(version = ServerVersion.v1_21_6) BLOCK_DRIED_GHAST_PLACE,
+    @EnumVersion(version = ServerVersion.v1_21_6) BLOCK_DRIED_GHAST_PLACE_IN_WATER,
+    @EnumVersion(version = ServerVersion.v1_21_6) BLOCK_DRIED_GHAST_STEP,
+    @EnumVersion(version = ServerVersion.v1_21_6) BLOCK_DRIED_GHAST_TRANSITION,
+    @EnumVersion(version = ServerVersion.v1_21_6) BLOCK_DRY_GRASS_AMBIENT,
+    @EnumVersion(version = ServerVersion.v1_21_6) ENTITY_GHASTLING_AMBIENT,
+    @EnumVersion(version = ServerVersion.v1_21_6) ENTITY_GHASTLING_DEATH,
+    @EnumVersion(version = ServerVersion.v1_21_6) ENTITY_GHASTLING_HURT,
+    @EnumVersion(version = ServerVersion.v1_21_6) ENTITY_GHASTLING_SPAWN,
+    @EnumVersion(version = ServerVersion.v1_21_6) ENTITY_HAPPY_GHAST_AMBIENT,
+    @EnumVersion(version = ServerVersion.v1_21_6) ENTITY_HAPPY_GHAST_DEATH,
+    @EnumVersion(version = ServerVersion.v1_21_6) ENTITY_HAPPY_GHAST_EQUIP,
+    @EnumVersion(version = ServerVersion.v1_21_6) ENTITY_HAPPY_GHAST_HARNESS_GOGGLES_DOWN,
+    @EnumVersion(version = ServerVersion.v1_21_6) ENTITY_HAPPY_GHAST_HARNESS_GOGGLES_UP,
+    @EnumVersion(version = ServerVersion.v1_21_6) ENTITY_HAPPY_GHAST_HURT,
+    @EnumVersion(version = ServerVersion.v1_21_6) ENTITY_HAPPY_GHAST_RIDING,
+    @EnumVersion(version = ServerVersion.v1_21_6) ENTITY_HAPPY_GHAST_UNEQUIP,
+    @EnumVersion(version = ServerVersion.v1_21_6) ITEM_HORSE_ARMOR_UNEQUIP,
+    @EnumVersion(version = ServerVersion.v1_21_6) ITEM_LEAD_BREAK,
+    @EnumVersion(version = ServerVersion.v1_21_6) ITEM_LEAD_TIED,
+    @EnumVersion(version = ServerVersion.v1_21_6) ITEM_LEAD_UNTIED,
+    @EnumVersion(version = ServerVersion.v1_21_6) ITEM_LLAMA_CARPET_UNEQUIP,
+    @EnumVersion(version = ServerVersion.v1_21_6) ITEM_SADDLE_UNEQUIP,
+    @EnumVersion(version = ServerVersion.v1_21_6) ITEM_SHEARS_SNIP,
+    @EnumVersion(version = ServerVersion.v1_21_6) MUSIC_DISC_TEARS
     ; // ---- END ---- //
 
     private String soundname = name();
