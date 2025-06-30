@@ -1956,7 +1956,11 @@ public enum SoundMaker {
     @EnumVersion(version = ServerVersion.v1_21_6) ITEM_LLAMA_CARPET_UNEQUIP,
     @EnumVersion(version = ServerVersion.v1_21_6) ITEM_SADDLE_UNEQUIP,
     @EnumVersion(version = ServerVersion.v1_21_6) ITEM_SHEARS_SNIP,
-    @EnumVersion(version = ServerVersion.v1_21_6) MUSIC_DISC_TEARS
+    @EnumVersion(version = ServerVersion.v1_21_6) MUSIC_DISC_TEARS,
+
+
+    // ---- Sounds added in version: v1_21_7 ----
+    @EnumVersion(version = ServerVersion.v1_21_7) MUSIC_DISC_LAVA_CHICKEN
     ; // ---- END ---- //
 
     private String soundname = name();
