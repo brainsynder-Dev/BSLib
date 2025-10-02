@@ -1960,7 +1960,53 @@ public enum SoundMaker {
 
 
     // ---- Sounds added in version: v1_21_7 ----
-    @EnumVersion(version = ServerVersion.v1_21_7) MUSIC_DISC_LAVA_CHICKEN
+    @EnumVersion(version = ServerVersion.v1_21_7) MUSIC_DISC_LAVA_CHICKEN,
+
+
+    // ---- Sounds added in version: v1_21_9 ----
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_COPPER_CHEST_CLOSE,
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_COPPER_CHEST_OPEN,
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_COPPER_CHEST_OXIDIZED_CLOSE,
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_COPPER_CHEST_OXIDIZED_OPEN,
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_COPPER_CHEST_WEATHERED_CLOSE,
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_COPPER_CHEST_WEATHERED_OPEN,
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_COPPER_GOLEM_STATUE_BREAK,
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_COPPER_GOLEM_STATUE_FALL,
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_COPPER_GOLEM_STATUE_HIT,
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_COPPER_GOLEM_STATUE_PLACE,
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_COPPER_GOLEM_STATUE_STEP,
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_SHELF_ACTIVATE,
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_SHELF_BREAK,
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_SHELF_DEACTIVATE,
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_SHELF_FALL,
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_SHELF_HIT,
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_SHELF_MULTI_SWAP,
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_SHELF_PLACE,
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_SHELF_PLACE_ITEM,
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_SHELF_SINGLE_SWAP,
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_SHELF_STEP,
+    @EnumVersion(version = ServerVersion.v1_21_9) BLOCK_SHELF_TAKE_ITEM,
+    @EnumVersion(version = ServerVersion.v1_21_9) ENTITY_COPPER_GOLEM_BECOME_STATUE,
+    @EnumVersion(version = ServerVersion.v1_21_9) ENTITY_COPPER_GOLEM_DEATH,
+    @EnumVersion(version = ServerVersion.v1_21_9) ENTITY_COPPER_GOLEM_HURT,
+    @EnumVersion(version = ServerVersion.v1_21_9) ENTITY_COPPER_GOLEM_ITEM_DROP,
+    @EnumVersion(version = ServerVersion.v1_21_9) ENTITY_COPPER_GOLEM_ITEM_NO_DROP,
+    @EnumVersion(version = ServerVersion.v1_21_9) ENTITY_COPPER_GOLEM_NO_ITEM_GET,
+    @EnumVersion(version = ServerVersion.v1_21_9) ENTITY_COPPER_GOLEM_NO_ITEM_NO_GET,
+    @EnumVersion(version = ServerVersion.v1_21_9) ENTITY_COPPER_GOLEM_OXIDIZED_DEATH,
+    @EnumVersion(version = ServerVersion.v1_21_9) ENTITY_COPPER_GOLEM_OXIDIZED_HURT,
+    @EnumVersion(version = ServerVersion.v1_21_9) ENTITY_COPPER_GOLEM_OXIDIZED_SPIN,
+    @EnumVersion(version = ServerVersion.v1_21_9) ENTITY_COPPER_GOLEM_OXIDIZED_STEP,
+    @EnumVersion(version = ServerVersion.v1_21_9) ENTITY_COPPER_GOLEM_SHEAR,
+    @EnumVersion(version = ServerVersion.v1_21_9) ENTITY_COPPER_GOLEM_SPAWN,
+    @EnumVersion(version = ServerVersion.v1_21_9) ENTITY_COPPER_GOLEM_SPIN,
+    @EnumVersion(version = ServerVersion.v1_21_9) ENTITY_COPPER_GOLEM_STEP,
+    @EnumVersion(version = ServerVersion.v1_21_9) ENTITY_COPPER_GOLEM_WEATHERED_DEATH,
+    @EnumVersion(version = ServerVersion.v1_21_9) ENTITY_COPPER_GOLEM_WEATHERED_HURT,
+    @EnumVersion(version = ServerVersion.v1_21_9) ENTITY_COPPER_GOLEM_WEATHERED_SPIN,
+    @EnumVersion(version = ServerVersion.v1_21_9) ENTITY_COPPER_GOLEM_WEATHERED_STEP,
+    @EnumVersion(version = ServerVersion.v1_21_9) ITEM_ARMOR_EQUIP_COPPER,
+    @EnumVersion(version = ServerVersion.v1_21_9) WEATHER_END_FLASH
     ; // ---- END ---- //
 
     private String soundname = name();
