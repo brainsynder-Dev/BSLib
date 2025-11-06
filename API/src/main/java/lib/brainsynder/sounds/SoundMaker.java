@@ -2,7 +2,6 @@ package lib.brainsynder.sounds;
 
 import lib.brainsynder.EnumVersion;
 import lib.brainsynder.ServerVersion;
-import lib.brainsynder.apache.EnumUtils;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -2046,10 +2045,12 @@ public enum SoundMaker {
     }
 
     public String getSound() {
-        if (EnumUtils.isValidEnum(Sound.class, name())) return name();
-        if (EnumUtils.isValidEnum(Sound.class, soundname)) return soundname;
-        if (EnumUtils.isValidEnum(Sound.class, v1_8_SoundName)) return v1_8_SoundName;
-        return null;
+        try {
+            Sound.valueOf(name());
+            return name();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Deprecated
@@ -2109,8 +2110,7 @@ public enum SoundMaker {
         try {
             Annotation[] annotations = getClass().getField(name()).getAnnotations();
             for (Annotation annotation : annotations) {
-                if (annotation instanceof EnumVersion) {
-                    EnumVersion support = (EnumVersion) annotation;
+                if (annotation instanceof EnumVersion support) {
                     if (support.maxVersion() != ServerVersion.UNKNOWN)
                         return (ServerVersion.isEqualOld(support.maxVersion()) && (ServerVersion.isEqualNew(support.version())));
                     return ServerVersion.isEqualNew(support.version());

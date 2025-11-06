@@ -1,7 +1,7 @@
-package lib.brainsynder.particle;
+package lib.brainsynder.particle.data;
 
 public class NoteColor {
-    private int note;
+    private final int note;
 
     public NoteColor(int note) throws IllegalArgumentException {
         if (note < 0) throw new IllegalArgumentException("The note value is lower than 0");

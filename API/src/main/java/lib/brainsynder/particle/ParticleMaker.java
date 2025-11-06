@@ -5,6 +5,8 @@ import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.nbt.StorageBase;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nbt.StorageTagString;
+import lib.brainsynder.particle.data.CustomColor;
+import lib.brainsynder.particle.data.NoteColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -22,7 +24,7 @@ public class ParticleMaker {
     private double offsetX = 0.0;
     private double offsetY = 0.0;
     private double offsetZ = 0.0;
-    private DustOptions dustOptions = null;
+    private CustomColor colorOptions = null;
     private Object data = null;
     private boolean colored = false;
     private int repeatAmount = 1;
@@ -45,7 +47,7 @@ public class ParticleMaker {
 
     /**
      * If you are using Redstone Particle then
-     * Please use {@link ParticleMaker#setDustOptions(DustOptions)}
+     * Please use {@link ParticleMaker#setColorOptions(CustomColor)}
      *
      * @Deprecated
      */
@@ -53,13 +55,13 @@ public class ParticleMaker {
     public ParticleMaker(Particle type, int count, Color color) {
         this(type, 1.0F, 0, getColor(color.getRed()), getColor(color.getGreen()), getColor(color.getBlue()));
         colored = true;
-        dustOptions = new DustOptions(color, 1.0F);
+        colorOptions = new CustomColor(color, 1.0F);
         this.repeatAmount = count;
     }
 
     /**
      * If you are using Redstone Particle then
-     * Please use {@link ParticleMaker#setDustOptions(DustOptions)}
+     * Please use {@link ParticleMaker#setColorOptions(CustomColor)}
      *
      * @Deprecated
      */
@@ -89,7 +91,7 @@ public class ParticleMaker {
         this.type = type;
         if (!type.isCompatible()) {
             try {
-                throw new MissingParticleException("The particle '" + type.getName() + "' is not supported in this version.");
+                throw new MissingParticleException("The particle '" + type.fetchName() + "' is not supported in this version.");
             } catch (MissingParticleException e) {
                 e.printStackTrace();
             }
@@ -112,7 +114,7 @@ public class ParticleMaker {
             offsetY = offset.getDouble("y", 0);
             offsetZ = offset.getDouble("z", 0);
         }
-        if (compound.hasKey("dust")) dustOptions = new DustOptions (compound.getCompoundTag("dust"));
+        if (compound.hasKey("color")) colorOptions = new CustomColor(compound.getCompoundTag("color"));
         if (compound.hasKey("item")) {
             StorageBase base = compound.getTag("item");
             if (base instanceof StorageTagCompound) {
@@ -138,8 +140,8 @@ public class ParticleMaker {
         return this;
     }
 
-    public ParticleMaker setDustOptions(DustOptions dustOptions) {
-        this.dustOptions = dustOptions;
+    public ParticleMaker setColorOptions(CustomColor colorOptions) {
+        this.colorOptions = colorOptions;
         return this;
     }
 
@@ -216,10 +218,9 @@ public class ParticleMaker {
 
     public void sendToPlayer(Player player, Location location) {
         Object data = null;
-        if ((type == Particle.ITEM_CRACK)
-                || (type == Particle.BLOCK_CRACK)
-                || (type == Particle.ITEM_TAKE)
-                || (type == Particle.BLOCK_DUST)) {
+        if ((type == Particle.ITEM)
+                || (type == Particle.BLOCK)
+                || (type == Particle.BLOCK_MARKER)) {
             if (this.data == null) {
                 if (type.name().contains("BLOCK")) {
                     data = Material.STONE.createBlockData();
@@ -227,15 +228,21 @@ public class ParticleMaker {
                     data = new ItemStack(Material.STONE);
                 }
             }else data = this.data;
-        } else if (type == Particle.REDSTONE) {
-            if (dustOptions == null) dustOptions = new DustOptions(Color.RED, 1);
+        } else if (type == Particle.DUST) {
+            if (colorOptions == null) colorOptions = new CustomColor(Color.RED, 1);
 
             if (ServerVersion.isEqualNew(ServerVersion.v1_13_R1)) {
-                data = new org.bukkit.Particle.DustOptions(dustOptions.getColor(), dustOptions.getSize());
+                data = new org.bukkit.Particle.DustOptions(colorOptions.getColor(), colorOptions.getSize());
             }else{
-                offsetX = getColor(dustOptions.getColor().getRed());
-                offsetY = getColor(dustOptions.getColor().getGreen());
-                offsetZ = getColor(dustOptions.getColor().getBlue());
+                offsetX = getColor(colorOptions.getColor().getRed());
+                offsetY = getColor(colorOptions.getColor().getGreen());
+                offsetZ = getColor(colorOptions.getColor().getBlue());
+            }
+        }else if ((type == Particle.INSTANT_EFFECT) || (type == Particle.EFFECT)) {
+            if (colorOptions == null) colorOptions = new CustomColor(Color.WHITE, 1);
+
+            if (ServerVersion.isEqualNew(ServerVersion.v1_21_9)) {
+                data = new org.bukkit.Particle.Spell(colorOptions.getColor(), colorOptions.getSize());
             }
         }
 
@@ -260,7 +267,7 @@ public class ParticleMaker {
         compound.setDouble("speed", speed);
         compound.setInteger("count", count);
         compound.setTag("offset", new StorageTagCompound().setDouble("x", offsetX).setDouble("y", offsetY).setDouble("z", offsetZ));
-        if (dustOptions != null) compound.setTag("dust", dustOptions.toCompound());
+        if (colorOptions != null) compound.setTag("color", colorOptions.toCompound());
         if (data != null) {
             if (data instanceof BlockData) {
                 compound.setString("item", ((BlockData) data).getAsString());

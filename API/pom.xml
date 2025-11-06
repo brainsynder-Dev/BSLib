@@ -11,7 +11,7 @@
     </parent>
     <description>Contains the BSLib code (Without NMS)</description>
     <artifactId>API</artifactId>
-    <version>B142</version>
+    <version>B143</version>
 
     <build>
         <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
@@ -88,7 +88,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.20.5-R0.1-SNAPSHOT</version>
+            <version>1.21.9-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 

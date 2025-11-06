@@ -9,7 +9,12 @@ import lib.brainsynder.utils.ReturnValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -102,7 +107,7 @@ public class WebConnector {
     public static void uploadPaste(Plugin plugin, String text, Callback<String, String> callback) {
         CompletableFuture.runAsync(() -> {
             try {
-                String urlBase = "https://www.pastelog.us";
+                String urlBase = "https://pastelog.us";
 
                 URL url = new URL(urlBase+"/api/paste/create");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
