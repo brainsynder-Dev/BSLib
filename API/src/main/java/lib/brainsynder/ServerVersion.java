@@ -121,6 +121,7 @@ public enum ServerVersion implements IVersion {
         }
 
         String mc = AdvString.between("MC: ", ")", Bukkit.getVersion());
+        if (mc.contains(" ")) mc = mc.substring(0, mc.indexOf(" "));
         String mcVersion = "v"+mc.replace(".", "_");
 
         String[] args = mc.split("\\.");
